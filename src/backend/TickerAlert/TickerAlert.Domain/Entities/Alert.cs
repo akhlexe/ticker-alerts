@@ -1,11 +1,23 @@
 ﻿using TickerAlert.Domain.Common;
+using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Domain.Entities
 {
     public class Alert : Entity
     {
-        public string Ticker { get; set; }
-        public decimal Price { get; set; }
-        public int Direction { get; set; }
+        public int FinancialAssetId { get; }
+        public decimal TargetPrice { get; } 
+        public PriceThresholdType ThresholdType { get; }
+
+        public Alert(FinancialAsset asset, decimal targetPrice, PriceThresholdType thresholdType)
+        {
+            FinancialAssetId = asset.Id;
+            TargetPrice = targetPrice;
+            ThresholdType = thresholdType;
+            FinancialAsset = asset;
+        }
+
+
+        private FinancialAsset FinancialAsset { get; set; }
     }
 }

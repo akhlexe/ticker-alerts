@@ -2,11 +2,15 @@
 
 namespace TickerAlert.Domain.Entities
 {
-    internal class FinancialAsset : Entity
+    public class FinancialAsset : Entity
     {
-        public string Ticker { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public DateTime FromDate { get; set; }
+        public string Ticker { get; }
+        public string Name { get; }
+
+        public FinancialAsset(string ticker, string name)
+        {
+            this.Ticker = ticker;
+            this.Name = name;
+        }
     }
 }
