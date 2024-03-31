@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TickerAlert.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TickerAlert.Application.UnitTests", "TickerAlert.Application.UnitTests\TickerAlert.Application.UnitTests.csproj", "{8DAEE750-5057-4B22-8791-4DFEC1B0F709}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TickerAlert.Domain.UnitTests", "TickerAlert.Domain.UnitTests\TickerAlert.Domain.UnitTests.csproj", "{2485ACB4-046A-4E65-9D16-CA97AD07C934}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8DAEE750-5057-4B22-8791-4DFEC1B0F709}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DAEE750-5057-4B22-8791-4DFEC1B0F709}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DAEE750-5057-4B22-8791-4DFEC1B0F709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2485ACB4-046A-4E65-9D16-CA97AD07C934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2485ACB4-046A-4E65-9D16-CA97AD07C934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2485ACB4-046A-4E65-9D16-CA97AD07C934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2485ACB4-046A-4E65-9D16-CA97AD07C934}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
