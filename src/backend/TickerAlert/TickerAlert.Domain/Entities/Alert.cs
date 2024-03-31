@@ -16,8 +16,6 @@ namespace TickerAlert.Domain.Entities
             ThresholdType = thresholdType;
             FinancialAsset = asset;
         }
-
-
-        private FinancialAsset FinancialAsset { get; set; }
+        public FinancialAsset FinancialAsset { get; set; }
     }
 }

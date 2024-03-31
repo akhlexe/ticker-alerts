@@ -9,5 +9,9 @@
   <ItemGroup>
     <ProjectReference Include="..\TickerAlert.Domain\TickerAlert.Domain.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+  </ItemGroup>
 
 </Project>
