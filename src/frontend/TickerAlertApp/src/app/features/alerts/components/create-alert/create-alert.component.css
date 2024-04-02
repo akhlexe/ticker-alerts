@@ -1,0 +1,11 @@
+.create-alert-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.create-alert-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+}

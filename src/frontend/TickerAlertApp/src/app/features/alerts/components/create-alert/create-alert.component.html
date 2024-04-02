@@ -1,0 +1,22 @@
+<div class="create-alert-container">
+    <form [formGroup]="createAlertForm" (ngSubmit)="onSubmit()" class="create-alert-form">
+        <mat-form-field>
+            <mat-label>Ticker</mat-label>
+            <input matInput formControlName="ticker" type="text">
+            <button *ngIf="createAlertForm.get('ticker')!.value" matSuffix mat-icon-button aria-label="Clear"
+                (click)="clearTickerInput()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Target Price </mat-label>
+            <input matInput formControlName="targetPrice" type="number">
+            <button *ngIf="createAlertForm.get('targetPrice')!.value" matSuffix mat-icon-button aria-label="Clear"
+                (click)="clearPriceInput()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button type="submit" mat-flat-button color="primary" [disabled]="!createAlertForm.valid">Nueva Alerta</button>
+    </form>
+</div>
