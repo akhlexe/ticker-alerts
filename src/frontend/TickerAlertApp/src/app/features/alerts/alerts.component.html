@@ -1,0 +1,31 @@
+<div class="alerts-container">
+    <table mat-table [dataSource]="alerts" class="mat-elevation-z8">
+        <ng-container matColumnDef="tickerName">
+            <th mat-header-cell *matHeaderCellDef> Ticker </th>
+            <td mat-cell *matCellDef="let alert"> {{alert.tickerName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="targetPrice">
+            <th mat-header-cell *matHeaderCellDef> Target Price </th>
+            <td mat-cell *matCellDef="let alert"> {{alert.targetPrice}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actualPrice">
+            <th mat-header-cell *matHeaderCellDef> Actual Price </th>
+            <td mat-cell *matCellDef="let alert"> {{alert.actualPrice}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="difference">
+            <th mat-header-cell *matHeaderCellDef> Difference </th>
+            <td mat-cell *matCellDef="let alert"> {{alert.difference}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef> State </th>
+            <td mat-cell *matCellDef="let alert"> {{alert.state}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
