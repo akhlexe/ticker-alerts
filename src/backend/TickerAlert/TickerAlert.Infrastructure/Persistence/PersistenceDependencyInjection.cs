@@ -9,6 +9,6 @@ public static class PersistenceDependencyInjection
     public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options 
-            => options.UseSqlServer(configuration.GetConnectionString("AlertsDatabase")));
+            => options.UseSqlServer(configuration.GetConnectionString("TickerAlertsDatabase")));
     }
 }

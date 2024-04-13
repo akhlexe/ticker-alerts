@@ -23,7 +23,7 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
         entity.HasOne(a => a.FinancialAsset)
             .WithMany()
             .HasForeignKey(a => a.FinancialAssetId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
 
         entity.HasIndex(a => a.FinancialAssetId);
     }

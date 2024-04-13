@@ -23,6 +23,6 @@ public class PriceMeasureConfiguration : IEntityTypeConfiguration<PriceMeasure>
         entity.HasOne(e => e.FinancialAsset)
             .WithMany()
             .HasForeignKey(e => e.FinancialAssetId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

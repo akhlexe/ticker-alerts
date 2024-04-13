@@ -96,7 +96,7 @@ namespace TickerAlert.Infrastructure.Migrations
                     b.HasOne("TickerAlert.Domain.Entities.FinancialAsset", "FinancialAsset")
                         .WithMany()
                         .HasForeignKey("FinancialAssetId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FinancialAsset");
@@ -107,7 +107,7 @@ namespace TickerAlert.Infrastructure.Migrations
                     b.HasOne("TickerAlert.Domain.Entities.FinancialAsset", "FinancialAsset")
                         .WithMany()
                         .HasForeignKey("FinancialAssetId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FinancialAsset");

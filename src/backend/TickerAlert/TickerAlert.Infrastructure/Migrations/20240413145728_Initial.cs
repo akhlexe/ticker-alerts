@@ -43,7 +43,7 @@ namespace TickerAlert.Infrastructure.Migrations
                         column: x => x.FinancialAssetId,
                         principalTable: "FinancialAssets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,7 +64,7 @@ namespace TickerAlert.Infrastructure.Migrations
                         column: x => x.FinancialAssetId,
                         principalTable: "FinancialAssets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
