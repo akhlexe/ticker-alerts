@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TickerAlert.Application.Interfaces.Alerts;
+using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Infrastructure.Persistence.Repositories;
 
@@ -21,5 +22,6 @@ public static class PersistenceDependencyInjection
     {
         services.AddScoped<IAlertRepository, AlertRepository>();
         services.AddScoped<IPriceMeasureRepository, PriceMeasureRepository>();
+        services.AddScoped<IFinancialAssetRepository, FinancialAssetRepository>();
     }
 }
