@@ -1,13 +1,16 @@
 using TickerAlert.Api.Extensions;
 using TickerAlert.Application;
+using TickerAlert.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddApplication();
-builder.Services.AddCustomCors(builder.Configuration);
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddCustomCors(builder.Configuration)
+    .AddControllers();
 
 var app = builder.Build();
 

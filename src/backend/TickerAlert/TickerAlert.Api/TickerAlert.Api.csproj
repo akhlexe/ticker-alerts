@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TickerAlert.Application\TickerAlert.Application.csproj" />
+    <ProjectReference Include="..\TickerAlert.Infrastructure\TickerAlert.Infrastructure.csproj" />
   </ItemGroup>
-
 
 </Project>
