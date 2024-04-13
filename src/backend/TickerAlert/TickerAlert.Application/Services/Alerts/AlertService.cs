@@ -1,4 +1,5 @@
 using TickerAlert.Application.Interfaces.Alerts;
+using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Domain.Enums;
 using TickerAlert.Domain.Services;
 
@@ -7,8 +8,13 @@ namespace TickerAlert.Application.Services.Alerts;
 public class AlertService : IAlertService
 {
     private readonly IAlertRepository _repository;
+    private readonly IPriceMeasureRepository _priceMeasureRepository;
 
-    public AlertService(IAlertRepository repository) => _repository = repository;
+    public AlertService(IAlertRepository repository, IPriceMeasureRepository priceMeasureRepository)
+    {
+        _repository = repository;
+        _priceMeasureRepository = priceMeasureRepository;
+    }
 
     public async Task CreateAlert(int financialAssetId, decimal targetPrice)
     {
@@ -17,9 +23,9 @@ public class AlertService : IAlertService
         await _repository.CreateAlert(financialAssetId, targetPrice, threshold);
     }
 
-    // TODO: Definir servicio externo para consumir precios de activos financieros
     private async Task<decimal> GetCurrentPrice(int financialAssetId)
     {
-        return 0;
+        var priceMeasure = await _priceMeasureRepository.GetLastPriceMeasureFor(financialAssetId);
+        return priceMeasure.Price;
     }
 }
