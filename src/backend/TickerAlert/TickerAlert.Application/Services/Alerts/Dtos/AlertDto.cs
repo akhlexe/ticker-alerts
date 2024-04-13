@@ -1,4 +1,4 @@
-namespace TickerAlert.Application.UseCases.Alerts.GetAlerts.Dtos;
+namespace TickerAlert.Application.Services.Alerts.Dtos;
 
 public class AlertDto
 {

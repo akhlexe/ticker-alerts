@@ -17,7 +17,8 @@ public static class DependencyInjection
 
     private static void RegisterApplicationServices(IServiceCollection services)
     {
-        services.AddScoped<IAlertsReader, AlertsReader>();
+        services.AddScoped<IAlertReader, AlertReader>();
+        services.AddScoped<IAlertService, AlertService>();
         services.AddScoped<IWatcher, Watcher>();
     }
 }

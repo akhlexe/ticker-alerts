@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TickerAlert.Application.Common.Responses;
+using TickerAlert.Application.Services.Alerts.Dtos;
 using TickerAlert.Application.UseCases.Alerts.CreateAlert;
 using TickerAlert.Application.UseCases.Alerts.GetAlerts;
-using TickerAlert.Application.UseCases.Alerts.GetAlerts.Dtos;
 
 namespace TickerAlert.Api.Controllers;
 

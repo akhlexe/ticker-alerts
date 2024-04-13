@@ -1,16 +1,23 @@
 using MediatR;
 using TickerAlert.Application.Common.Responses;
+using TickerAlert.Application.Interfaces.Alerts;
 
 namespace TickerAlert.Application.UseCases.Alerts.CreateAlert;
 
-public record class CreateAlertCommand(string Ticker, decimal TargetPrice) : IRequest<Result>;
+public record class CreateAlertCommand(int FinancialAssetId, decimal TargetPrice) : IRequest<Result>;
 
 public class CreateAlertCommandHandler : IRequestHandler<CreateAlertCommand, Result>
 {
+    private readonly IAlertService _alertService;
+
+    public CreateAlertCommandHandler(IAlertService alertService)
+    {
+        _alertService = alertService;
+    }
+
     public Task<Result> Handle(CreateAlertCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine(request);
-        Console.WriteLine(request.Ticker);
+        _alertService.CreateAlert(request.FinancialAssetId, request.TargetPrice);
 
         return Task.FromResult(Result.SuccessResult());
     }

@@ -2,7 +2,7 @@
 {
     public enum PriceThresholdType
     {
-        Above = 0,
-        Below = 1,
+        Below = 0,
+        Above = 1,
     }
 }
