@@ -5,17 +5,26 @@ namespace TickerAlert.Domain.Entities
 {
     public class Alert : Entity
     {
-        public int FinancialAssetId { get; }
-        public decimal TargetPrice { get; } 
-        public PriceThresholdType ThresholdType { get; }
-
-        public Alert(FinancialAsset asset, decimal targetPrice, PriceThresholdType thresholdType)
+        public int FinancialAssetId { get; private set; }
+        public decimal TargetPrice { get; private set;} 
+        public PriceThresholdType ThresholdType { get; private set;}
+        
+        public Alert(int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType) 
+            : base()
         {
-            FinancialAssetId = asset.Id;
+            FinancialAssetId = financialAssetId;
             TargetPrice = targetPrice;
             ThresholdType = thresholdType;
-            FinancialAsset = asset;
         }
+        
+        public Alert(int id, int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType) 
+            : base(id)
+        {
+            FinancialAssetId = financialAssetId;
+            TargetPrice = targetPrice;
+            ThresholdType = thresholdType;
+        }
+        
         public FinancialAsset FinancialAsset { get; set; }
     }
 }
