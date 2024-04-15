@@ -29,11 +29,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var financialAssetSeeder = services.GetRequiredService<FinancialAssetSeeder>();
-    await financialAssetSeeder.Seed();
-}
+await FinancialAssetSeeder.Seed(app.Services);
 
 app.Run();

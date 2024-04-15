@@ -1,6 +1,6 @@
 namespace TickerAlert.Infrastructure.Persistence.Seeders.Dtos;
 
-public class FinancialAssetDto
+public class FinancialAssetSeedDto
 {
     public string Currency { get; set; }
     public string Description { get; set; }

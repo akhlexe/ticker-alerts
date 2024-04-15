@@ -1,36 +1,66 @@
 using System.Net.Http.Json;
 using Microsoft.Extensions.Configuration;
-using TickerAlert.Application.Services.FinancialAssets.Dtos;
+using Microsoft.Extensions.DependencyInjection;
+using TickerAlert.Domain.Entities;
+using TickerAlert.Infrastructure.Persistence.Seeders.Dtos;
 
 namespace TickerAlert.Infrastructure.Persistence.Seeders;
 /// <summary>
 /// Seeder for filling stocks available data for NASDAQ
 /// </summary>
-public class FinancialAssetSeeder
+public static class FinancialAssetSeeder
 {
-    private readonly ApplicationDbContext _context;
-    private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
     private const string SeedUrl = "https://finnhub.io/api/v1/stock/symbol?exchange=US&token={API_KEY}";
-    
-    public FinancialAssetSeeder(ApplicationDbContext context, IHttpClientFactory factory, IConfiguration configuration)
+    private const int BATCH_SIZE = 1000;
+
+    public static async Task Seed(IServiceProvider serviceProvider)
     {
-        _context = context;
-        _httpClient = factory.CreateClient();
-        _configuration = configuration;
+        using var scope = serviceProvider.CreateScope();
+        var services = scope.ServiceProvider;
+
+        var configuration = services.GetRequiredService<IConfiguration>();
+        var httpClientFactory = services.GetRequiredService<IHttpClientFactory>();
+        var context = services.GetRequiredService<ApplicationDbContext>();
+
+        if (!context.FinancialAssets.Any())
+        {
+            await SeedData(configuration, httpClientFactory, context);
+        }
     }
-    
-    public async Task Seed()
+
+    private static async Task SeedData(IConfiguration configuration, IHttpClientFactory httpFactory, ApplicationDbContext context)
     {
-        string apiKey = _configuration["Services:Finnhub:ApiKey"];
+        string apiKey = configuration["Services:Finnhub:ApiKey"];
         var queryUrl = SeedUrl.Replace("{API_KEY}", apiKey);
 
-        var financialAssetDtos = await _httpClient.GetFromJsonAsync<IEnumerable<FinancialAssetDto>>(queryUrl);
-
-        Console.WriteLine(financialAssetDtos.Count());
-
-        var only50 = financialAssetDtos.Take(50);
+        var httpClient = httpFactory.CreateClient();
+        var financialAssetDtos = await httpClient.GetFromJsonAsync<IEnumerable<FinancialAssetSeedDto>>(queryUrl);
         
-        Console.WriteLine(only50);
+        context.ChangeTracker.AutoDetectChangesEnabled = false;
+
+        var financialAssets = financialAssetDtos
+            .Select(dto => new FinancialAsset(dto.Symbol, dto.Description))
+            .ToList();
+
+        LoadData(context, financialAssets);
+    }
+
+    private static void LoadData(ApplicationDbContext context, List<FinancialAsset> financialAssets)
+    {
+        int count = 0;
+        
+        foreach (var financialAsset in financialAssets)
+        {
+            context.FinancialAssets.Add(financialAsset);
+            count++;
+            
+            if (count % BATCH_SIZE == 0)
+            {
+                context.SaveChanges();
+                context.ChangeTracker.Clear();
+            }
+        }
+
+        context.SaveChanges();
     }
 }
