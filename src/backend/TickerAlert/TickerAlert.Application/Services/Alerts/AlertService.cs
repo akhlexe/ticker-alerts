@@ -26,6 +26,6 @@ public class AlertService : IAlertService
     private async Task<decimal> GetCurrentPrice(int financialAssetId)
     {
         var priceMeasure = await _priceMeasureRepository.GetLastPriceMeasureFor(financialAssetId);
-        return priceMeasure.Price;
+        return priceMeasure?.Price ?? 0;
     }
 }

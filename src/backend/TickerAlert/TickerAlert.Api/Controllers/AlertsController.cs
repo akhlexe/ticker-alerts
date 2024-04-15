@@ -13,6 +13,12 @@ public class AlertsController : ApiController
         => await Mediator.Send(new GetAlertsRequest());
 
     [HttpPost("CreateAlert")]
-    public async Task<Result> CreateAlert([FromBody]CreateAlertCommand command) 
-        => await Mediator.Send(command);
+    public async Task<ActionResult<Result>> CreateAlert([FromBody]CreateAlertCommand command)
+    {
+        var result = await Mediator.Send(command);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest();
+    }
 }

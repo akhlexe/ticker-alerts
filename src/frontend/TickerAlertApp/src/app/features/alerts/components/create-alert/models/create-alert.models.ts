@@ -1,4 +1,4 @@
 export interface CreateAlertRequest {
-  ticker: number;
+  financialAssetId: number;
   targetPrice: number;
 }

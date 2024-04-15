@@ -1,8 +1,13 @@
 <div class="create-alert-container">
-    <form [formGroup]="createAlertForm" (ngSubmit)="onSubmit()" class="create-alert-form">
+    <form [formGroup]="createAlertForm" (ngSubmit)="submitForm()" class="create-alert-form">
         <mat-form-field>
             <mat-label>Ticker</mat-label>
-            <input matInput formControlName="ticker" type="text">
+            <input #tickerInput type="text" matInput formControlName="ticker" [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayAssetTicker">
+                <mat-option *ngFor="let asset of assetSearchList | async" [value]="asset">
+                    {{ asset.ticker }} - {{ asset.name }}
+                </mat-option>
+            </mat-autocomplete>
             <button *ngIf="createAlertForm.get('ticker')!.value" matSuffix mat-icon-button aria-label="Clear"
                 (click)="clearTickerInput()">
                 <mat-icon>close</mat-icon>
@@ -17,6 +22,7 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <button type="submit" mat-flat-button color="primary" [disabled]="!createAlertForm.valid">Nueva Alerta</button>
+        <button type="submit" mat-flat-button color="primary" [disabled]="!isCreateAlertFormValid()">Nueva
+            Alerta</button>
     </form>
 </div>

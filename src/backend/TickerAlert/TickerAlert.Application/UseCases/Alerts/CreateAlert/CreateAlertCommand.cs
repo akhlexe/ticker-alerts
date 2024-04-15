@@ -15,10 +15,10 @@ public class CreateAlertCommandHandler : IRequestHandler<CreateAlertCommand, Res
         _alertService = alertService;
     }
 
-    public Task<Result> Handle(CreateAlertCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateAlertCommand request, CancellationToken cancellationToken)
     {
-        _alertService.CreateAlert(request.FinancialAssetId, request.TargetPrice);
+        await _alertService.CreateAlert(request.FinancialAssetId, request.TargetPrice);
 
-        return Task.FromResult(Result.SuccessResult());
+        return Result.SuccessResult();
     }
 }
