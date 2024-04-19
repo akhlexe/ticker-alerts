@@ -1,4 +1,3 @@
-using System.Collections;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Services.FinancialAssets.Dtos;
 using TickerAlert.Domain.Entities;
@@ -14,7 +13,6 @@ public class FinancialAssetReader : IFinancialAssetReader
     public async Task<IEnumerable<FinancialAssetDto>> GetAllBySearchCriteria(string criteria)
     {
         var assets = await _repository.GetAllBySearchCriteria(criteria);
-
         return assets.Select(CreateFinancialAssetDto);
     }
 
