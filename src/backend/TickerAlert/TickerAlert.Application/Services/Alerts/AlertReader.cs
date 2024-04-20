@@ -29,6 +29,7 @@ public class AlertReader : IAlertReader
 
         return new AlertDto()
         {
+            FinancialAssetId = a.FinancialAssetId,
             TickerName = a.FinancialAsset.Ticker,
             TargetPrice = a.TargetPrice,
             ActualPrice = actualPrice,
