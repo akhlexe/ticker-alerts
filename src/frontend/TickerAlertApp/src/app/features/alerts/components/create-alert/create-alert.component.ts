@@ -17,15 +17,10 @@ import { CreateAlertRequest } from './models/create-alert.models';
 import { AlertsService } from '../../services/alerts.service';
 import { FinancialAssetsService } from './services/financial-assets.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import {
-  BehaviorSubject,
-  Observable,
-  debounceTime,
-  filter,
-  of,
-  switchMap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, debounceTime, of, switchMap } from 'rxjs';
 import { FinancialAssetDto } from './models/financial-asset.model';
+import { ToastrService } from 'ngx-toastr';
+import { AlertMessages } from './models/alerts-messages.model';
 
 @Component({
   selector: 'app-create-alert',
@@ -55,8 +50,9 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
   constructor(
     private formBuilder: FormBuilder,
     private alertsService: AlertsService,
-    private assetsService: FinancialAssetsService
-  ) {}
+    private assetsService: FinancialAssetsService,
+    private toastr: ToastrService
+  ) { }
   ngAfterViewInit(): void {
     setTimeout(() => this.tickerInput.nativeElement.focus());
   }
@@ -103,6 +99,7 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
         this.alertCreated.emit();
         this.clearInputsAndSearchList();
         this.tickerInput.nativeElement.focus();
+        this.toastr.success(AlertMessages.SUCCESS_MESSAGE);
       } else {
         console.log(result.errors);
       }

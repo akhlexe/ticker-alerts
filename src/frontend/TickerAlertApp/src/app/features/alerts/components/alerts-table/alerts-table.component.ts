@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Alert } from '../../models/alert.model';
 import { AlertsService } from '../../services/alerts.service';
 import { MatTableModule } from '@angular/material/table';
+import { CurrencyMaskPipe } from '../../../../shared/pipes/currency-mask.pipe';
 
 @Component({
   selector: 'app-alerts-table',
   standalone: true,
-  imports: [MatTableModule],
+  imports: [MatTableModule, CurrencyMaskPipe],
   templateUrl: './alerts-table.component.html',
   styleUrl: './alerts-table.component.css',
   providers: [AlertsService],
