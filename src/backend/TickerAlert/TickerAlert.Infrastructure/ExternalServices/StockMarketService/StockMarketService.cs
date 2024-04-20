@@ -8,27 +8,37 @@ namespace TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 
 public class StockMarketService : IStockMarketService
 {
-    private readonly IConfiguration _configuration;
     private readonly HttpClient _httpClient;
-    private string _baseUri = "https://finnhub.io/api/v1";
+    private readonly string _baseUrl;
+    private readonly string _apiKey;
 
     public StockMarketService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
-        _configuration = configuration;
+        _baseUrl = configuration["Services:Finnhub:BaseUrl"];
+        _apiKey = configuration["Services:Finnhub:ApiKey"];
+        
+        if (string.IsNullOrEmpty(_baseUrl))
+        {
+            throw new ArgumentNullException(nameof(_baseUrl), "Base URL configuration is missing in the settings.");
+        }
+    
+        if (string.IsNullOrEmpty(_apiKey))
+        {
+            throw new ArgumentNullException(nameof(_apiKey), "API Key configuration is missing in the settings.");
+        }
+        
         _httpClient = httpClientFactory.CreateClient();
     }
 
     public async Task<PriceMeasureDto> ReadPriceFor(string ticker)
     {
-        var apiKey = _configuration["Services:Finnhub:ApiKey"];
-
-        var path = "/quote?symbol={TICKER}&token={ApiKey}"
-            .Replace("{TICKER}", ticker)
-            .Replace("{ApiKey}", apiKey);
-
-        var query = _baseUri + path;
-
+        var query = _baseUrl + GetQuotePath(ticker);
         var priceRead = await _httpClient.GetFromJsonAsync<PriceMeasureReadDto>(query);
         return new PriceMeasureDto() { CurrentPrice = priceRead?.CurrentPrice ?? 0 };
+    }
+
+    private string GetQuotePath(string ticker)
+    {
+        return $"/quote?symbol={ticker}&token={_apiKey}";
     }
 }
