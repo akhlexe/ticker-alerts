@@ -4,6 +4,8 @@ import {
   ElementRef,
   ViewChild,
   AfterViewInit,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,6 +37,8 @@ import { FinancialAssetDto } from './models/financial-asset.model';
   providers: [AlertsService, FinancialAssetsService],
 })
 export class CreateAlertComponent implements OnInit, AfterViewInit {
+  @Output() alertCreated: EventEmitter<void> = new EventEmitter<void>();
+
   createAlertForm!: FormGroup;
   assetSearchList: Observable<FinancialAssetDto[]> | undefined;
 
@@ -85,6 +89,7 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
       if (result.success) {
         this.createAlertForm.reset();
         this.tickerInput.nativeElement.focus();
+        this.alertCreated.emit();
       } else {
         console.log(result.errors);
       }

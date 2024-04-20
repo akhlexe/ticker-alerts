@@ -24,6 +24,10 @@ export class AlertsTableComponent implements OnInit {
   constructor(private alertsService: AlertsService) {}
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  public getData() {
     this.alertsService.getAlerts().subscribe((result) => {
       this.alerts = result;
     });
