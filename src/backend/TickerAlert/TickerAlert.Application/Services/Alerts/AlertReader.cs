@@ -19,23 +19,21 @@ public class AlertReader : IAlertReader
     public async Task<IEnumerable<AlertDto>> GetAlerts()
     {
         var alerts = await _repository.GetAll();
-        var assetsIds = alerts.Select(x => x.FinancialAssetId).ToList();
-        var lastPrices = await _priceMeasureRepository.GetLastPricesMeasuresFor(assetsIds);
-        return alerts.Select(a => CreateAlertDto(a, lastPrices)).ToList();
+        var lastPrices = await _priceMeasureRepository.GetLastPricesMeasuresFor(alerts.Select(x => x.FinancialAssetId));
+        return alerts.Select(alert => CreateAlertDto(alert, lastPrices.FirstOrDefault(p => p.FinancialAssetId == alert.FinancialAssetId)));
     }
 
-    private static AlertDto CreateAlertDto(Alert a, IEnumerable<PriceMeasure> lastPrices)
+    private static AlertDto CreateAlertDto(Alert a, PriceMeasure? priceMeasure)
     {
-        var lastMeasure = lastPrices.FirstOrDefault(p=> p.FinancialAssetId == a.FinancialAssetId);
-        var lastPrice = lastMeasure?.Price ?? 0;
+        var actualPrice = priceMeasure?.Price ?? 0;
 
         return new AlertDto()
         {
             TickerName = a.FinancialAsset.Ticker,
             TargetPrice = a.TargetPrice,
-            ActualPrice = lastPrice,
-            Difference = a.TargetPrice - lastMeasure?.Price ?? 0,
-            State = "PENDING"
+            ActualPrice = actualPrice,
+            Difference = a.TargetPrice - actualPrice,
+            State = a.State.ToString()
         };
     }
 }

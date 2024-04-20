@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TickerAlert.Domain.Entities;
+using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Infrastructure.Persistence.Configurations;
 
@@ -18,6 +19,9 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
             .HasColumnType("decimal(15, 2)");
 
         entity.Property(a => a.ThresholdType)
+            .IsRequired();
+
+        entity.Property(a => a.State)
             .IsRequired();
 
         entity.HasOne(a => a.FinancialAsset)
