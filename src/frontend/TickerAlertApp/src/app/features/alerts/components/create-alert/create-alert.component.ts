@@ -17,7 +17,14 @@ import { CreateAlertRequest } from './models/create-alert.models';
 import { AlertsService } from '../../services/alerts.service';
 import { FinancialAssetsService } from './services/financial-assets.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, debounceTime, filter, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  debounceTime,
+  filter,
+  of,
+  switchMap,
+} from 'rxjs';
 import { FinancialAssetDto } from './models/financial-asset.model';
 
 @Component({
@@ -39,8 +46,9 @@ import { FinancialAssetDto } from './models/financial-asset.model';
 export class CreateAlertComponent implements OnInit, AfterViewInit {
   @Output() alertCreated: EventEmitter<void> = new EventEmitter<void>();
 
-  createAlertForm!: FormGroup;
+  private searchControl = new BehaviorSubject<string | null>(null);
   assetSearchList: Observable<FinancialAssetDto[]> | undefined;
+  createAlertForm!: FormGroup;
 
   @ViewChild('tickerInput') tickerInput!: ElementRef;
 
@@ -59,15 +67,20 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
       targetPrice: ['', []],
     });
 
-    this.assetSearchList = this.createAlertForm
-      .get('ticker')
-      ?.valueChanges.pipe(
-        debounceTime(300),
-        filter((value) => value && value.length > 2),
-        switchMap((value) =>
-          this.assetsService.getFinancialAssetsByCriteria(value)
-        )
-      );
+    this.assetSearchList = this.searchControl.pipe(
+      debounceTime(300),
+      switchMap((value) => {
+        if (value === null || value.length <= 2) {
+          return of([]);
+        } else {
+          return this.assetsService.getFinancialAssetsByCriteria(value);
+        }
+      })
+    );
+
+    this.createAlertForm.get('ticker')?.valueChanges.subscribe((value) => {
+      this.searchControl.next(value);
+    });
   }
 
   public isCreateAlertFormValid() {
@@ -87,13 +100,18 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
 
     this.alertsService.createAlert(request).subscribe((result) => {
       if (result.success) {
-        this.createAlertForm.reset();
-        this.tickerInput.nativeElement.focus();
         this.alertCreated.emit();
+        this.clearInputsAndSearchList();
+        this.tickerInput.nativeElement.focus();
       } else {
         console.log(result.errors);
       }
     });
+  }
+
+  public clearInputsAndSearchList() {
+    this.createAlertForm.reset();
+    this.searchControl.next(null);
   }
 
   public clearTickerInput(): void {
