@@ -64,7 +64,7 @@ public class AlertReaderTests
         // Arrange
         var alerts = _fixture.CreateMany<Alert>(3).ToList();
         var priceMeasures =alerts
-            .Select(a => new PriceMeasure(a.FinancialAssetId, _fixture.Create<decimal>(), DateTime.Now))
+            .Select(a => new PriceMeasure(a.FinancialAssetId, _fixture.Create<decimal>(), DateTime.UtcNow))
             .ToList();
 
         _mockAlertRepository

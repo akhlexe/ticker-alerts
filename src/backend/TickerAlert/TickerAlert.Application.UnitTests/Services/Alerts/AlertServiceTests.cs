@@ -30,7 +30,7 @@ public class AlertServiceTests
 
         _mockPriceMeasureRepository
             .Setup(repo => repo.GetLastPriceMeasureFor(assetId))
-            .ReturnsAsync(new PriceMeasure(assetId, currentPrice, DateTime.Now));
+            .ReturnsAsync(new PriceMeasure(assetId, currentPrice, DateTime.UtcNow));
 
         _mockAlertRepository
             .Setup(repo => repo.CreateAlert(assetId, targetPrice, It.IsAny<PriceThresholdType>()))

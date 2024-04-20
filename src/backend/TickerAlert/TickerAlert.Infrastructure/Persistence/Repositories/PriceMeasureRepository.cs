@@ -26,4 +26,10 @@ public class PriceMeasureRepository : IPriceMeasureRepository
             .Select(g => g.OrderByDescending(r => r.MeasuredOn).FirstOrDefault())
             .ToListAsync();
     }
+
+    public async Task RegisterPriceMeasure(PriceMeasure measure)
+    {
+        _context.PriceMeasures.Add(measure);
+        await _context.SaveChangesAsync();
+    }
 }
