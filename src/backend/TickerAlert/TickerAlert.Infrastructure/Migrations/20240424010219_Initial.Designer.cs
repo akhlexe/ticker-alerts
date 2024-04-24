@@ -12,7 +12,7 @@ using TickerAlert.Infrastructure.Persistence;
 namespace TickerAlert.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240413145728_Initial")]
+    [Migration("20240424010219_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -36,15 +36,23 @@ namespace TickerAlert.Infrastructure.Migrations
                     b.Property<int>("FinancialAssetId")
                         .HasColumnType("int");
 
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("TargetPrice")
                         .HasColumnType("decimal(15, 2)");
 
                     b.Property<int>("ThresholdType")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FinancialAssetId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Alerts");
                 });
@@ -94,6 +102,36 @@ namespace TickerAlert.Infrastructure.Migrations
                     b.ToTable("PriceMeasures");
                 });
 
+            modelBuilder.Entity("TickerAlert.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HashedPassword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("TickerAlert.Domain.Entities.Alert", b =>
                 {
                     b.HasOne("TickerAlert.Domain.Entities.FinancialAsset", "FinancialAsset")
@@ -102,7 +140,15 @@ namespace TickerAlert.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TickerAlert.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("FinancialAsset");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TickerAlert.Domain.Entities.PriceMeasure", b =>

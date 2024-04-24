@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TickerAlert.Application.Common.Responses;
 using TickerAlert.Application.Services.Alerts.Dtos;
@@ -6,6 +7,7 @@ using TickerAlert.Application.UseCases.Alerts.GetAlerts;
 
 namespace TickerAlert.Api.Controllers;
 
+[Authorize]
 public class AlertsController : ApiController
 {
     [HttpGet]

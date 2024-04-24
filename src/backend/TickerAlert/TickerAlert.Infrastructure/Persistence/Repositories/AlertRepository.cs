@@ -8,12 +8,12 @@ namespace TickerAlert.Infrastructure.Persistence.Repositories;
 public class AlertRepository : IAlertRepository
 {
     private readonly ApplicationDbContext _context;
-
     public AlertRepository(ApplicationDbContext context) => _context = context;
 
     public async Task CreateAlert(int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)
     {
         var alert = new Alert(
+            1,
             financialAssetId, 
             targetPrice,
             thresholdType

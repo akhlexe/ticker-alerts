@@ -13,6 +13,9 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
 
         entity.Property(a => a.FinancialAssetId)
             .IsRequired();
+
+        entity.Property(a => a.UserId)
+            .IsRequired();
         
         entity.Property(a => a.TargetPrice)
             .IsRequired()
@@ -30,5 +33,10 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
             .OnDelete(DeleteBehavior.Cascade);
 
         entity.HasIndex(a => a.FinancialAssetId);
+
+        entity.HasOne(a => a.User)
+            .WithMany()
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

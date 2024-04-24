@@ -26,24 +26,19 @@ namespace TickerAlert.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Alerts",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FinancialAssetId = table.Column<int>(type: "int", nullable: false),
-                    TargetPrice = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
-                    ThresholdType = table.Column<int>(type: "int", nullable: false)
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HashedPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Alerts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Alerts_FinancialAssets_FinancialAssetId",
-                        column: x => x.FinancialAssetId,
-                        principalTable: "FinancialAssets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,15 +62,55 @@ namespace TickerAlert.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Alerts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FinancialAssetId = table.Column<int>(type: "int", nullable: false),
+                    TargetPrice = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
+                    ThresholdType = table.Column<int>(type: "int", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alerts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Alerts_FinancialAssets_FinancialAssetId",
+                        column: x => x.FinancialAssetId,
+                        principalTable: "FinancialAssets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Alerts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Alerts_FinancialAssetId",
                 table: "Alerts",
                 column: "FinancialAssetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Alerts_UserId",
+                table: "Alerts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PriceMeasures_FinancialAssetId",
                 table: "PriceMeasures",
                 column: "FinancialAssetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -86,6 +121,9 @@ namespace TickerAlert.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "PriceMeasures");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "FinancialAssets");

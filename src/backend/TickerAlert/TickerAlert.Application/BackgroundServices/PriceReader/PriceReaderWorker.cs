@@ -29,7 +29,7 @@ public class PriceReaderWorker : BackgroundService
                 try
                 {
                     _logger.LogInformation("Running PriceReaderService.");
-                    await priceReaderService.ReadPricesAndSaveAsync();
+                    // await priceReaderService.ReadPricesAndSaveAsync();
                     _logger.LogInformation("Price reading and saving completed successfully.");
                 }
                 catch (Exception ex)
@@ -38,7 +38,7 @@ public class PriceReaderWorker : BackgroundService
                 }
             }
 
-            await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+            await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
         }
     }
 }

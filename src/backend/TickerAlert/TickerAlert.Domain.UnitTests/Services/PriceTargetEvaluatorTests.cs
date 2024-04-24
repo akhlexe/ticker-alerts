@@ -13,7 +13,7 @@ public class PriceTargetEvaluatorTests
     public void when_alert_reachs_target_price_returns_true(decimal target, decimal measuredPrice, PriceThresholdType threshold)
     {
         var asset = new FinancialAsset("SPY", "Standard & Poor 500");
-        var alert = new Alert(asset.Id, target, threshold);
+        var alert = new Alert(1,asset.Id, target, threshold);
         var priceMeasure = new PriceMeasure(asset.Id, measuredPrice, DateTime.UtcNow);
 
         bool result = PriceTargetEvaluator.IsTargetReached(alert, priceMeasure);
