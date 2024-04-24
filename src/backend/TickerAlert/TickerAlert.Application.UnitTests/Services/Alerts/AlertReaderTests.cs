@@ -2,6 +2,7 @@ using AutoFixture;
 using FluentAssertions;
 using Moq;
 using TickerAlert.Application.Interfaces.Alerts;
+using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Application.Services.Alerts;
 using TickerAlert.Domain.Entities;
@@ -12,6 +13,8 @@ public class AlertReaderTests
 {
     private readonly Mock<IAlertRepository> _mockAlertRepository;
     private readonly Mock<IPriceMeasureRepository> _mockPriceMeasureRepository;
+    private readonly Mock<ICurrentUserService> _mockCurrentUserService;
+    private const int USER_ID = 1;
     private readonly AlertReader _alertReader;
     private readonly Fixture _fixture;
 
@@ -19,7 +22,15 @@ public class AlertReaderTests
     {
         _mockAlertRepository = new Mock<IAlertRepository>();
         _mockPriceMeasureRepository = new Mock<IPriceMeasureRepository>();
-        _alertReader = new AlertReader(_mockAlertRepository.Object, _mockPriceMeasureRepository.Object);
+        _mockCurrentUserService = new Mock<ICurrentUserService>();
+        _alertReader = new AlertReader(
+            _mockAlertRepository.Object, 
+            _mockPriceMeasureRepository.Object, 
+            _mockCurrentUserService.Object);
+
+        _mockCurrentUserService.Setup(u => u.UserId).Returns(USER_ID);
+        _mockCurrentUserService.Setup(u => u.IsAuthenticated).Returns(true);
+        
         _fixture = new Fixture();
     }
     
@@ -28,7 +39,7 @@ public class AlertReaderTests
     {
         // Arrange
         _mockAlertRepository
-            .Setup(repo => repo.GetAll())
+            .Setup(repo => repo.GetAllForUserId(USER_ID))
             .ReturnsAsync(Enumerable.Empty<Alert>());
 
         // Act
@@ -44,7 +55,7 @@ public class AlertReaderTests
         // Arrange
         var alerts = _fixture.CreateMany<Alert>(3).ToList();
         _mockAlertRepository
-            .Setup(repo => repo.GetAll())
+            .Setup(repo => repo.GetAllForUserId(USER_ID))
             .ReturnsAsync(alerts);
         
         _mockPriceMeasureRepository
@@ -68,7 +79,7 @@ public class AlertReaderTests
             .ToList();
 
         _mockAlertRepository
-            .Setup(repo => repo.GetAll())
+            .Setup(repo => repo.GetAllForUserId(USER_ID))
             .ReturnsAsync(alerts);
         
         _mockPriceMeasureRepository

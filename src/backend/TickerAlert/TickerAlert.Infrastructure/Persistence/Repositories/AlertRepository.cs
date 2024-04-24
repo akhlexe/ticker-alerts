@@ -10,10 +10,10 @@ public class AlertRepository : IAlertRepository
     private readonly ApplicationDbContext _context;
     public AlertRepository(ApplicationDbContext context) => _context = context;
 
-    public async Task CreateAlert(int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)
+    public async Task CreateAlert(int userId, int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)
     {
         var alert = new Alert(
-            1,
+            userId,
             financialAssetId, 
             targetPrice,
             thresholdType
@@ -23,10 +23,11 @@ public class AlertRepository : IAlertRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Alert>> GetAll()
+    public async Task<IEnumerable<Alert>> GetAllForUserId(int userId)
     {
         return await _context.Alerts
             .Include(a => a.FinancialAsset)
+            .Where(a => a.UserId == userId)
             .AsNoTracking()
             .ToListAsync();
     }

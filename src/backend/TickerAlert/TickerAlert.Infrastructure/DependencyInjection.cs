@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
+using TickerAlert.Infrastructure.Common;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Persistence;
 
@@ -13,6 +14,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         RegisterSettings(services, configuration);
+        RegisterCommonServices(services);
         services.AddPersistence(configuration);
         services.AddHttpClient();
         RegisterAuthenticationServices(services, configuration);
@@ -25,6 +27,11 @@ public static class DependencyInjection
     {
         services.AddJwtAuthentication(configuration);
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+    }
+
+    private static void RegisterCommonServices(IServiceCollection services)
+    {
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
 
     private static void RegisterExternalServices(IServiceCollection services)
