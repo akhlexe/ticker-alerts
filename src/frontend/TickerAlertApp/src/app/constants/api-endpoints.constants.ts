@@ -5,3 +5,8 @@ export const Endpoints = {
   CreateAlert: `${environment.apiBaseUrl}/Alerts/CreateAlert`,
   FinancialAssets: `${environment.apiBaseUrl}/FinancialAssets`,
 };
+
+export const AuthEndpoints = {
+  Register: `${environment.apiBaseUrl}/Auth/Register`,
+  Login: `${environment.apiBaseUrl}/Auth/Login`,
+}

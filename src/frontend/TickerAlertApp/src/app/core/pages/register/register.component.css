@@ -1,0 +1,32 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  mat-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .full-width-input {
+    width: 100%;
+  }
+  
+  .submit-button {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .login-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .register-footer {
+    justify-content: space-evenly;
+  }
