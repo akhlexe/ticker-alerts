@@ -1,20 +1,28 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoginRequestDto } from '../../services/models/auth.model';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatButtonModule, MatCardModule, MatInputModule, ReactiveFormsModule, RouterModule],
+  imports: [MatButtonModule, MatCardModule, MatInputModule, ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private route: Router) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -25,8 +33,25 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      // Implement login logic here
+      const request: LoginRequestDto = {
+        username: this.loginForm.get('email')?.value,
+        password: this.loginForm.get('password')?.value
+      }
+
+      this.authService.login(request).subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.route.navigateByUrl('');
+            this.toastr.success('Login success!');
+          }
+          else {
+            this.toastr.error(res.errorMessage);
+          }
+        },
+        error: (err) => {
+          this.toastr.error('Error trying to login the user.');
+        }
+      })
     }
   }
 }

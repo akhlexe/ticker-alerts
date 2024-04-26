@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TickerAlert.Application.Interfaces.Authentication;
+using TickerAlert.Application.Interfaces.Authentication.Dtos;
 using TickerAlert.Domain.Entities;
 using TickerAlert.Infrastructure.Persistence;
 
@@ -21,7 +22,7 @@ public class AuthenticationService : IAuthenticationService
         _jwtSettings = jwtSettingsOptions.Value;
     }
 
-    public async Task<string> Register(string username, string password)
+    public async Task<AuthResponse> Register(string username, string password)
     {
         var existingUser = await _context
             .Users
@@ -29,7 +30,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (existingUser != null)
         {
-            return "Ya existe usuario con ese username";
+            return AuthResponse.CreateFailedResult("Username already taken.");
         }
 
         var newUser = new User()
@@ -43,28 +44,25 @@ public class AuthenticationService : IAuthenticationService
         _context.Users.Add(newUser);
         await _context.SaveChangesAsync();
 
-        return GenerateJwtToken(newUser);
+        string token = GenerateJwtToken(newUser);
+        return AuthResponse.CreateSuccessResult(token);
     }
 
-    public async Task<string> Login(string username, string password)
+    public async Task<AuthResponse> Login(string username, string password)
     {
         var existingUser = await _context
             .Users
             .FirstOrDefaultAsync(u => u.Username == username);
 
-        if (existingUser == null)
+        if (existingUser != null && VerifyUserCredentials(username, password, existingUser))
         {
-            return "Credenciales inválidas.";
+            string token = GenerateJwtToken(existingUser);
+            return AuthResponse.CreateSuccessResult(token);
         }
 
-        if (existingUser.Username == username && PasswordHelper.VerifyPassword(password, existingUser.HashedPassword))
-        {
-            return GenerateJwtToken(existingUser);
-        }
-
-        return "Credenciales inválidas.";
+        return AuthResponse.CreateFailedResult("Invalid credentials.");
     }
-    
+
     private string GenerateJwtToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
@@ -88,5 +86,10 @@ public class AuthenticationService : IAuthenticationService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+    
+    private static bool VerifyUserCredentials(string username, string password, User existingUser)
+    {
+        return existingUser.Username == username && PasswordHelper.VerifyPassword(password, existingUser.HashedPassword);
     }
 }

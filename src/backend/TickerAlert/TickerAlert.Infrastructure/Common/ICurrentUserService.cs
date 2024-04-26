@@ -26,7 +26,13 @@ public class CurrentUserService : ICurrentUserService
     {
         if (!IsAuthenticated) return 0;
 
-        string userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        string userId = _httpContextAccessor.
+            HttpContext?
+            .User?
+            .Claims
+            .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?
+            .Value;
+        
         return int.TryParse(userId, out int userIntId) ? userIntId : 0;
     }
 }

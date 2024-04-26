@@ -31,6 +31,7 @@ public static class DependencyInjection
 
     private static void RegisterCommonServices(IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
 

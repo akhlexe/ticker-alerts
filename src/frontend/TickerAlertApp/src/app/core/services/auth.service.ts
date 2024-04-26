@@ -1,24 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { LoginRequestDto, LoginResponseDto, RegisterRequestDto, RegisterResponseDto } from './models/auth.model';
+import { AuthResponse, LoginRequestDto, RegisterRequestDto } from './models/auth.model';
 import { AuthEndpoints } from '../../constants/api-endpoints.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly JWT_TOKEN = 'JWT_TOKEN';
+  private readonly JWT_TOKEN = 'authToken';
   constructor(private http: HttpClient) { }
 
   public register(request: RegisterRequestDto) {
-    return this.http.post<RegisterResponseDto>(AuthEndpoints.Register, request)
+    return this.http.post<AuthResponse>(AuthEndpoints.Register, request)
       .pipe(tap(res => this.storeJwtToken(res.token)));
   }
 
   public login(request: LoginRequestDto) {
-    return this.http.post<LoginResponseDto>(AuthEndpoints.Login, request)
+    return this.http.post<AuthResponse>(AuthEndpoints.Login, request)
       .pipe(tap(res => this.storeJwtToken(res.token)));
   }
 
@@ -31,7 +30,7 @@ export class AuthService {
   }
 
   public getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem(this.JWT_TOKEN);
   }
 
   private storeJwtToken(jwt: string) {
