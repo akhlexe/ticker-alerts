@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: frontend
+    build: ./src/frontend/TickerAlertApp/
+    ports:
+      - 2222:80
+    depends_on:
+      - backend-api
+
+  backend-api:
+    container_name: backend-api
+    build:
+      context: ./src/backend/TickerAlert/
+      dockerfile: ./TickerAlert.Api/Dockerfile
+    environment:
+      - AllowedHosts=*
+      - AllowedOrigins__AngularApp=http://localhost:4200
+      - ConnectionStrings__TickerAlertsDatabase=${API_DB_CONNECTION_STRING}
+      - Services__Finnhub__BaseUrl=${FINNHUB_BASEURL}
+      - Services__Finnhub__ApiKey=${FINNHUB_API_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Jwt__Key=${JWT_KEY}
+    ports:
+      - 5000:80
+    depends_on:
+      - ticker-db
+
+  ticker-db:
+    container_name: ticker-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
+    driver: local
