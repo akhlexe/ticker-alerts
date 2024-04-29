@@ -9,6 +9,7 @@ export interface RegisterRequestDto {
 }
 
 export interface AuthResponse {
+    username: string;
     token: string;
     success: boolean;
     errorMessage: string;

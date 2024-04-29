@@ -1,0 +1,24 @@
+.toolbar {
+    justify-content: space-between;
+}
+
+.user-login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* This centers the items vertically */
+}
+
+.user-login > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-around
+}
+
+.user-info {
+    padding: 20px;
+    
+}
+
+mat-icon {
+    margin-right: 8px;
+}

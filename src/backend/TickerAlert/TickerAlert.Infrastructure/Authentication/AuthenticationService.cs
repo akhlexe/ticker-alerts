@@ -45,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
         await _context.SaveChangesAsync();
 
         string token = GenerateJwtToken(newUser);
-        return AuthResponse.CreateSuccessResult(token);
+        return AuthResponse.CreateSuccessResult(newUser.Username, token);
     }
 
     public async Task<AuthResponse> Login(string username, string password)
@@ -57,7 +57,7 @@ public class AuthenticationService : IAuthenticationService
         if (existingUser != null && VerifyUserCredentials(username, password, existingUser))
         {
             string token = GenerateJwtToken(existingUser);
-            return AuthResponse.CreateSuccessResult(token);
+            return AuthResponse.CreateSuccessResult(existingUser.Username, token);
         }
 
         return AuthResponse.CreateFailedResult("Invalid credentials.");

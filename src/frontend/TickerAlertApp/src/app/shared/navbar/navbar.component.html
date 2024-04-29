@@ -1,3 +1,14 @@
-<mat-toolbar>
-    <span>Ticker Alert App</span>
+<mat-toolbar class="toolbar">
+    <div>
+        <span>Ticker Alert App</span>
+    </div>
+    <div *ngIf="username" class="user-login">
+        <div class="user-info">
+            <mat-icon>account_circle</mat-icon>
+            <span>{{username}}</span>
+        </div>
+        <div>
+            <button mat-button (click)="onLogout()">Logout</button>
+        </div>
+    </div>
 </mat-toolbar>
