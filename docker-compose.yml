@@ -5,7 +5,7 @@ services:
     container_name: frontend
     build: ./src/frontend/TickerAlertApp/
     ports:
-      - 2222:80
+      - 5000:80
     depends_on:
       - backend-api
 
@@ -16,7 +16,7 @@ services:
       dockerfile: ./TickerAlert.Api/Dockerfile
     environment:
       - AllowedHosts=*
-      - AllowedOrigins__AngularApp=http://localhost:4200
+      - AllowedOrigins__AngularApp=http://localhost:5000
       - ConnectionStrings__TickerAlertsDatabase=${API_DB_CONNECTION_STRING}
       - Services__Finnhub__BaseUrl=${FINNHUB_BASEURL}
       - Services__Finnhub__ApiKey=${FINNHUB_API_KEY}
@@ -24,7 +24,7 @@ services:
       - Jwt__Audience=${JWT_AUDIENCE}
       - Jwt__Key=${JWT_KEY}
     ports:
-      - 5000:80
+      - 5001:80
     depends_on:
       - ticker-db
 
