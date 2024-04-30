@@ -13,13 +13,9 @@ builder.Services
     .AddCustomCors(builder.Configuration)
     .AddControllers();
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var app = builder.Build()
+    .InitializeDatabase()
+    .AddSwaggerIfDevelopment();
 
 app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
