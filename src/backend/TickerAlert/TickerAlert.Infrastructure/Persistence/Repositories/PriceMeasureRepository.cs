@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Domain.Entities;
+using TickerAlert.Domain.Events;
+using TickerAlert.Infrastructure.Persistence.Outbox;
 
 namespace TickerAlert.Infrastructure.Persistence.Repositories;
 
@@ -29,7 +31,24 @@ public class PriceMeasureRepository : IPriceMeasureRepository
 
     public async Task RegisterPriceMeasure(PriceMeasure measure)
     {
-        _context.PriceMeasures.Add(measure);
-        await _context.SaveChangesAsync();
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        
+        try
+        {
+            _context.PriceMeasures.Add(measure);
+            await _context.SaveChangesAsync();
+        
+            var priceReadedDomainEvent = new PriceReadedDomainEvent(Guid.NewGuid(), measure.Id);
+            _context.OutboxMessages.Add(OutboxMessageBuilder.CreateOutboxMessage(priceReadedDomainEvent));    
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            Console.WriteLine(ex);
+            throw;
+        }
     }
 }

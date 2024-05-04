@@ -23,18 +23,6 @@ public class FinancialAssetRepository : IFinancialAssetRepository
 
     public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()
     {
-        // IEnumerable<int> pendingAssetsIds = await _context
-        //     .Alerts
-        //     .Where(x => x.State == AlertState.PENDING)
-        //     .Select(x => x.Id)
-        //     .Distinct()
-        //     .ToListAsync();
-        //
-        // return await _context
-        //     .FinancialAssets
-        //     .Where(x => pendingAssetsIds.Contains(x.Id))
-        //     .ToListAsync();
-        
         return await _context.FinancialAssets
             .Join(_context.Alerts,
                 fa => fa.Id,
