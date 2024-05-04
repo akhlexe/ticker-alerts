@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
+using TickerAlert.Infrastructure.BackgroundJobs;
 using TickerAlert.Infrastructure.Common;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Persistence;
@@ -19,8 +21,27 @@ public static class DependencyInjection
         services.AddHttpClient();
         RegisterAuthenticationServices(services, configuration);
         RegisterExternalServices(services);
+        RegisterBackgroundJobs(services);
         
         return services;
+    }
+
+    private static void RegisterBackgroundJobs(IServiceCollection services)
+    {
+        services.AddQuartz(configure =>
+        {
+            var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+
+            configure
+                .AddJob<ProcessOutboxMessagesJob>(jobKey)
+                .AddTrigger(trigger =>trigger.ForJob(jobKey)
+                    .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(10)
+                        .RepeatForever()
+                    )
+                );
+        });
+
+        services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
     }
     
     private static void RegisterAuthenticationServices(IServiceCollection services, IConfiguration configuration)

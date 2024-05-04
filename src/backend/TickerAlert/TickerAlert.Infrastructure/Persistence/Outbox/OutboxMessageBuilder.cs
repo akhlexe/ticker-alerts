@@ -12,10 +12,12 @@ public static class OutboxMessageBuilder
     
     public static OutboxMessage CreateOutboxMessage(IDomainEvent domainEvent)
     {
-        return new OutboxMessage(
-            Guid.NewGuid(),
-            domainEvent.GetType().Name,
-            JsonConvert.SerializeObject(domainEvent, SerializerSettings),
-            DateTime.UtcNow);
+        return new OutboxMessage()
+        {
+            Id = Guid.NewGuid(),
+            Name = domainEvent.GetType().Name, 
+            Content = JsonConvert.SerializeObject(domainEvent, SerializerSettings),
+            CreatedOnUtc = DateTime.UtcNow
+        };
     }
 }

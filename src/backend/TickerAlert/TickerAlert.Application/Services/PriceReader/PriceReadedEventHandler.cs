@@ -8,6 +8,8 @@ public class PriceReadedEventHandler
 {
     public Task Handle(PriceReadedDomainEvent notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        Console.WriteLine($"Recibo en handler el precio leido nuevo con Id => {notification.PriceMeasureId}.");
+
+        return Task.CompletedTask;
     }
 }
