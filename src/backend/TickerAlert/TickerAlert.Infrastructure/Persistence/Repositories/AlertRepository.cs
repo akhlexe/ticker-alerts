@@ -31,4 +31,18 @@ public class AlertRepository : IAlertRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(int financialAssetId)
+    {
+        return await _context
+            .Alerts
+            .Where(x => x.FinancialAssetId == financialAssetId && x.State == AlertState.PENDING)
+            .ToListAsync();
+    }
+
+    public async Task UpdateRange(IEnumerable<Alert> alerts)
+    {
+        _context.Alerts.UpdateRange(alerts);
+        await _context.SaveChangesAsync();
+    }
 }

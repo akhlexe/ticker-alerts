@@ -51,4 +51,9 @@ public class PriceMeasureRepository : IPriceMeasureRepository
             throw;
         }
     }
+
+    public async Task<PriceMeasure?> GetById(int id)
+    {
+        return await _context.PriceMeasures.FirstOrDefaultAsync(p => p.Id == id);
+    }
 }

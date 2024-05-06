@@ -4,6 +4,7 @@ using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.Watcher;
 using TickerAlert.Application.Services.Alerts;
 using TickerAlert.Application.Services.FinancialAssets;
+using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.PriceReader;
 using TickerAlert.Application.Services.Watcher;
 
@@ -25,5 +26,6 @@ public static class DependencyInjection
         services.AddScoped<IFinancialAssetReader, FinancialAssetReader>();
         services.AddScoped<IWatcher, Watcher>();
         services.AddScoped<PriceReaderService>();
+        services.AddScoped<PriceEvaluatorService>();
     }
 }

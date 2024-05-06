@@ -9,7 +9,7 @@ namespace TickerAlert.Domain.Entities
         public int FinancialAssetId { get; private set; }
         public decimal TargetPrice { get; private set;} 
         public PriceThresholdType ThresholdType { get; private set;}
-        public AlertState State { get; private set; }
+        public AlertState State { get; set; }
         
         public Alert(int userId, int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType) 
             : base()
