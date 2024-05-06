@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using TickerAlert.Application.BackgroundServices.PriceReader;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.Watcher;
@@ -16,7 +15,6 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         RegisterApplicationServices(services);
-        RegisterApplicationWorkers(services);
         return services;
     }
 
@@ -27,10 +25,5 @@ public static class DependencyInjection
         services.AddScoped<IFinancialAssetReader, FinancialAssetReader>();
         services.AddScoped<IWatcher, Watcher>();
         services.AddScoped<PriceReaderService>();
-    }
-
-    private static void RegisterApplicationWorkers(IServiceCollection services)
-    {
-        services.AddHostedService<PriceReaderWorker>();
     }
 }

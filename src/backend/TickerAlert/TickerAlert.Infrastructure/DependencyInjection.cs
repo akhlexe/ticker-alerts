@@ -32,16 +32,7 @@ public static class DependencyInjection
         services.AddQuartz(config =>
         {
             QuartzJobsConfigurator.RegisterTimedJob<ProcessOutboxMessagesJob>(config, JobIntervalsInSeconds.ProcessOutboxMessagesJob);
-            
-            // var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
-            //
-            // configure
-            //     .AddJob<ProcessOutboxMessagesJob>(jobKey)
-            //     .AddTrigger(trigger =>trigger.ForJob(jobKey)
-            //         .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(10)
-            //             .RepeatForever()
-            //         )
-            //     );
+            QuartzJobsConfigurator.RegisterTimedJob<PriceReaderJob>(config, JobIntervalsInSeconds.PriceReaderJob);
         });
 
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
