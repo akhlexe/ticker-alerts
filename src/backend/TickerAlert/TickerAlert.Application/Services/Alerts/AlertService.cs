@@ -1,6 +1,7 @@
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
+using TickerAlert.Domain.Entities;
 using TickerAlert.Domain.Enums;
 using TickerAlert.Domain.Services;
 
@@ -33,6 +34,12 @@ public class AlertService : IAlertService
             targetPrice, 
             threshold
         );
+    }
+
+    public async Task TriggerAlert(Alert alert)
+    {
+        alert.State = AlertState.TRIGGERED;
+        await _repository.TriggerAlert(alert);
     }
 
     private async Task<decimal> GetCurrentPrice(int financialAssetId)

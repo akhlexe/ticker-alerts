@@ -12,4 +12,7 @@ public interface IAlertRepository
     // Background process access
     Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(int financialAssetId);
     Task UpdateRange(IEnumerable<Alert> alerts);
+    
+    // TODO: Modificar esto luego de implementar UoW
+    Task TriggerAlert(Alert alert);
 }
