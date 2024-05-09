@@ -9,7 +9,8 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
 {
     public void Configure(EntityTypeBuilder<Alert> entity)
     {
-        entity.HasKey(a => a.Id);
+        entity.HasKey(a => a.Id)
+            .IsClustered(false);
 
         entity.Property(a => a.FinancialAssetId)
             .IsRequired();
@@ -21,7 +22,7 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
             .IsRequired()
             .HasColumnType("decimal(15, 2)");
 
-        entity.Property(a => a.ThresholdType)
+        entity.Property(a => a.PriceThreshold)
             .IsRequired();
 
         entity.Property(a => a.State)

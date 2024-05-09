@@ -8,7 +8,8 @@ public class PriceMeasureConfiguration : IEntityTypeConfiguration<PriceMeasure>
 {
     public void Configure(EntityTypeBuilder<PriceMeasure> entity)
     {
-        entity.HasKey(e => e.Id);
+        entity.HasKey(e => e.Id)
+            .IsClustered(false);
 
         entity.Property(e => e.FinancialAssetId)
             .IsRequired();

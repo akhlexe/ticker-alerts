@@ -7,7 +7,7 @@ public static class PriceTargetEvaluator
 {
     public static bool IsTargetReached(Alert alert, PriceMeasure measure)
     {
-        return alert.ThresholdType switch
+        return alert.PriceThreshold switch
         {
             PriceThresholdType.Above => HasPriceReachOverAlertTarget(alert, measure),
             PriceThresholdType.Below => HasPriceGoesBelowAlertTarget(alert, measure),

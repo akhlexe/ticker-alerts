@@ -8,7 +8,7 @@ namespace TickerAlert.Domain.Entities
         public Guid UserId { get; private set; }
         public Guid FinancialAssetId { get; private set; }
         public decimal TargetPrice { get; private set;} 
-        public PriceThresholdType ThresholdType { get; private set;}
+        public PriceThresholdType PriceThreshold { get; private set;}
         public AlertState State { get; set; }
 
         public static Alert Create(
@@ -25,7 +25,7 @@ namespace TickerAlert.Domain.Entities
             UserId = userId;
             FinancialAssetId = financialAssetId;
             TargetPrice = targetPrice;
-            ThresholdType = priceThreshold;
+            PriceThreshold = priceThreshold;
             State = AlertState.PENDING;
         }
         

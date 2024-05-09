@@ -12,8 +12,8 @@ using TickerAlert.Infrastructure.Persistence;
 namespace TickerAlert.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240503012225_AddOutboxMessages")]
-    partial class AddOutboxMessages
+    [Migration("20240509030010_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,13 +27,14 @@ namespace TickerAlert.Infrastructure.Migrations
 
             modelBuilder.Entity("TickerAlert.Domain.Entities.Alert", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("FinancialAssetId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("FinancialAssetId")
+                    b.Property<int>("PriceThreshold")
                         .HasColumnType("int");
 
                     b.Property<int>("State")
@@ -42,13 +43,12 @@ namespace TickerAlert.Infrastructure.Migrations
                     b.Property<decimal>("TargetPrice")
                         .HasColumnType("decimal(15, 2)");
 
-                    b.Property<int>("ThresholdType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
 
                     b.HasIndex("FinancialAssetId");
 
@@ -59,11 +59,9 @@ namespace TickerAlert.Infrastructure.Migrations
 
             modelBuilder.Entity("TickerAlert.Domain.Entities.FinancialAsset", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -75,19 +73,19 @@ namespace TickerAlert.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
                     b.ToTable("FinancialAssets");
                 });
 
             modelBuilder.Entity("TickerAlert.Domain.Entities.PriceMeasure", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("FinancialAssetId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FinancialAssetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("MeasuredOn")
                         .HasColumnType("datetime2");
@@ -97,6 +95,8 @@ namespace TickerAlert.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
                     b.HasIndex("FinancialAssetId");
 
                     b.ToTable("PriceMeasures");
@@ -104,11 +104,9 @@ namespace TickerAlert.Infrastructure.Migrations
 
             modelBuilder.Entity("TickerAlert.Domain.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -125,6 +123,8 @@ namespace TickerAlert.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -156,6 +156,8 @@ namespace TickerAlert.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
 
                     b.ToTable("OutboxMessages", (string)null);
                 });

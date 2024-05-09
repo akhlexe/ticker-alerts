@@ -1,5 +1,5 @@
 export interface FinancialAssetDto {
-  id: number;
+  id: string;
   ticker: string;
   name: string;
 }
