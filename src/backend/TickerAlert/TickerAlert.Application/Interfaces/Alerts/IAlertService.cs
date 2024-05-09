@@ -4,7 +4,7 @@ namespace TickerAlert.Application.Interfaces.Alerts
 {
     public interface IAlertService
     {
-        Task CreateAlert(int financialAssetId, decimal targetPrice);
+        Task CreateAlert(Guid financialAssetId, decimal targetPrice);
         Task TriggerAlert(Alert alert);
     }
 }

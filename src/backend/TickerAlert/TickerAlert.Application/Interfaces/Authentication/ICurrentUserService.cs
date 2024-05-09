@@ -2,6 +2,6 @@ namespace TickerAlert.Application.Interfaces.Authentication;
 
 public interface ICurrentUserService
 {
-    int UserId { get; }
+    Guid UserId { get; }
     bool IsAuthenticated  { get; }
 }

@@ -7,17 +7,22 @@ namespace TickerAlert.Domain.UnitTests.Services;
 
 public class PriceTargetEvaluatorTests
 {
+    private readonly Guid UserId = Guid.NewGuid();
+    
     [Theory]
     [InlineData(1000, 900, PriceThresholdType.Below)]
     [InlineData(1000, 1100, PriceThresholdType.Above)]
     public void when_alert_reachs_target_price_returns_true(decimal target, decimal measuredPrice, PriceThresholdType threshold)
     {
-        var asset = new FinancialAsset("SPY", "Standard & Poor 500");
-        var alert = new Alert(1,asset.Id, target, threshold);
-        var priceMeasure = new PriceMeasure(asset.Id, measuredPrice, DateTime.UtcNow);
-
+        // Arrange
+        var asset = FinancialAsset.Create(Guid.NewGuid(), "SPY", "Standard & Poor 500");
+        var alert = Alert.Create(Guid.NewGuid(), UserId, asset.Id, target, threshold);
+        var priceMeasure = PriceMeasure.Create(Guid.NewGuid(), asset.Id, measuredPrice);
+        
+        // Act
         bool result = PriceTargetEvaluator.IsTargetReached(alert, priceMeasure);
 
+        // Assert
         result.Should().Be(true);
     }
 }

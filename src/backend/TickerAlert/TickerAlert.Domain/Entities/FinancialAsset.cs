@@ -7,17 +7,16 @@ namespace TickerAlert.Domain.Entities
         public string Ticker { get; private set; }
         public string Name { get; private set; }
 
-        public FinancialAsset(string ticker, string name) : base()
-        {
-            this.Ticker = ticker;
-            this.Name = name;
-        }
-        
-        public FinancialAsset(int id, string ticker, string name)
-            : base(id)
+        private FinancialAsset(Guid id, string ticker, string name) : base(id)
         {
             Ticker = ticker;
             Name = name;
         }
+
+        public static FinancialAsset Create(Guid id, string ticker, string name) 
+            => new(id, ticker, name);
+        
+        // EF Core.
+        // private FinancialAsset() : base(Guid.Empty) {}
     }
 }

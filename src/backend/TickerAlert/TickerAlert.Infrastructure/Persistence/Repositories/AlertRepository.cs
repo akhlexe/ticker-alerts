@@ -12,20 +12,14 @@ public class AlertRepository : IAlertRepository
     private readonly ApplicationDbContext _context;
     public AlertRepository(ApplicationDbContext context) => _context = context;
 
-    public async Task CreateAlert(int userId, int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)
+    public async Task CreateAlert(Guid userId, Guid financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)
     {
-        var alert = new Alert(
-            userId,
-            financialAssetId, 
-            targetPrice,
-            thresholdType
-        );
-        
+        var alert = Alert.Create(Guid.NewGuid(), userId, financialAssetId, targetPrice, thresholdType);
         _context.Alerts.Add(alert);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Alert>> GetAllForUserId(int userId)
+    public async Task<IEnumerable<Alert>> GetAllForUserId(Guid userId)
     {
         return await _context.Alerts
             .Include(a => a.FinancialAsset)
@@ -34,7 +28,7 @@ public class AlertRepository : IAlertRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(int financialAssetId)
+    public async Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(Guid financialAssetId)
     {
         return await _context
             .Alerts

@@ -20,7 +20,7 @@ public class PriceEvaluatorService
         _alertService = alertService;
     }
 
-    public async Task EvaluatePriceMeasure(int priceMeasureId)
+    public async Task EvaluatePriceMeasure(Guid priceMeasureId)
     {
         var priceMeasure = await _measureRepository.GetById(priceMeasureId);
         var pendingAlerts = await _alertRepository.GetAllWithPendingStateAndByFinancialAssetId(priceMeasure.FinancialAssetId);

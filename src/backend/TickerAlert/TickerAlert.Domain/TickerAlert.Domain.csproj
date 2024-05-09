@@ -8,11 +8,6 @@
 
 
 
-  <ItemGroup>
-    <Compile Update="Entities\Alert.cs">
-      <DependentUpon>User.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
 
 
 

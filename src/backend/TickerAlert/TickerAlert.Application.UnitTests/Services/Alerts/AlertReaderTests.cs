@@ -14,7 +14,7 @@ public class AlertReaderTests
     private readonly Mock<IAlertRepository> _mockAlertRepository;
     private readonly Mock<IPriceMeasureRepository> _mockPriceMeasureRepository;
     private readonly Mock<ICurrentUserService> _mockCurrentUserService;
-    private const int USER_ID = 1;
+    private readonly Guid USER_ID = Guid.NewGuid();
     private readonly AlertReader _alertReader;
     private readonly Fixture _fixture;
 
@@ -59,7 +59,7 @@ public class AlertReaderTests
             .ReturnsAsync(alerts);
         
         _mockPriceMeasureRepository
-            .Setup(repo => repo.GetLastPricesMeasuresFor(It.IsAny<IEnumerable<int>>()))!
+            .Setup(repo => repo.GetLastPricesMeasuresFor(It.IsAny<IEnumerable<Guid>>()))!
             .ReturnsAsync(new List<PriceMeasure>());
 
         // Act
@@ -74,8 +74,8 @@ public class AlertReaderTests
     {
         // Arrange
         var alerts = _fixture.CreateMany<Alert>(3).ToList();
-        var priceMeasures =alerts
-            .Select(a => new PriceMeasure(a.FinancialAssetId, _fixture.Create<decimal>(), DateTime.UtcNow))
+        var priceMeasures = alerts
+            .Select(a => PriceMeasure.Create(Guid.NewGuid(), a.FinancialAssetId, _fixture.Create<decimal>()))
             .ToList();
 
         _mockAlertRepository
@@ -83,7 +83,7 @@ public class AlertReaderTests
             .ReturnsAsync(alerts);
         
         _mockPriceMeasureRepository
-            .Setup(repo => repo.GetLastPricesMeasuresFor(It.IsAny<IEnumerable<int>>()))!
+            .Setup(repo => repo.GetLastPricesMeasuresFor(It.IsAny<IEnumerable<Guid>>()))!
             .ReturnsAsync(priceMeasures);
 
         // Act

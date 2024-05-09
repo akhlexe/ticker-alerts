@@ -39,7 +39,7 @@ public static class FinancialAssetSeeder
         context.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var financialAssets = financialAssetDtos
-            .Select(dto => new FinancialAsset(dto.Symbol, dto.Description))
+            .Select(dto => FinancialAsset.Create(Guid.NewGuid(), dto.Symbol, dto.Description))
             .ToList();
 
         LoadData(context, financialAssets);

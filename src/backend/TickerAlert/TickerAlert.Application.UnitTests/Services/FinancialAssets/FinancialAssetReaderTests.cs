@@ -39,8 +39,8 @@ public class FinancialAssetReaderTests
         const string criteria = "example";
         var assets = new List<FinancialAsset>
         {
-            new FinancialAsset(1, "ABC", "Example Corp"),
-            new FinancialAsset(2, "XYZ", "Example Inc"),
+            FinancialAsset.Create(Guid.NewGuid(), "ABC", "Example Corp"),
+            FinancialAsset.Create(Guid.NewGuid(), "XYZ", "Example Inc")
         };
         
         _mockRepository.Setup(repo => repo.GetAllBySearchCriteria(criteria))
@@ -61,9 +61,11 @@ public class FinancialAssetReaderTests
     {
         // Arrange
         const string criteria = "example";
+        var newGuid = Guid.NewGuid();
+        
         var assets = new List<FinancialAsset>
         {
-            new FinancialAsset(1, "ABC", "Example Corp"),
+            FinancialAsset.Create(newGuid, "ABC", "Example Corp")
         };
         _mockRepository.Setup(repo => repo.GetAllBySearchCriteria(criteria))
                        .ReturnsAsync(assets);
@@ -73,7 +75,7 @@ public class FinancialAssetReaderTests
 
         // Assert
         var assetDto = result.First();
-        assetDto.Id.Should().Be(1);
+        assetDto.Id.Should().Be(newGuid);
         assetDto.Ticker.Should().Be("ABC");
         assetDto.Name.Should().Be("Example Corp");
     }

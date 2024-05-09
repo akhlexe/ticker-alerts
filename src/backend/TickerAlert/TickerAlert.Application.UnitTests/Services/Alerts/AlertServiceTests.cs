@@ -14,7 +14,7 @@ public class AlertServiceTests
     private readonly Mock<IPriceMeasureRepository> _mockPriceMeasureRepository;
     private readonly Mock<ICurrentUserService> _mockCurrentUserService;
     private readonly AlertService _alertService;
-    private const int USER_ID = 1;
+    private readonly Guid USER_ID = Guid.NewGuid();
 
     public AlertServiceTests()
     {
@@ -35,14 +35,13 @@ public class AlertServiceTests
     public async Task CreateAlert_WithValidData_CreatesAlert()
     {
         // Arrange
-        const int assetId = 1;
-        const int userId = 1;
+        Guid assetId = Guid.NewGuid();
         const decimal targetPrice = 100m;
         const decimal currentPrice = 90m;
-        
+
         _mockPriceMeasureRepository
             .Setup(repo => repo.GetLastPriceMeasureFor(assetId))
-            .ReturnsAsync(new PriceMeasure(assetId, currentPrice, DateTime.UtcNow));
+            .ReturnsAsync(PriceMeasure.Create(Guid.NewGuid(), assetId, currentPrice));
 
         _mockAlertRepository
             .Setup(repo => repo.CreateAlert(USER_ID, assetId, targetPrice, It.IsAny<PriceThresholdType>()))

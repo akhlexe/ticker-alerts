@@ -23,7 +23,7 @@ public class AlertService : IAlertService
         _currentUserService = currentUserService;
     }
 
-    public async Task CreateAlert(int financialAssetId, decimal targetPrice)
+    public async Task CreateAlert(Guid financialAssetId, decimal targetPrice)
     {
         decimal currentPrice = await GetCurrentPrice(financialAssetId);
         PriceThresholdType threshold = ThresholdResolver.Resolve(currentPrice, targetPrice);
@@ -42,7 +42,7 @@ public class AlertService : IAlertService
         await _repository.TriggerAlert(alert);
     }
 
-    private async Task<decimal> GetCurrentPrice(int financialAssetId)
+    private async Task<decimal> GetCurrentPrice(Guid financialAssetId)
     {
         var priceMeasure = await _priceMeasureRepository.GetLastPriceMeasureFor(financialAssetId);
         return priceMeasure?.Price ?? 0;

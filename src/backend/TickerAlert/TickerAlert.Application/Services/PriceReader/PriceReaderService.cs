@@ -36,8 +36,6 @@ public class PriceReaderService
         }
     }
 
-    private static PriceMeasure CreatePriceMeasureModel(FinancialAsset asset, PriceMeasureDto priceMeasureDto)
-    {
-        return new PriceMeasure(asset.Id, priceMeasureDto.CurrentPrice, DateTime.UtcNow);
-    }
+    private static PriceMeasure CreatePriceMeasureModel(FinancialAsset asset, PriceMeasureDto priceMeasureDto) 
+        => PriceMeasure.Create(Guid.NewGuid(), asset.Id, priceMeasureDto.CurrentPrice);
 }

@@ -4,7 +4,7 @@ using TickerAlert.Application.Interfaces.Alerts;
 
 namespace TickerAlert.Application.UseCases.Alerts.CreateAlert;
 
-public record class CreateAlertCommand(int FinancialAssetId, decimal TargetPrice) : IRequest<Result>;
+public record class CreateAlertCommand(Guid FinancialAssetId, decimal TargetPrice) : IRequest<Result>;
 
 public class CreateAlertCommandHandler : IRequestHandler<CreateAlertCommand, Result>
 {

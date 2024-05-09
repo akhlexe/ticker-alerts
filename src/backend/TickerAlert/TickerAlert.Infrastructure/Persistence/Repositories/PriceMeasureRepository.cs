@@ -12,7 +12,7 @@ public class PriceMeasureRepository : IPriceMeasureRepository
 
     public PriceMeasureRepository(ApplicationDbContext context) => _context = context;
 
-    public async Task<PriceMeasure?> GetLastPriceMeasureFor(int financialAssetId)
+    public async Task<PriceMeasure?> GetLastPriceMeasureFor(Guid financialAssetId)
     {
         return await _context.PriceMeasures
             .Where(p => p.FinancialAssetId == financialAssetId)
@@ -20,7 +20,7 @@ public class PriceMeasureRepository : IPriceMeasureRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<List<PriceMeasure?>> GetLastPricesMeasuresFor(IEnumerable<int> financialAssetsIds)
+    public async Task<List<PriceMeasure?>> GetLastPricesMeasuresFor(IEnumerable<Guid> financialAssetsIds)
     {
         return await _context.PriceMeasures
             .Where(x => financialAssetsIds.Contains(x.FinancialAssetId))
@@ -52,7 +52,7 @@ public class PriceMeasureRepository : IPriceMeasureRepository
         }
     }
 
-    public async Task<PriceMeasure?> GetById(int id)
+    public async Task<PriceMeasure?> GetById(Guid id)
     {
         return await _context.PriceMeasures.FirstOrDefaultAsync(p => p.Id == id);
     }

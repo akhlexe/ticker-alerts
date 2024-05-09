@@ -6,11 +6,11 @@ namespace TickerAlert.Application.Interfaces.Alerts;
 public interface IAlertRepository
 {
     // User interaction scope
-    Task CreateAlert(int userId, int financialAssetId, decimal targetPrice, PriceThresholdType thresholdType);
-    Task<IEnumerable<Alert>> GetAllForUserId(int userId);
+    Task CreateAlert(Guid userId, Guid financialAssetId, decimal targetPrice, PriceThresholdType thresholdType);
+    Task<IEnumerable<Alert>> GetAllForUserId(Guid userId);
     
     // Background process access
-    Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(int financialAssetId);
+    Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(Guid financialAssetId);
     Task UpdateRange(IEnumerable<Alert> alerts);
     
     // TODO: Modificar esto luego de implementar UoW

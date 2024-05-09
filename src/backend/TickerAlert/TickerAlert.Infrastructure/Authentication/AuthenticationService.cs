@@ -33,14 +33,8 @@ public class AuthenticationService : IAuthenticationService
             return AuthResponse.CreateFailedResult("Username already taken.");
         }
 
-        var newUser = new User()
-        {
-            Username = username,
-            HashedPassword = PasswordHelper.HashPassword(password),
-            CreatedOn = DateTime.UtcNow,
-            IsActive = true
-        };
-
+        var newUser = User.CreateUser(Guid.NewGuid(), username, PasswordHelper.HashPassword(password));
+        
         _context.Users.Add(newUser);
         await _context.SaveChangesAsync();
 

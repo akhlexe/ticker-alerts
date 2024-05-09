@@ -2,8 +2,12 @@
 {
     public abstract class Entity
     {
-        public int Id { get; private set; }
+        public Guid Id { get; private set; }
+
+        protected Entity(Guid id) => Id = id;
         
-        protected Entity(int id = 0) => Id = id;
+        // EF core required.
+        private Entity() => Id = Guid.Empty;
+        
     }
 }

@@ -14,7 +14,7 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public int UserId => GetUserId();
+    public Guid UserId => GetUserId();
     
     public bool IsAuthenticated => _httpContextAccessor
         .HttpContext?
@@ -22,17 +22,20 @@ public class CurrentUserService : ICurrentUserService
         .Identity?
         .IsAuthenticated ?? false;
     
-    private int GetUserId()
+    private Guid GetUserId()
     {
-        if (!IsAuthenticated) return 0;
+        if (!IsAuthenticated) return Guid.Empty;
 
-        string userId = _httpContextAccessor.
+        string strUserId = _httpContextAccessor.
             HttpContext?
             .User?
             .Claims
             .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)?
             .Value;
         
-        return int.TryParse(userId, out int userIntId) ? userIntId : 0;
+        
+        return Guid.TryParse(strUserId, out Guid userId) 
+            ? userId 
+            : Guid.Empty;
     }
 }
