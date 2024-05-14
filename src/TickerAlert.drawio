@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-05-14T02:12:50.669Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="rkzXIzRyxjfl8HBths-2" version="24.4.0" type="github">
+<mxfile host="app.diagrams.net" modified="2024-05-14T02:15:58.046Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="9rWHWmYUJIOikWDZ0gcJ" version="24.4.0" type="github">
   <diagram name="Page-1" id="gIa_hYs-Oa0FOu4E7pOf">
     <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -89,7 +89,7 @@
             <mxPoint x="310" y="770" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ayM1k6lNBPU3NUKRUYsf-30" value="&lt;b&gt;AlertTriggeredNotifier&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;i&gt;Prepares the message and&amp;nbsp;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;i&gt;send it to the NotificationService&lt;/i&gt;&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-30" value="&lt;b&gt;AlertTriggeredNotifier&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;i&gt;Prepares the message and&amp;nbsp;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;i&gt;send it to the NotificationService&lt;br&gt;&lt;/i&gt;&lt;/span&gt;&lt;br&gt;- Alert change state to Notified&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="80" y="705" width="200" height="130" as="geometry" />
         </mxCell>
         <mxCell id="ayM1k6lNBPU3NUKRUYsf-31" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
