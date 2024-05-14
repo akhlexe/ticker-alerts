@@ -1,9 +1,115 @@
-<mxfile host="app.diagrams.net" modified="2024-05-14T00:33:52.976Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" version="24.4.0" etag="GgI6MyNKeRbiWmkW8Jyt" type="github">
+<mxfile host="app.diagrams.net" modified="2024-05-14T02:12:50.669Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="rkzXIzRyxjfl8HBths-2" version="24.4.0" type="github">
   <diagram name="Page-1" id="gIa_hYs-Oa0FOu4E7pOf">
-    <mxGraphModel>
+    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-1" value="PriceReaderService" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-2" value="PriceReadedEventHandler" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="220" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-3" value="PriceReadedEvent" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="ayM1k6lNBPU3NUKRUYsf-1" target="ayM1k6lNBPU3NUKRUYsf-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="110" y="180" as="sourcePoint" />
+            <mxPoint x="160" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-7" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0667" y="-30" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="294" y="249.5" as="sourcePoint" />
+            <mxPoint x="414" y="249.5" as="targetPoint" />
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-8" value="&lt;b&gt;PriceEvaluatorService&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;i&gt;Verify Alerts reach the price readed&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="160" width="230" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-9" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ayM1k6lNBPU3NUKRUYsf-8" target="ayM1k6lNBPU3NUKRUYsf-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="360" as="sourcePoint" />
+            <mxPoint x="525" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="ayM1k6lNBPU3NUKRUYsf-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-10" value="Target Reached" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="492.5" y="360" width="105" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-11" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="470" y="414.5" as="sourcePoint" />
+            <mxPoint x="370" y="414.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-12" value="Not reached" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ayM1k6lNBPU3NUKRUYsf-11">
+          <mxGeometry x="-0.0167" y="2" relative="1" as="geometry">
+            <mxPoint x="9" y="-26" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-14" value="Do nothing." style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="375" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-17" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="544.5" y="480" as="sourcePoint" />
+            <mxPoint x="544.5" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-20" value="Reached" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="550" y="500" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-22" value="&lt;ul&gt;&lt;li&gt;- Alert change state to Triggered.&lt;/li&gt;&lt;li&gt;- Alert Triggered Event is raised&lt;/li&gt;&lt;/ul&gt;" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="390" y="570" width="310" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="ayM1k6lNBPU3NUKRUYsf-22" target="ayM1k6lNBPU3NUKRUYsf-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-24" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="544.5" y="650" as="sourcePoint" />
+            <mxPoint x="544.5" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-25" value="AlertTriggeredEvent" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ayM1k6lNBPU3NUKRUYsf-24">
+          <mxGeometry x="-0.125" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-26" value="AlertTriggeredEventHandler" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="437.5" y="740" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-27" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="769.5" as="sourcePoint" />
+            <mxPoint x="310" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-30" value="&lt;b&gt;AlertTriggeredNotifier&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;i&gt;Prepares the message and&amp;nbsp;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;i&gt;send it to the NotificationService&lt;/i&gt;&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-wrap: nowrap;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="705" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-31" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="179.5" y="850" as="sourcePoint" />
+            <mxPoint x="179.5" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-34" value="NotificationService&lt;br&gt;&lt;br&gt;(In our case, SignalR implementation)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="970" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-35" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="320" y="1010" as="sourcePoint" />
+            <mxPoint x="430" y="1010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ayM1k6lNBPU3NUKRUYsf-36" value="Client receive message" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="985" width="190" height="50" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
