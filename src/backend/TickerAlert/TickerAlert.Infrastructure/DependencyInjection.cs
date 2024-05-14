@@ -2,12 +2,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using TickerAlert.Application.Interfaces.Authentication;
+using TickerAlert.Application.Interfaces.NotificationService;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
 using TickerAlert.Infrastructure.BackgroundJobs;
 using TickerAlert.Infrastructure.BackgroundJobs.Helpers;
 using TickerAlert.Infrastructure.Common;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
+using TickerAlert.Infrastructure.NotificationService;
 using TickerAlert.Infrastructure.Persistence;
 
 namespace TickerAlert.Infrastructure;
@@ -25,6 +27,12 @@ public static class DependencyInjection
         RegisterBackgroundJobs(services);
         
         return services;
+    }
+
+    private static void RegisterNotificationServices(IServiceCollection services)
+    {
+        services.AddSignalR();
+        services.AddSingleton<INotificationService, SignalRNotificationService>();
     }
 
     private static void RegisterBackgroundJobs(IServiceCollection services)

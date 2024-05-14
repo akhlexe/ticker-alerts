@@ -43,12 +43,21 @@ public class AlertRepository : IAlertRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<Alert>> GetAllWithTriggeredState()
+    {
+        return await _context
+            .Alerts
+            .Where(x => x.State == AlertState.TRIGGERED)
+            .ToListAsync();
+    }
+
     public async Task TriggerAlert(Alert alert)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
         
         try
         {
+            alert.State = AlertState.TRIGGERED;
             _context.Alerts.Update(alert);
             await _context.SaveChangesAsync();
 
@@ -64,5 +73,11 @@ public class AlertRepository : IAlertRepository
             Console.WriteLine(ex);
             throw;
         }
+    }
+
+    public async Task NotifyAlert(Alert alert)
+    {
+        alert.State = AlertState.NOTIFIED;
+        await _context.SaveChangesAsync();
     }
 }
