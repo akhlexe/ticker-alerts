@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TickerAlert.Api.Utilities;
+using TickerAlert.Infrastructure.NotificationService;
 using TickerAlert.Infrastructure.Persistence;
 
 namespace TickerAlert.Api.Extensions;
@@ -37,5 +38,15 @@ public static class ApplicationBuilderExtensions
             Console.Write(ex.Message);
             throw;
         }
+    }
+
+    public static WebApplication AddHubEndpoints(this WebApplication app)
+    {
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHub<AlertTriggeredHub>("/api/alertTriggeredHub");
+        });
+
+        return app;
     }
 }

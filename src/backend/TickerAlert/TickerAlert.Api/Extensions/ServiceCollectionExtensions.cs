@@ -16,7 +16,8 @@ public static class ServiceCollectionExtensions
             {
                 policy.WithOrigins(allowedOrigins.Values.ToArray())
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
 

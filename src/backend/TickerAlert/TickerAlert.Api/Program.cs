@@ -17,10 +17,12 @@ var app = builder.Build()
     .InitializeDatabase()
     .AddSwaggerIfDevelopment();
 
+app.UseRouting();
 app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.AddHubEndpoints();
 app.MapControllers();
 
 await FinancialAssetSeeder.Seed(app.Services);

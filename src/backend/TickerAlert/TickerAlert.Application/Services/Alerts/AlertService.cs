@@ -38,7 +38,6 @@ public class AlertService : IAlertService
 
     public async Task TriggerAlert(Alert alert)
     {
-        alert.State = AlertState.TRIGGERED;
         await _repository.TriggerAlert(alert);
     }
 

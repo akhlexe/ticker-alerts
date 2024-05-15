@@ -25,6 +25,7 @@ public static class DependencyInjection
         RegisterAuthenticationServices(services, configuration);
         RegisterExternalServices(services);
         RegisterBackgroundJobs(services);
+        RegisterNotificationServices(services);
         
         return services;
     }

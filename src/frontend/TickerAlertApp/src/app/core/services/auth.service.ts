@@ -10,6 +10,7 @@ import { StorageKeys } from './models/storage-key.model';
 })
 export class AuthService {
   private loggedInUsername = new BehaviorSubject<string | null>(null);
+  public loggedInUsername$ = this.loggedInUsername.asObservable();
 
   constructor(private http: HttpClient) {
     this.checkInitialAuthState();

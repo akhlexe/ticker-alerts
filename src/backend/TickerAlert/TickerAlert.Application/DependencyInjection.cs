@@ -3,6 +3,7 @@ using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Services.Alerts;
 using TickerAlert.Application.Services.FinancialAssets;
+using TickerAlert.Application.Services.Notifiers;
 using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.PriceReader;
 
@@ -24,5 +25,6 @@ public static class DependencyInjection
         services.AddScoped<IFinancialAssetReader, FinancialAssetReader>();
         services.AddScoped<PriceReaderService>();
         services.AddScoped<PriceEvaluatorService>();
+        services.AddScoped<AlertTriggeredNotifier>();
     }
 }

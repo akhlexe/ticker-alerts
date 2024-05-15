@@ -12,6 +12,11 @@ public class AlertRepository : IAlertRepository
     private readonly ApplicationDbContext _context;
     public AlertRepository(ApplicationDbContext context) => _context = context;
 
+    public async Task<Alert?> GetById(Guid alertId)
+    {
+        return await _context.Alerts.FindAsync(alertId);
+    }
+
     public async Task CreateAlert(Guid userId, Guid financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)
     {
         var alert = Alert.Create(Guid.NewGuid(), userId, financialAssetId, targetPrice, thresholdType);
@@ -36,20 +41,12 @@ public class AlertRepository : IAlertRepository
             .ToListAsync();
     }
 
-    // Ver si queda, sino lo borro.
-    public async Task UpdateRange(IEnumerable<Alert> alerts)
-    {
-        _context.Alerts.UpdateRange(alerts);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task<IEnumerable<Alert>> GetAllWithTriggeredState()
-    {
-        return await _context
-            .Alerts
-            .Where(x => x.State == AlertState.TRIGGERED)
-            .ToListAsync();
-    }
+    // // Ver si queda, sino lo borro.
+    // public async Task UpdateRange(IEnumerable<Alert> alerts)
+    // {
+    //     _context.Alerts.UpdateRange(alerts);
+    //     await _context.SaveChangesAsync();
+    // }
 
     public async Task TriggerAlert(Alert alert)
     {
