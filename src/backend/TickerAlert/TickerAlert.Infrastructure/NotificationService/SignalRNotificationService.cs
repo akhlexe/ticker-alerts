@@ -10,6 +10,8 @@ public class SignalRNotificationService : INotificationService
     public SignalRNotificationService(IHubContext<AlertTriggeredHub> hubContext) 
         => _hubContext = hubContext;
 
-    public async Task Notify(string userId, string message) 
-        => await _hubContext.Clients.User(userId).SendAsync("ReceiveMessage", message);
+    public async Task Notify(string userId, string message)
+    {
+        await _hubContext.Clients.User(userId).SendAsync("ReceiveMessage", message);
+    }
 }

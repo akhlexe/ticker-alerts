@@ -14,7 +14,10 @@ public class AlertRepository : IAlertRepository
 
     public async Task<Alert?> GetById(Guid alertId)
     {
-        return await _context.Alerts.FindAsync(alertId);
+        return await _context
+            .Alerts
+            .Include(x => x.FinancialAsset)
+            .FirstOrDefaultAsync(x => x.Id == alertId);
     }
 
     public async Task CreateAlert(Guid userId, Guid financialAssetId, decimal targetPrice, PriceThresholdType thresholdType)

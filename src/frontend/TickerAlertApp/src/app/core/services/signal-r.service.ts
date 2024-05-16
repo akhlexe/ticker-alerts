@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { StorageKeys } from './models/storage-key.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +14,35 @@ export class SignalRService {
   private notificationSubject = new BehaviorSubject<string | null>(null);
   public notification$ = this.notificationSubject.asObservable();
 
-  constructor() { }
+  constructor(private authService: AuthService) {
+    this.authService.loggedInUsername$.subscribe(username => {
+      if (username) {
+        this.startConnection();
+      } else {
+        this.stopConnection();
+      }
+    });
+  }
 
   public startConnection(): void {
-
     debugger
+    const token = localStorage.getItem(StorageKeys.JWT_TOKEN);
+
+    if (!token) {
+      console.error('No token found in session storage');
+      return;
+    }
+
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.apiBaseUrl + '/alertTriggeredHub')
+      .withUrl(environment.apiBaseUrl + '/alertTriggeredHub', {
+        accessTokenFactory: () => token,
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets,
+      })
       .build();
 
-    this.hubConnection.on('MessageReceived', (message) => {
-      console.log(message);
+    this.hubConnection.on('ReceiveMessage', (message) => {
+      this.notificationSubject.next(message);
     })
 
     this.hubConnection.start()
@@ -31,8 +51,6 @@ export class SignalRService {
   }
 
   public stopConnection(): void {
-
-    debugger
     this.hubConnection.stop()
       .then(() => console.log('Hub connection stopped'))
       .catch(err => console.log('Error while stopping connection: ' + err));

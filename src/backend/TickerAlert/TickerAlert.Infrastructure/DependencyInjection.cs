@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
@@ -34,6 +35,7 @@ public static class DependencyInjection
     {
         services.AddSignalR();
         services.AddSingleton<INotificationService, SignalRNotificationService>();
+        services.AddSingleton<IUserIdProvider, SignalrUserIdProvider>();
     }
 
     private static void RegisterBackgroundJobs(IServiceCollection services)
