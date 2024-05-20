@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.18.1" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.19" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="xunit" Version="2.4.2" />
@@ -26,12 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TickerAlert.Application\TickerAlert.Application.csproj" />
+    <ProjectReference Include="..\TickerAlert.Infrastructure\TickerAlert.Infrastructure.csproj" />
 
-
-
-  <ItemGroup>
-    <Folder Include="Common\Persistence\" />
-  </ItemGroup>
 
   </ItemGroup>
 

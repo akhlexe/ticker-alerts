@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Domain.Entities;
 using TickerAlert.Infrastructure.Persistence.Outbox;
 
 namespace TickerAlert.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
         : base(options) { }
@@ -18,7 +19,11 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        
         base.OnModelCreating(modelBuilder);
+    }
+    
+    public Task<int> SaveChangesAsync()
+    {
+        return base.SaveChangesAsync();
     }
 }
