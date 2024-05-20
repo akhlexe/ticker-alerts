@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using FluentAssertions;
 using Moq;
+using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Services.FinancialAssets;
 using TickerAlert.Domain.Entities;
@@ -10,12 +11,14 @@ namespace TickerAlert.Application.UnitTests.Services.FinancialAssets;
 public class FinancialAssetReaderTests
 {
     private readonly Mock<IFinancialAssetRepository> _mockRepository;
+    private readonly Mock<IApplicationDbContext> _mockContext;
     private readonly FinancialAssetReader _financialAssetReader;
 
     public FinancialAssetReaderTests()
     {
+        _mockContext = new Mock<IApplicationDbContext>();
         _mockRepository = new Mock<IFinancialAssetRepository>();
-        _financialAssetReader = new FinancialAssetReader(_mockRepository.Object);
+        _financialAssetReader = new FinancialAssetReader(_mockContext.Object);
     }
 
     [Fact]

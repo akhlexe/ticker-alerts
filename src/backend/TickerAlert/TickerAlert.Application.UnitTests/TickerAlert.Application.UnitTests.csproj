@@ -26,6 +26,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TickerAlert.Application\TickerAlert.Application.csproj" />
+
+
+
+  <ItemGroup>
+    <Folder Include="Common\Persistence\" />
+  </ItemGroup>
+
   </ItemGroup>
 
 
