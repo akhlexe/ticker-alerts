@@ -6,5 +6,6 @@ namespace TickerAlert.Application.Interfaces.Alerts
     {
         Task CreateAlert(Guid financialAssetId, decimal targetPrice);
         Task TriggerAlert(Alert alert);
+        Task NotifyAlert(Alert alert);
     }
 }

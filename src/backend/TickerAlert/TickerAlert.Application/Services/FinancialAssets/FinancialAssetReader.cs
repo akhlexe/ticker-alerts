@@ -3,6 +3,7 @@ using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Services.FinancialAssets.Dtos;
 using TickerAlert.Domain.Entities;
+using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Application.Services.FinancialAssets;
 
@@ -22,6 +23,19 @@ public class FinancialAssetReader : IFinancialAssetReader
             .ToListAsync();
 
         return assets.Select(CreateFinancialAssetDto);
+    }
+
+    public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()
+    {
+        return await _context.FinancialAssets
+            .Join(_context.Alerts,
+                fa => fa.Id,
+                alert => alert.FinancialAssetId,
+                (fa, alert) => new { FinancialAsset = fa, Alert = alert })
+            .Where(faAlert => faAlert.Alert.State == AlertState.PENDING)
+            .Select(faAlert => faAlert.FinancialAsset)
+            .Distinct()
+            .ToListAsync();
     }
 
     private static FinancialAssetDto CreateFinancialAssetDto(FinancialAsset financialAsset)

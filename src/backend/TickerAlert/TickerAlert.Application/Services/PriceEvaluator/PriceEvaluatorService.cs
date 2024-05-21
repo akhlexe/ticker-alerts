@@ -6,24 +6,24 @@ namespace TickerAlert.Application.Services.PriceEvaluator;
 
 public class PriceEvaluatorService
 {
-    private readonly IAlertRepository _alertRepository;
-    private readonly IPriceMeasureRepository _measureRepository;
+    private readonly ISystemAlertReader _systemAlertReader;
+    private readonly IPriceMeasureReader _measureReader;
     private readonly IAlertService _alertService;
 
     public PriceEvaluatorService(
-        IAlertRepository alertRepository, 
-        IPriceMeasureRepository measureRepository, 
+        ISystemAlertReader systemAlertReader, 
+        IPriceMeasureReader measureReader, 
         IAlertService alertService)
     {
-        _alertRepository = alertRepository;
-        _measureRepository = measureRepository;
+        _systemAlertReader = systemAlertReader;
+        _measureReader = measureReader;
         _alertService = alertService;
     }
 
     public async Task EvaluatePriceMeasure(Guid priceMeasureId)
     {
-        var priceMeasure = await _measureRepository.GetById(priceMeasureId);
-        var pendingAlerts = await _alertRepository.GetAllWithPendingStateAndByFinancialAssetId(priceMeasure.FinancialAssetId);
+        var priceMeasure = await _measureReader.GetById(priceMeasureId);
+        var pendingAlerts = await _systemAlertReader.GetAllWithPendingStateAndByFinancialAssetId(priceMeasure.FinancialAssetId);
 
         foreach (var alert in pendingAlerts)
         {

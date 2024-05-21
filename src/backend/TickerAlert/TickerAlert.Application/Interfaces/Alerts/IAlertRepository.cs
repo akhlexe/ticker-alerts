@@ -7,7 +7,6 @@ public interface IAlertRepository
 {
     // User interaction scope
     Task<Alert?> GetById(Guid alertId);
-    Task CreateAlert(Guid userId, Guid financialAssetId, decimal targetPrice, PriceThresholdType thresholdType);
     Task<IEnumerable<Alert>> GetAllForUserId(Guid userId);
     
     // Background process access

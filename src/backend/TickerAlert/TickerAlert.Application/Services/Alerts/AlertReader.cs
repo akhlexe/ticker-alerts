@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
@@ -8,25 +10,42 @@ namespace TickerAlert.Application.Services.Alerts;
 
 public class AlertReader : IAlertReader
 {
+    private readonly IApplicationDbContext _context;
+    private readonly IPriceMeasureReader _priceMeasureReader;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IAlertRepository _repository;
-    private readonly IPriceMeasureRepository _priceMeasureRepository;
     
     public AlertReader(
-        IAlertRepository repository, 
-        IPriceMeasureRepository priceMeasureRepository, 
-        ICurrentUserService currentUserService)
+        IApplicationDbContext context,
+        IPriceMeasureReader priceMeasureReader, 
+        ICurrentUserService currentUserService) 
     {
-        _repository = repository;
-        _priceMeasureRepository = priceMeasureRepository;
+        _context = context;
+        _priceMeasureReader = priceMeasureReader;
         _currentUserService = currentUserService;
     }
 
     public async Task<IEnumerable<AlertDto>> GetAlerts()
     {
-        var alerts = await _repository.GetAllForUserId(_currentUserService.UserId);
-        var lastPrices = await _priceMeasureRepository.GetLastPricesMeasuresFor(alerts.Select(x => x.FinancialAssetId));
+        var alerts = await GetAllForUserId(_currentUserService.UserId);
+        var lastPrices = await _priceMeasureReader.GetLastPricesMeasuresFor(alerts.Select(x => x.FinancialAssetId));
         return alerts.Select(alert => CreateAlertDto(alert, lastPrices.FirstOrDefault(p => p.FinancialAssetId == alert.FinancialAssetId)));
+    }
+
+    public async Task<Alert?> GetById(Guid alertId)
+    {
+        return await _context
+            .Alerts
+            .Include(x => x.FinancialAsset)
+            .FirstOrDefaultAsync(x => x.Id == alertId);
+    }
+
+    public async Task<IEnumerable<Alert>> GetAllForUserId(Guid userId)
+    {
+        return await _context.Alerts
+            .Include(a => a.FinancialAsset)
+            .Where(a => a.UserId == userId)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     private static AlertDto CreateAlertDto(Alert a, PriceMeasure? priceMeasure)

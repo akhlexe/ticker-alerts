@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Domain.Events;
 
-namespace TickerAlert.Application.Services.PriceReader;
+namespace TickerAlert.Application.Services.Prices;
 
 public class PriceReadedEventHandler : INotificationHandler<PriceReadedDomainEvent>
 {

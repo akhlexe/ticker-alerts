@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using TickerAlert.Application.Services.PriceReader;
+using TickerAlert.Application.Services.Prices;
 
 namespace TickerAlert.Infrastructure.BackgroundJobs;
 

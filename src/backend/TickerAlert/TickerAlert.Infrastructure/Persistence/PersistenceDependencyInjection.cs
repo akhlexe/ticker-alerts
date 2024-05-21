@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TickerAlert.Application.Interfaces.Alerts;
-using TickerAlert.Application.Interfaces.FinancialAssets;
-using TickerAlert.Application.Interfaces.PriceMeasures;
-using TickerAlert.Infrastructure.Persistence.Repositories;
+using TickerAlert.Application.Common.Persistence;
+using TickerAlert.Infrastructure.Persistence.Interceptors;
 
 namespace TickerAlert.Infrastructure.Persistence;
 
@@ -12,16 +10,15 @@ public static class PersistenceDependencyInjection
 {
     public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlServer(configuration.GetConnectionString("TickerAlertsDatabase")));
-        
-        RegisterRepositories(services);
-    }
+        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        {
+            var interceptor = sp.GetRequiredService<ConvertDomainEventsToOutboxMessagesInterceptor>();
 
-    private static void RegisterRepositories(IServiceCollection services)
-    {
-        services.AddScoped<IAlertRepository, AlertRepository>();
-        services.AddScoped<IPriceMeasureRepository, PriceMeasureRepository>();
-        services.AddScoped<IFinancialAssetRepository, FinancialAssetRepository>();
+            options.UseSqlServer(configuration.GetConnectionString("TickerAlertsDatabase"))
+                .AddInterceptors(interceptor);
+        });
+
+        services.AddSingleton<ConvertDomainEventsToOutboxMessagesInterceptor>();
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
     }
 }

@@ -1,47 +1,50 @@
 using AutoFixture;
 using FluentAssertions;
 using Moq;
+using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Application.Services.Alerts;
+using TickerAlert.Application.Services.Prices;
+using TickerAlert.Application.UnitTests.Common.Persistence;
 using TickerAlert.Domain.Entities;
 
 namespace TickerAlert.Application.UnitTests.Services.Alerts;
 
 public class AlertReaderTests
 {
-    private readonly Mock<IAlertRepository> _mockAlertRepository;
-    private readonly Mock<IPriceMeasureRepository> _mockPriceMeasureRepository;
-    private readonly Mock<ICurrentUserService> _mockCurrentUserService;
-    private readonly Guid USER_ID = Guid.NewGuid();
+    private readonly IApplicationDbContext _context;
+    private readonly Guid _userId = Guid.NewGuid();
     private readonly AlertReader _alertReader;
     private readonly Fixture _fixture;
 
     public AlertReaderTests()
     {
-        _mockAlertRepository = new Mock<IAlertRepository>();
-        _mockPriceMeasureRepository = new Mock<IPriceMeasureRepository>();
-        _mockCurrentUserService = new Mock<ICurrentUserService>();
+        _context = DbContextInMemory.Create();
         _alertReader = new AlertReader(
-            _mockAlertRepository.Object, 
-            _mockPriceMeasureRepository.Object, 
-            _mockCurrentUserService.Object);
-
-        _mockCurrentUserService.Setup(u => u.UserId).Returns(USER_ID);
-        _mockCurrentUserService.Setup(u => u.IsAuthenticated).Returns(true);
+            _context,
+            new PriceMeasureReader(_context),
+            CreateMockCurrentUser().Object
+        );
         
         _fixture = new Fixture();
     }
-    
+
+    private Mock<ICurrentUserService> CreateMockCurrentUser()
+    {
+        var mockCurrentUserService = new Mock<ICurrentUserService>();
+        mockCurrentUserService.Setup(u => u.UserId).Returns(_userId);
+        mockCurrentUserService.Setup(u => u.IsAuthenticated).Returns(true);
+        return mockCurrentUserService;
+    }
+
     [Fact]
     public async Task GetAlerts_NoAlerts_ShouldReturnsEmptyList()
     {
-        // Arrange
-        _mockAlertRepository
-            .Setup(repo => repo.GetAllForUserId(USER_ID))
-            .ReturnsAsync(Enumerable.Empty<Alert>());
-
+        // Arrange. 
+        // Empty context state.
+        
         // Act
         var result = await _alertReader.GetAlerts();
 
@@ -54,13 +57,7 @@ public class AlertReaderTests
     {
         // Arrange
         var alerts = _fixture.CreateMany<Alert>(3).ToList();
-        _mockAlertRepository
-            .Setup(repo => repo.GetAllForUserId(USER_ID))
-            .ReturnsAsync(alerts);
-        
-        _mockPriceMeasureRepository
-            .Setup(repo => repo.GetLastPricesMeasuresFor(It.IsAny<IEnumerable<Guid>>()))!
-            .ReturnsAsync(new List<PriceMeasure>());
+        await InitializeDatabaseWith(alerts);
 
         // Act
         var result = await _alertReader.GetAlerts();
@@ -68,7 +65,9 @@ public class AlertReaderTests
         // Assert
         Assert.All(result, dto => dto.ActualPrice.Should().Be(0));
     }
+
     
+
     [Fact]
     public async Task GetAlerts_AlertsAndPriceMeasuresAvailable_ReturnsCorrectData()
     {
@@ -78,13 +77,7 @@ public class AlertReaderTests
             .Select(a => PriceMeasure.Create(Guid.NewGuid(), a.FinancialAssetId, _fixture.Create<decimal>()))
             .ToList();
 
-        _mockAlertRepository
-            .Setup(repo => repo.GetAllForUserId(USER_ID))
-            .ReturnsAsync(alerts);
-        
-        _mockPriceMeasureRepository
-            .Setup(repo => repo.GetLastPricesMeasuresFor(It.IsAny<IEnumerable<Guid>>()))!
-            .ReturnsAsync(priceMeasures);
+        await InitializeDatabaseWith(alerts, priceMeasures);
 
         // Act
         var result = await _alertReader.GetAlerts();
@@ -96,5 +89,12 @@ public class AlertReaderTests
             Assert.Equal(correspondingPriceMeasure.Price, dto.ActualPrice);
             Assert.Equal(dto.TargetPrice - correspondingPriceMeasure.Price, dto.Difference);
         }
+    }
+    
+    private async Task InitializeDatabaseWith(List<Alert> alerts, List<PriceMeasure>? priceMeasures = null)
+    {
+        _context.Alerts.AddRange(alerts);
+        _context.PriceMeasures.AddRange(priceMeasures ??= new List<PriceMeasure>());
+        await _context.SaveChangesAsync();
     }
 }

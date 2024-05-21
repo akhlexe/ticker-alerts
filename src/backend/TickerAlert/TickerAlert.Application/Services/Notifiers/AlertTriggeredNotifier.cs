@@ -7,20 +7,25 @@ namespace TickerAlert.Application.Services.Notifiers;
 
 public class AlertTriggeredNotifier
 {
-    private readonly IAlertRepository _alertRepository;
+    private readonly IAlertReader _alertReader;
+    private readonly IAlertService _alertService;
     private readonly INotificationService _notificationService;
 
-    public AlertTriggeredNotifier(IAlertRepository alertRepository, INotificationService notificationService)
+    public AlertTriggeredNotifier(
+        INotificationService notificationService, 
+        IAlertReader alertReader, 
+        IAlertService alertService)
     {
-        _alertRepository = alertRepository;
         _notificationService = notificationService;
+        _alertReader = alertReader;
+        _alertService = alertService;
     }
 
     public async Task Notify(Guid alertId)
     {
         try
         {
-            var alertTriggered = await _alertRepository.GetById(alertId);
+            var alertTriggered = await _alertReader.GetById(alertId);
         
             if (alertTriggered == null) return;
             
@@ -36,7 +41,7 @@ public class AlertTriggeredNotifier
 
     private async Task UpdateAlertState(Alert alert)
     {
-        await _alertRepository.NotifyAlert(alert);
+        await _alertService.NotifyAlert(alert);
     }
 
     private async Task SendNotification(Alert alert)

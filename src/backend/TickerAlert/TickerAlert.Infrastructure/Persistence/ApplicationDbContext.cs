@@ -24,6 +24,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     
     public Task<int> SaveChangesAsync()
     {
+        
+        
         return base.SaveChangesAsync();
     }
 }
