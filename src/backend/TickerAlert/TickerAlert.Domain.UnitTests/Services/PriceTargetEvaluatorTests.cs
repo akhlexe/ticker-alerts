@@ -12,7 +12,7 @@ public class PriceTargetEvaluatorTests
     [Theory]
     [InlineData(1000, 900, PriceThresholdType.Below)]
     [InlineData(1000, 1100, PriceThresholdType.Above)]
-    public void when_alert_reachs_target_price_returns_true(decimal target, decimal measuredPrice, PriceThresholdType threshold)
+    public void IsTargetReached_WhenAlertReachTarget_ReturnsTrue(decimal target, decimal measuredPrice, PriceThresholdType threshold)
     {
         // Arrange
         var asset = FinancialAsset.Create(Guid.NewGuid(), "SPY", "Standard & Poor 500");
@@ -23,6 +23,6 @@ public class PriceTargetEvaluatorTests
         bool result = PriceTargetEvaluator.IsTargetReached(alert, priceMeasure);
 
         // Assert
-        result.Should().Be(true);
+        result.Should().BeTrue();
     }
 }
