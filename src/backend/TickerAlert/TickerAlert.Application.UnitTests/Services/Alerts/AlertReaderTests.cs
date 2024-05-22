@@ -31,14 +31,6 @@ public class AlertReaderTests
         _fixture = new Fixture();
     }
 
-    private Mock<ICurrentUserService> CreateMockCurrentUser()
-    {
-        var mockCurrentUserService = new Mock<ICurrentUserService>();
-        mockCurrentUserService.Setup(u => u.UserId).Returns(_userId);
-        mockCurrentUserService.Setup(u => u.IsAuthenticated).Returns(true);
-        return mockCurrentUserService;
-    }
-
     [Fact]
     public async Task GetAlerts_NoAlerts_ShouldReturnsEmptyList()
     {
@@ -65,8 +57,6 @@ public class AlertReaderTests
         // Assert
         Assert.All(result, dto => dto.ActualPrice.Should().Be(0));
     }
-
-    
 
     [Fact]
     public async Task GetAlerts_AlertsAndPriceMeasuresAvailable_ReturnsCorrectData()
@@ -96,5 +86,13 @@ public class AlertReaderTests
         _context.Alerts.AddRange(alerts);
         _context.PriceMeasures.AddRange(priceMeasures ??= new List<PriceMeasure>());
         await _context.SaveChangesAsync();
+    }
+    
+    private Mock<ICurrentUserService> CreateMockCurrentUser()
+    {
+        var mockCurrentUserService = new Mock<ICurrentUserService>();
+        mockCurrentUserService.Setup(u => u.UserId).Returns(_userId);
+        mockCurrentUserService.Setup(u => u.IsAuthenticated).Returns(true);
+        return mockCurrentUserService;
     }
 }

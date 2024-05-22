@@ -59,4 +59,53 @@ public class AlertServiceTests
         alert.FinancialAssetId.Should().Be(assetId);
         alert.TargetPrice.Should().Be(targetPrice);
     }
+
+    [Fact]
+    public async Task TriggerAlert()
+    {
+        // Arrange
+        var alert = CreatePendingAlert();
+        alert.State.Should().Be(AlertState.PENDING);
+        
+        _context.Alerts.Add(alert);
+        await _context.SaveChangesAsync();
+
+        // Act
+        await _alertService.TriggerAlert(alert);
+
+        // Assert
+        var first = _context.Alerts.First();
+        first.State.Should().Be(AlertState.TRIGGERED);
+    }
+    
+    [Fact]
+    public async Task NotifyAlert()
+    {
+        // Arrange
+        var alert = CreateTriggeredAlert();
+        alert.State.Should().Be(AlertState.TRIGGERED);
+        
+        _context.Alerts.Add(alert);
+        await _context.SaveChangesAsync();
+
+        // Act
+        await _alertService.NotifyAlert(alert);
+
+        // Assert
+        var first = _context.Alerts.First();
+        first.State.Should().Be(AlertState.NOTIFIED);
+    }
+
+    private Alert CreatePendingAlert()
+    {
+        return Alert.Create(Guid.NewGuid(), _userId, Guid.NewGuid(), 100, PriceThresholdType.Above);
+    }
+    
+    private Alert CreateTriggeredAlert()
+    {
+        var alert = Alert.Create(Guid.NewGuid(), _userId, Guid.NewGuid(), 100, PriceThresholdType.Above);
+        alert.State = AlertState.TRIGGERED;
+
+        return alert;
+    }
 }

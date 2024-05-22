@@ -15,7 +15,7 @@ public class SystemAlertReader : ISystemAlertReader
         _context = context;
     }
 
-    public async Task<IEnumerable<Alert>> GetAllWithPendingStateAndByFinancialAssetId(Guid financialAssetId)
+    public async Task<IEnumerable<Alert>> GetPendingAlertsByFinancialAsset(Guid financialAssetId)
     {
         return await _context
             .Alerts
