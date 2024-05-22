@@ -1,35 +1,33 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET CI
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
 on:
   push:
     branches: ["master"]
-  pull_request:
-    branches: ["master"]
 
 jobs:
-  build:
+  Explore-Github-Actions:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Check out repository code
         uses: actions/checkout@v4
-    
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 7.0.x
 
-      - name: Set up working directory
-        run: cd src/backend/TickerAlert/TickerAlert.Api
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
 
-      - name: Restore dependencies
-        run: dotnet restore TickerAlert.Api.csproj
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release TickerAlert.Api.csproj
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
 
-      - name: Test
-        run: dotnet test --no-build --verbosity normal --configuration Release TickerAlert.Api.csproj
+      - run: echo "🍏 This job's status is ${{ job.status }}."
