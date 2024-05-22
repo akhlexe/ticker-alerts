@@ -25,9 +25,9 @@ jobs:
         working-directory: src/backend/TickerAlert/TickerAlert.Api
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release TickerAlert.Api.csproj
+        run: dotnet build --no-restore TickerAlert.Api.csproj
         working-directory: src/backend/TickerAlert/TickerAlert.Api
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --configuration Release TickerAlert.Api.csproj --logger "console;verbosity=detailed"
+        run: dotnet test --no-build TickerAlert.Api.csproj
         working-directory: src/backend/TickerAlert/TickerAlert.Api
