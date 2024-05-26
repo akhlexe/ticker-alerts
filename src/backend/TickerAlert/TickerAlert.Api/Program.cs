@@ -1,7 +1,6 @@
 using TickerAlert.Api.Extensions;
 using TickerAlert.Application;
 using TickerAlert.Infrastructure;
-using TickerAlert.Infrastructure.Persistence.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +12,10 @@ builder.Services
     .AddCustomCors(builder.Configuration)
     .AddControllers();
 
-var app = builder.Build()
-    .InitializeDatabase()
-    .AddSwaggerIfDevelopment();
+var app = builder.Build();
 
+app.InitializeDatabase();
+app.AddSwaggerIfDevelopment();
 app.UseRouting();
 app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
@@ -24,7 +23,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.AddHubEndpoints();
 app.MapControllers();
-
-await FinancialAssetSeeder.Seed(app.Services);
-
 app.Run();
+
+public partial class Program { }

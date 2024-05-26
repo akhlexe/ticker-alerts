@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Infrastructure.Persistence.Interceptors;
+using TickerAlert.Infrastructure.Persistence.Seeders;
 
 namespace TickerAlert.Infrastructure.Persistence;
 
@@ -20,5 +21,6 @@ public static class PersistenceDependencyInjection
 
         services.AddSingleton<ConvertDomainEventsToOutboxMessagesInterceptor>();
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddSingleton<IDataSeeder, ApplicationDataSeeder>();
     }
 }

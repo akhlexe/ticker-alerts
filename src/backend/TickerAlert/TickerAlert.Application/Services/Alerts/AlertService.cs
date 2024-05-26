@@ -25,13 +25,15 @@ public class AlertService : IAlertService
         _currentUserService = currentUserService;
     }
 
-    public async Task CreateAlert(Guid financialAssetId, decimal targetPrice)
+    public async Task<Guid> CreateAlert(Guid financialAssetId, decimal targetPrice)
     {
         var threshold = await ResolveThreshold(financialAssetId, targetPrice);
         var newAlert = Alert.Create(Guid.NewGuid(), _currentUserService.UserId, financialAssetId, targetPrice, threshold);
 
         _context.Alerts.Add(newAlert);
         await _context.SaveChangesAsync();
+
+        return newAlert.Id;
     }
 
     public async Task TriggerAlert(Alert alert)

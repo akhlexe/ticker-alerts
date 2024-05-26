@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TickerAlert.Api.Utilities;
 using TickerAlert.Infrastructure.NotificationService;
 using TickerAlert.Infrastructure.Persistence;
+using TickerAlert.Infrastructure.Persistence.Seeders;
 
 namespace TickerAlert.Api.Extensions;
 
@@ -10,6 +11,11 @@ public static class ApplicationBuilderExtensions
     public static WebApplication InitializeDatabase(this WebApplication app)
     {
         PrepDB.Migrate(app);
+
+        var dataSeeder = app.Services.GetRequiredService<IDataSeeder>();
+
+        dataSeeder.Seed(app.Services).GetAwaiter().GetResult();
+
         return app;
     }
 
