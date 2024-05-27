@@ -21,13 +21,13 @@ jobs:
           dotnet-version: 7.0.x
 
       - name: Restore dependencies
-        run: dotnet restore TickerAlert.Api.csproj
-        working-directory: src/backend/TickerAlert/TickerAlert.Api
+        run: dotnet restore TickerAlert.sln
+        working-directory: src/backend/TickerAlert
 
       - name: Build
-        run: dotnet build --no-restore TickerAlert.Api.csproj
-        working-directory: src/backend/TickerAlert/TickerAlert.Api
+        run: dotnet build --no-restore TickerAlert.sln
+        working-directory: src/backend/TickerAlert
 
       - name: Test
-        run: dotnet test --no-build TickerAlert.Api.csproj
-        working-directory: src/backend/TickerAlert/TickerAlert.Api
+        run: dotnet test --no-build TickerAlert.sln
+        working-directory: src/backend/TickerAlert
