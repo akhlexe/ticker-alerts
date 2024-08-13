@@ -12,19 +12,29 @@ public static class PrepDB
         using var scope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        const bool isProcessing = true;
+        int pendingMigrations = context.Database.GetPendingMigrations().Count();
 
-        while(isProcessing)
+        if (pendingMigrations > 0)
         {
-            try
+            const bool isProcessing = true;
+
+            while (isProcessing)
             {
-                context.Database.Migrate();
-                break;
-            }
-            catch(SqlException ex)
-            {
-                Task.Delay(TimeSpan.FromSeconds(5)).Wait();
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    if (context.Database.GetPendingMigrations().Count() > 0)
+                    {
+                        context.Database.Migrate();
+                        break;
+                    }
+
+
+                }
+                catch (SqlException ex)
+                {
+                    Task.Delay(TimeSpan.FromSeconds(5)).Wait();
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
     }

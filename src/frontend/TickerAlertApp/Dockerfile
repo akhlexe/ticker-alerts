@@ -12,7 +12,7 @@ RUN npm run build-production
 
 FROM nginx:alpine
 
-COPY --from=builder /app/dist/ticker-alert-app/browser /usr/share/nginx/html
+COPY --from=builder /app/dist/ticker-alert-app /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
