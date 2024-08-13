@@ -15,7 +15,7 @@ public static class PersistenceDependencyInjection
         {
             var interceptor = sp.GetRequiredService<ConvertDomainEventsToOutboxMessagesInterceptor>();
 
-            options.UseSqlServer(configuration.GetConnectionString("TickerAlertsDatabase"))
+            options.UseNpgsql(configuration.GetConnectionString("TickerAlertsDatabase"))
                 .AddInterceptors(interceptor);
         });
 

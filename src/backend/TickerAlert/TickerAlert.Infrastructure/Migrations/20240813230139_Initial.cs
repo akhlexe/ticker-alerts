@@ -15,62 +15,58 @@ namespace TickerAlert.Infrastructure.Migrations
                 name: "FinancialAssets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Ticker = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Ticker = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FinancialAssets", x => x.Id)
-                        .Annotation("SqlServer:Clustered", false);
+                    table.PrimaryKey("PK_FinancialAssets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "OutboxMessages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProcessedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Error = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreatedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ProcessedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Error = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OutboxMessages", x => x.Id)
-                        .Annotation("SqlServer:Clustered", false);
+                    table.PrimaryKey("PK_OutboxMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    HashedPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    HashedPassword = table.Column<string>(type: "text", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id)
-                        .Annotation("SqlServer:Clustered", false);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PriceMeasures",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FinancialAssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
-                    MeasuredOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FinancialAssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(15,2)", nullable: false),
+                    MeasuredOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PriceMeasures", x => x.Id)
-                        .Annotation("SqlServer:Clustered", false);
+                    table.PrimaryKey("PK_PriceMeasures", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PriceMeasures_FinancialAssets_FinancialAssetId",
                         column: x => x.FinancialAssetId,
@@ -83,17 +79,16 @@ namespace TickerAlert.Infrastructure.Migrations
                 name: "Alerts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FinancialAssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TargetPrice = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
-                    PriceThreshold = table.Column<int>(type: "int", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FinancialAssetId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TargetPrice = table.Column<decimal>(type: "numeric(15,2)", nullable: false),
+                    PriceThreshold = table.Column<int>(type: "integer", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Alerts", x => x.Id)
-                        .Annotation("SqlServer:Clustered", false);
+                    table.PrimaryKey("PK_Alerts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Alerts_FinancialAssets_FinancialAssetId",
                         column: x => x.FinancialAssetId,

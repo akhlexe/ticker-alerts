@@ -8,8 +8,7 @@ public class FinancialAssetConfiguration : IEntityTypeConfiguration<FinancialAss
 {
     public void Configure(EntityTypeBuilder<FinancialAsset> entity)
     {
-        entity.HasKey(f => f.Id)
-            .IsClustered(false);
+        entity.HasKey(f => f.Id);
         
         entity.Property(f => f.Name)
             .IsRequired();

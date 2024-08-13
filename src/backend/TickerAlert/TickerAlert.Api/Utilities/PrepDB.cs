@@ -1,4 +1,3 @@
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TickerAlert.Infrastructure.Persistence;
 
@@ -30,7 +29,7 @@ public static class PrepDB
 
 
                 }
-                catch (SqlException ex)
+                catch (Exception ex)
                 {
                     Task.Delay(TimeSpan.FromSeconds(5)).Wait();
                     Console.WriteLine(ex.Message);

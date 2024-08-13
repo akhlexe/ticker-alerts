@@ -8,8 +8,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> entity)
     {
-        entity.HasKey(e => e.Id)
-            .IsClustered(false);
+        entity.HasKey(e => e.Id);
         
         entity.Property(e => e.Username).IsRequired();
         entity.Property(e => e.HashedPassword).IsRequired();

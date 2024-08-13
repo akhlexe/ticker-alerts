@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TickerAlert.Domain.Entities;
-using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Infrastructure.Persistence.Configurations;
 
@@ -9,8 +8,7 @@ public class AlertConfiguration : IEntityTypeConfiguration<Alert>
 {
     public void Configure(EntityTypeBuilder<Alert> entity)
     {
-        entity.HasKey(a => a.Id)
-            .IsClustered(false);
+        entity.HasKey(a => a.Id);
 
         entity.Property(a => a.FinancialAssetId)
             .IsRequired();

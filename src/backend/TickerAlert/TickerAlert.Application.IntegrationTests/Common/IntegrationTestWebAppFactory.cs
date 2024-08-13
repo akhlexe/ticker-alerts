@@ -27,8 +27,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 var interceptor = sp.GetRequiredService<ConvertDomainEventsToOutboxMessagesInterceptor>();
-                options.UseSqlServer(_dbContainer.GetConnectionString())
-                    .AddInterceptors(interceptor);
+                //options.UseSqlServer(_dbContainer.GetConnectionString())
+                //    .AddInterceptors(interceptor);
             });
 
             services.AddSingleton<IDataSeeder, TestDataSeeder>();
