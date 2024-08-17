@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TickerAlert.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class ApiController : ControllerBase
 {
     private ISender _mediator;

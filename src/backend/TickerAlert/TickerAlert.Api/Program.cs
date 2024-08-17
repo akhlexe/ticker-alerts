@@ -9,7 +9,6 @@ builder.Services
     .AddCustomSwaggerGen()
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddCustomCors(builder.Configuration)
     .AddControllers();
 
 var app = builder.Build();
@@ -17,7 +16,6 @@ var app = builder.Build();
 app.InitializeDatabase();
 app.AddSwaggerIfDevelopment();
 app.UseRouting();
-app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

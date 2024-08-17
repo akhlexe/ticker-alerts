@@ -1,13 +1,19 @@
 version: "3.8"
 
+networks:
+  tickers-network:
+    driver: bridge
+
 services:
   frontend:
     container_name: frontend
     build: ./src/frontend/TickerAlertApp/
     ports:
-      - 80:80
+      - ${FRONTEND_PORT}:80
     depends_on:
       - backend-api
+    networks:
+      - tickers-network
 
   backend-api:
     container_name: backend-api
@@ -16,17 +22,17 @@ services:
       dockerfile: ./TickerAlert.Api/Dockerfile
     environment:
       - AllowedHosts=*
-      - AllowedOrigins__AngularApp=http://frontend:80
       - ConnectionStrings__TickerAlertsDatabase=${API_DB_CONNECTION_STRING}
       - Services__Finnhub__BaseUrl=${FINNHUB_BASEURL}
       - Services__Finnhub__ApiKey=${FINNHUB_API_KEY}
       - Jwt__Issuer=${JWT_ISSUER}
       - Jwt__Audience=${JWT_AUDIENCE}
       - Jwt__Key=${JWT_KEY}
-    ports:
-      - 5001:80
+      - ASPNETCORE_URLS=http://*:80
     depends_on:
       - ticker-db
+    networks:
+      - tickers-network
 
   ticker-db:
     container_name: ticker-db
@@ -36,10 +42,13 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: TickerAlert
       PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tickers-network
 
 volumes:
   postgres_data:

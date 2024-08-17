@@ -50,7 +50,7 @@ public static class ApplicationBuilderExtensions
     {
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapHub<AlertTriggeredHub>("/api/alertTriggeredHub");
+            endpoints.MapHub<AlertTriggeredHub>("/alertTriggeredHub");
         });
 
         return app;
