@@ -18,12 +18,18 @@ public class FinancialAssetReader : IFinancialAssetReader
 
     public async Task<IEnumerable<FinancialAssetDto>> GetAllBySearchCriteria(string criteria)
     {
+        var normalizedCriteria = criteria.Trim().ToLowerInvariant();
+
         var assets = await _context.FinancialAssets
-            .Where(x => x.Name.Contains(criteria) || x.Ticker.Contains(criteria))
+            .Where(x => IsMatch(x, normalizedCriteria))
             .ToListAsync();
 
         return assets.Select(CreateFinancialAssetDto);
     }
+
+    private static bool IsMatch(FinancialAsset financialAsset, string normalizedCriteria) 
+        => financialAsset.Name.Contains(normalizedCriteria, StringComparison.InvariantCultureIgnoreCase)
+        || financialAsset.Ticker.Contains(normalizedCriteria, StringComparison.InvariantCultureIgnoreCase);
 
     public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()
     {
