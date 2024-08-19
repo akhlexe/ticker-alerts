@@ -1,12 +1,12 @@
 import { environment } from '../../environments/environment';
 
 export const Endpoints = {
-  Alerts: `${environment.apiBaseUrl}/Alerts`,
-  CreateAlert: `${environment.apiBaseUrl}/Alerts/CreateAlert`,
-  FinancialAssets: `${environment.apiBaseUrl}/FinancialAssets`,
+  Alerts: `${environment.apiProxy}/Alerts`,
+  CreateAlert: `${environment.apiProxy}/Alerts/CreateAlert`,
+  FinancialAssets: `${environment.apiProxy}/FinancialAssets`,
 };
 
 export const AuthEndpoints = {
-  Register: `${environment.apiBaseUrl}/Auth/Register`,
-  Login: `${environment.apiBaseUrl}/Auth/Login`,
+  Register: `${environment.apiProxy}/Auth/Register`,
+  Login: `${environment.apiProxy}/Auth/Login`,
 }

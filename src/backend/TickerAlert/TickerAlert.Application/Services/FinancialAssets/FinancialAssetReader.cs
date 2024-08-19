@@ -21,15 +21,11 @@ public class FinancialAssetReader : IFinancialAssetReader
         var normalizedCriteria = criteria.Trim().ToLowerInvariant();
 
         var assets = await _context.FinancialAssets
-            .Where(x => IsMatch(x, normalizedCriteria))
+            .Where(x => x.Name.ToLower().Contains(normalizedCriteria) || x.Ticker.ToLower().Contains(normalizedCriteria))
             .ToListAsync();
 
         return assets.Select(CreateFinancialAssetDto);
     }
-
-    private static bool IsMatch(FinancialAsset financialAsset, string normalizedCriteria) 
-        => financialAsset.Name.Contains(normalizedCriteria, StringComparison.InvariantCultureIgnoreCase)
-        || financialAsset.Ticker.Contains(normalizedCriteria, StringComparison.InvariantCultureIgnoreCase);
 
     public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()
     {

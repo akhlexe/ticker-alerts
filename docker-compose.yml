@@ -22,6 +22,7 @@ services:
       dockerfile: ./TickerAlert.Api/Dockerfile
     environment:
       - AllowedHosts=*
+      - AllowedOrigins__AngularApp=${ANGULAR_APP_ORIGIN}
       - ConnectionStrings__TickerAlertsDatabase=${API_DB_CONNECTION_STRING}
       - Services__Finnhub__BaseUrl=${FINNHUB_BASEURL}
       - Services__Finnhub__ApiKey=${FINNHUB_API_KEY}
