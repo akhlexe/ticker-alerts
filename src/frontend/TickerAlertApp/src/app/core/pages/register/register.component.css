@@ -1,15 +1,30 @@
 .register-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    align-items: baseline;
+    min-height: 94vh;
+
+    background-image: url('/assets/images/homepage-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   
   mat-card {
     width: 100%;
     max-width: 400px;
-    margin: 20px;
+    margin: 4%;
     padding: 20px;
+
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
+  }
+
+  mat-card-header {
+    padding: 16px 16px;
   }
   
   .full-width-input {
@@ -22,7 +37,6 @@
   }
   
   .login-link {
-    display: block;
     text-align: center;
     margin-top: 20px;
   }
