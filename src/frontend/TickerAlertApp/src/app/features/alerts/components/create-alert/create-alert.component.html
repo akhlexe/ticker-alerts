@@ -2,7 +2,7 @@
     <form [formGroup]="createAlertForm" (ngSubmit)="submitForm()" class="create-alert-form">
         <mat-form-field>
             <mat-label>Ticker</mat-label>
-            <input #tickerInput type="text" matInput formControlName="ticker" [matAutocomplete]="auto">
+            <input #tickerInput type="text" class="ticker-input" matInput formControlName="ticker" [matAutocomplete]="auto">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayAssetTicker">
                 <mat-option *ngFor="let asset of assetSearchList | async" [value]="asset">
                     {{ asset.ticker }} - {{ asset.name }}

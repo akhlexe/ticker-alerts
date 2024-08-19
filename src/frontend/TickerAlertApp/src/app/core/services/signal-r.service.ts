@@ -25,7 +25,6 @@ export class SignalRService {
   }
 
   public startConnection(): void {
-    debugger
     const token = localStorage.getItem(StorageKeys.JWT_TOKEN);
 
     if (!token) {

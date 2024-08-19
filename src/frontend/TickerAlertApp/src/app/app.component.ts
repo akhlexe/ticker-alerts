@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.signalRService.stopConnection();
   }
   ngOnInit(): void {
-
+    
   }
 
 

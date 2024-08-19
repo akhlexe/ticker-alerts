@@ -1,0 +1,11 @@
+.alerts-main-container {
+    display: flex;
+    justify-content: flex-start;
+    min-height: 94vh;
+    flex-direction: column;
+
+    background-image: var(--background-image-url);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

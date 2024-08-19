@@ -4,7 +4,7 @@
     align-items: baseline;
     min-height: 94vh;
 
-    background-image: url('/assets/images/homepage-image.jpg');
+    background-image: var(--background-image-url);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
