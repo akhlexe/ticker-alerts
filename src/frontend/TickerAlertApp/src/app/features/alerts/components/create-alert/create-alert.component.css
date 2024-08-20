@@ -11,3 +11,11 @@
     justify-content: center;
     gap: 30px;
 }
+
+.ticker-input {
+    width: 600px;
+}
+
+.create-alert-button {
+    height: 56px;
+}
