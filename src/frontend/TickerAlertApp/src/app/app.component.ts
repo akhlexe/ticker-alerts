@@ -15,12 +15,13 @@ import { NotificationComponent } from './shared/components/notification/notifica
 export class AppComponent implements OnInit, OnDestroy {
   title = 'TickerAlertApp';
 
-  constructor(private authService: AuthService, private signalRService: SignalRService) { }
+  constructor(private signalRService: SignalRService) { }
   ngOnDestroy(): void {
     this.signalRService.stopConnection();
   }
+
   ngOnInit(): void {
-    
+
   }
 
 

@@ -14,8 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
   imports: [MatCardModule, ReactiveFormsModule, MatInputModule, RouterModule, MatButtonModule, CommonModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
-  providers: [AuthService]
+  styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   registerForm!: FormGroup;

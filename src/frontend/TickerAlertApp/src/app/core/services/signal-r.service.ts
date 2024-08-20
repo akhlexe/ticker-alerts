@@ -15,11 +15,13 @@ export class SignalRService {
   public notification$ = this.notificationSubject.asObservable();
 
   constructor(private authService: AuthService) {
-    this.authService.loggedInUsername$.subscribe(username => {
+    this.authService.getLoggedInUsername().subscribe(username => {
       if (username) {
         this.startConnection();
       } else {
-        this.stopConnection();
+        if (this.hubConnection) {
+          this.stopConnection();
+        }
       }
     });
   }

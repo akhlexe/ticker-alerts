@@ -10,7 +10,6 @@ import { StorageKeys } from './models/storage-key.model';
 })
 export class AuthService {
   private loggedInUsername = new BehaviorSubject<string | null>(null);
-  public loggedInUsername$ = this.loggedInUsername.asObservable();
 
   constructor(private http: HttpClient) {
     this.checkInitialAuthState();
@@ -49,7 +48,7 @@ export class AuthService {
     this.loggedInUsername.next(null);
   }
 
-  getLoggedInUsername(): Observable<string | null> {
+  public getLoggedInUsername(): Observable<string | null> {
     return this.loggedInUsername.asObservable();
   }
 
