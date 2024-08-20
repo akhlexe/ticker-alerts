@@ -11,5 +11,11 @@ public enum AlertState
     TRIGGERED = 1,
     
     [Display(Name = "Notified")]
-    NOTIFIED = 2
+    NOTIFIED = 2,
+
+    [Display(Name = "Received")]
+    RECEIVED = 3,
+
+    [Display(Name = "Canceled")]
+    CANCELED = 4
 }
