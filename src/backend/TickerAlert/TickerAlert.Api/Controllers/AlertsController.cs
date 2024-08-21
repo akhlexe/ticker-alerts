@@ -23,4 +23,10 @@ public class AlertsController : ApiController
             ? Ok(result)
             : BadRequest();
     }
+
+    [HttpPost("ConfirmReception")]
+    public async Task<ActionResult> ConfirmReception([FromBody] ConfirmReceptionCommand command)
+    {
+
+    }
 }

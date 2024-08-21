@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.Authentication;
@@ -65,5 +66,29 @@ public class AlertService : IAlertService
     {
         var priceMeasure = await _priceMeasureReader.GetLastPriceMeasureFor(financialAssetId);
         return priceMeasure?.Price ?? 0;
+    }
+
+    public async Task ConfirmReception(Guid alertId)
+    {
+        Alert? alert = await _context.Alerts.FirstOrDefaultAsync(a => a.Id == alertId);
+
+        if (alert is not null)
+        {
+            alert.State = AlertState.RECEIVED;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task CancelAlert(Guid alertId)
+    {
+        Alert? alert = await _context.Alerts.FirstOrDefaultAsync(a => a.Id == alertId);
+
+        if (alert is not null)
+        {
+            alert.State = AlertState.CANCELED;
+        }
+
+        await _context.SaveChangesAsync();
     }
 }
