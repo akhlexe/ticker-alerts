@@ -11,11 +11,11 @@ namespace TickerAlert.Api.Controllers;
 public class AlertsController : ApiController
 {
     [HttpGet]
-    public async Task<IEnumerable<AlertDto>> GetAlerts() 
+    public async Task<IEnumerable<AlertDto>> GetAlerts()
         => await Mediator.Send(new GetAlertsRequest());
 
     [HttpPost("CreateAlert")]
-    public async Task<ActionResult<Result>> CreateAlert([FromBody]CreateAlertCommand command)
+    public async Task<ActionResult<Result>> CreateAlert([FromBody] CreateAlertCommand command)
     {
         var result = await Mediator.Send(command);
 
@@ -24,9 +24,10 @@ public class AlertsController : ApiController
             : BadRequest();
     }
 
-    [HttpPost("ConfirmReception")]
-    public async Task<ActionResult> ConfirmReception([FromBody] ConfirmReceptionCommand command)
-    {
+    // [HttpPost("ConfirmReception")]
+    // public async Task<ActionResult> ConfirmReception([FromBody] ConfirmReceptionCommand command)
+    // {
+    //     var result = await Mediator.Send(command);
 
-    }
+    // }
 }
