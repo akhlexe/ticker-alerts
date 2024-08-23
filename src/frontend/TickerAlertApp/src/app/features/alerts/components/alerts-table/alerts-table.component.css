@@ -1,3 +1,30 @@
 .alerts-container {
     padding: 1% 5%;
 }
+
+.alert-state-common {
+    color: white;
+    padding: 7px;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+.alert-pending {
+    background-color: #B0BEC5;
+}
+
+.alert-triggered {
+    background-color: #2196F3;
+}
+
+.alert-notified {
+    background-color: #FF9800;
+}
+
+.alert-received {
+    background-color: #4CAF50;
+}
+
+.alert-canceled {
+    background-color: #F44336;
+}

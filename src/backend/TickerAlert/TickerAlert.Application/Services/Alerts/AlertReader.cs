@@ -54,12 +54,13 @@ public class AlertReader : IAlertReader
 
         return new AlertDto()
         {
+            Id = a.Id,
             FinancialAssetId = a.FinancialAssetId,
             TickerName = a.FinancialAsset.Ticker,
             TargetPrice = a.TargetPrice,
             ActualPrice = actualPrice,
             Difference = a.TargetPrice - actualPrice,
-            State = a.State.ToString()
+            State = a.State
         };
     }
 }

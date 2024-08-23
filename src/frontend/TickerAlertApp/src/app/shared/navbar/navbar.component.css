@@ -3,6 +3,13 @@
     height: 6vh;
 }
 
+.appname-cotainer{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
 .user-login {
     display: flex;
     justify-content: space-between;

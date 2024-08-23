@@ -24,10 +24,10 @@ public class AlertsController : ApiController
             : BadRequest();
     }
 
-    // [HttpPost("ConfirmReception")]
-    // public async Task<ActionResult> ConfirmReception([FromBody] ConfirmReceptionCommand command)
-    // {
-    //     var result = await Mediator.Send(command);
+    //[HttpPost("ConfirmReception")]
+    //public async Task<ActionResult> ConfirmReception([FromBody] ConfirmReceptionCommand command)
+    //{
+    //    var result = await Mediator.Send(command);
 
-    // }
+    //}
 }
