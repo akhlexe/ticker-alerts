@@ -4,7 +4,7 @@ using TickerAlert.Application.Interfaces.Alerts;
 
 namespace TickerAlert.Application.UseCases.Alerts.CancelAlert;
 
-public sealed record CancelAlertCommand(Guid alertId) : IRequest<Result>;
+public sealed record CancelAlertCommand(Guid id) : IRequest<Result>;
 
 public sealed class CancelAlertCommandHandler(IAlertService alertService) : IRequestHandler<CancelAlertCommand, Result>
 {
@@ -12,7 +12,7 @@ public sealed class CancelAlertCommandHandler(IAlertService alertService) : IReq
 
     public async Task<Result> Handle(CancelAlertCommand request, CancellationToken cancellationToken)
     {
-        await _alertService.CancelAlert(request.alertId);
+        await _alertService.CancelAlert(request.id);
         return Result.SuccessResult();
     }
 }

@@ -1,3 +1,4 @@
+import { ConfirmModalData } from './../../../../shared/components/confirm-modal/models/confirm-dialog.model';
 import { Component, inject, OnInit } from '@angular/core';
 import { Alert } from '../../models/alert.model';
 import { AlertsService } from '../../services/alerts.service';
@@ -7,11 +8,14 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AlertState, AlertStateConfig } from '../../models/alert-state.enum';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-alerts-table',
   standalone: true,
-  imports: [MatTableModule, CurrencyMaskPipe, MatButtonModule, MatIcon, CommonModule],
+  imports: [MatTableModule, CurrencyMaskPipe, MatButtonModule, MatIcon, CommonModule, ConfirmModalComponent],
   templateUrl: './alerts-table.component.html',
   styleUrl: './alerts-table.component.css',
   providers: [AlertsService],
@@ -29,7 +33,10 @@ export class AlertsTableComponent implements OnInit {
 
   public alerts: Alert[] = [];
 
-  constructor(private alertsService: AlertsService) { }
+  constructor(
+    private alertsService: AlertsService,
+    private dialog: MatDialog,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getData();
@@ -42,7 +49,30 @@ export class AlertsTableComponent implements OnInit {
   }
 
   public onCancel(id: number) {
-    console.log(id);
+
+    const dialogData: ConfirmModalData = {
+      title: 'Cancel Alert',
+      message: 'Do you want to cancel this alert?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+    };
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '300px',
+      data: dialogData
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.alertsService.cancelAlert({ id }).subscribe(cancelResult => {
+          if (cancelResult.success) {
+            this.getData();
+            this.toastr.success('Alert cancelled correctly', 'Cancel Alert');
+          } else {
+            this.toastr.error(cancelResult.errors.join(' '), 'Cancel Alert');
+          }
+        })
+      }
+    });
   }
 
   public getStateLabel(state: AlertState): string {

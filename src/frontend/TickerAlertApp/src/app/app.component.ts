@@ -1,9 +1,8 @@
-import { AuthService } from './core/services/auth.service';
 import { SignalRService } from './core/services/signal-r.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './shared/navbar/navbar.component';
 import { NotificationComponent } from './shared/components/notification/notification.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',

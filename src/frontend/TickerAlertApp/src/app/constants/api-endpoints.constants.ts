@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 export const Endpoints = {
   Alerts: `${environment.apiProxy}/Alerts`,
   CreateAlert: `${environment.apiProxy}/Alerts/CreateAlert`,
+  CancelAlert: `${environment.apiProxy}/Alerts/CancelAlert`,
   FinancialAssets: `${environment.apiProxy}/FinancialAssets`,
 };
 
