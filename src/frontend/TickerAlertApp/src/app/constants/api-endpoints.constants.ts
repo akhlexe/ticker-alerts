@@ -4,6 +4,7 @@ export const Endpoints = {
   Alerts: `${environment.apiProxy}/Alerts`,
   CreateAlert: `${environment.apiProxy}/Alerts/CreateAlert`,
   CancelAlert: `${environment.apiProxy}/Alerts/CancelAlert`,
+  ConfirmReception: `${environment.apiProxy}/Alerts/ConfirmReception`,
   FinancialAssets: `${environment.apiProxy}/FinancialAssets`,
 };
 

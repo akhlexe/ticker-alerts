@@ -22,6 +22,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AlertsTableComponent implements OnInit {
 
+
   public displayedColumns: string[] = [
     'tickerName',
     'targetPrice',
@@ -75,11 +76,30 @@ export class AlertsTableComponent implements OnInit {
     });
   }
 
+  public onReceived(id: number) {
+    this.alertsService.confirmReception({ id }).subscribe(result => {
+      if (result.success) {
+        this.getData();
+        this.toastr.success("Alert completed notified.", "Alert Confirmation");
+      } else {
+        this.toastr.error(result.errors.join(' '), 'Alert Confirmation')
+      }
+    })
+  }
+
   public getStateLabel(state: AlertState): string {
     return AlertStateConfig[state].label;
   }
 
   public getStateCssClass(state: AlertState): string {
     return `alert-state-common ${AlertStateConfig[state].cssClass}`;
+  }
+
+  public isCancelVisible(state: AlertState): boolean {
+    return state === AlertState.PENDING;
+  }
+
+  public isReceivedVisible(state: AlertState): boolean {
+    return state === AlertState.TRIGGERED || state === AlertState.NOTIFIED;
   }
 }

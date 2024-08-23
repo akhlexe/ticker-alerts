@@ -30,8 +30,13 @@
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> Actions </th>
             <td mat-cell *matCellDef="let alert">
-                <button mat-raised-button color="secondary" (click)="onCancel(alert.id)">
+                <button *ngIf="isCancelVisible(alert.state)" mat-raised-button color="secondary"
+                    (click)="onCancel(alert.id)">
                     <mat-icon>cancel</mat-icon> Cancel
+                </button>
+                <button *ngIf="isReceivedVisible(alert.state)" mat-raised-button color="secondary"
+                    (click)="onReceived(alert.id)">
+                    <mat-icon>check</mat-icon> Received
                 </button>
             </td>
         </ng-container>

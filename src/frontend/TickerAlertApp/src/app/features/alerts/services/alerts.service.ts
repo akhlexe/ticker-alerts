@@ -5,12 +5,13 @@ import { Observable } from 'rxjs';
 import { Endpoints } from '../../../constants/api-endpoints.constants';
 import { CreateAlertRequest } from '../components/create-alert/models/create-alert.models';
 import { Result } from '../../../shared/models/result.models';
-import { CancelAlertRequest } from './models/requests.model';
+import { CancelAlertRequest, ConfirmReceptionRequest } from './models/requests.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlertsService {
+
   constructor(private httpClient: HttpClient) { }
 
   public getAlerts(): Observable<Alert[]> {
@@ -24,5 +25,9 @@ export class AlertsService {
 
   public cancelAlert(request: CancelAlertRequest): Observable<Result> {
     return this.httpClient.post<Result>(Endpoints.CancelAlert, request);
+  }
+
+  public confirmReception(request: ConfirmReceptionRequest): Observable<Result> {
+    return this.httpClient.post<Result>(Endpoints.ConfirmReception, request);
   }
 }

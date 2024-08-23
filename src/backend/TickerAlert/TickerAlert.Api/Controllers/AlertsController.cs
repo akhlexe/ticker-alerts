@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TickerAlert.Application.Common.Responses;
 using TickerAlert.Application.Services.Alerts.Dtos;
 using TickerAlert.Application.UseCases.Alerts.CancelAlert;
+using TickerAlert.Application.UseCases.Alerts.ConfirmReception;
 using TickerAlert.Application.UseCases.Alerts.CreateAlert;
 using TickerAlert.Application.UseCases.Alerts.GetAlerts;
 
@@ -29,10 +30,7 @@ public class AlertsController : ApiController
     public async Task<ActionResult<Result>> CancelAlert([FromBody] CancelAlertCommand command) 
         => await Mediator.Send(command);
 
-    //[HttpPost("ConfirmReception")]
-    //public async Task<ActionResult> ConfirmReception([FromBody] ConfirmReceptionCommand command)
-    //{
-    //    var result = await Mediator.Send(command);
-
-    //}
+    [HttpPost("ConfirmReception")]
+    public async Task<ActionResult<Result>> ConfirmReception([FromBody] ConfirmReceptionCommand command) 
+        => await Mediator.Send(command);
 }

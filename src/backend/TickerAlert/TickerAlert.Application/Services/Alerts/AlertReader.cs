@@ -5,6 +5,7 @@ using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Application.Services.Alerts.Dtos;
 using TickerAlert.Domain.Entities;
+using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Application.Services.Alerts;
 
@@ -31,22 +32,22 @@ public class AlertReader : IAlertReader
         return alerts.Select(alert => CreateAlertDto(alert, lastPrices.FirstOrDefault(p => p.FinancialAssetId == alert.FinancialAssetId)));
     }
 
-    public async Task<Alert?> GetById(Guid alertId)
-    {
-        return await _context
+    public async Task<Alert?> GetById(Guid alertId) 
+        => await _context
             .Alerts
             .Include(x => x.FinancialAsset)
             .FirstOrDefaultAsync(x => x.Id == alertId);
-    }
 
-    public async Task<IEnumerable<Alert>> GetAllForUserId(Guid userId)
-    {
-        return await _context.Alerts
+    public async Task<IEnumerable<Alert>> GetAllForUserId(Guid userId) 
+        => await _context
+            .Alerts
             .Include(a => a.FinancialAsset)
-            .Where(a => a.UserId == userId)
+            .Where(a => a.UserId == userId && GetEstadosVisibles().Contains(a.State))
             .AsNoTracking()
             .ToListAsync();
-    }
+
+    private static List<AlertState> GetEstadosVisibles() 
+        => [AlertState.PENDING, AlertState.TRIGGERED, AlertState.NOTIFIED];
 
     private static AlertDto CreateAlertDto(Alert a, PriceMeasure? priceMeasure)
     {
