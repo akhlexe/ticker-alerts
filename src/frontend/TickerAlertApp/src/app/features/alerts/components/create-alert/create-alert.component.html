@@ -14,7 +14,7 @@
             </button>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field class="price-input">
             <mat-label> Target Price </mat-label>
             <input matInput formControlName="targetPrice" type="number">
             <button *ngIf="createAlertForm.get('targetPrice')!.value" matSuffix mat-icon-button aria-label="Clear"

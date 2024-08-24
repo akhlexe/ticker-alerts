@@ -1,6 +1,12 @@
 .toolbar {
     justify-content: space-between;
     height: 6vh;
+    width: 100%;
+}
+
+.app-logo {
+    height: 6vh;
+    width: 6vh;
 }
 
 .appname-cotainer{
@@ -24,9 +30,14 @@
 
 .user-info {
     padding: 20px;
-    
 }
 
 mat-icon {
     margin-right: 8px;
+}
+
+@media (max-width: 600px) {
+    .user-info {
+        display: none !important;
+    }
 }

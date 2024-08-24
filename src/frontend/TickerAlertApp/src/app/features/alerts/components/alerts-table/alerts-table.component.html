@@ -1,5 +1,5 @@
 <div class="alerts-container">
-    <table mat-table [dataSource]="alerts" class="mat-elevation-z8">
+    <table mat-table [dataSource]="alerts" class="mat-elevation-z8" class="alerts-table">
         <ng-container matColumnDef="tickerName">
             <th mat-header-cell *matHeaderCellDef> Ticker </th>
             <td mat-cell *matCellDef="let alert"> {{alert.tickerName}} </td>
@@ -11,13 +11,13 @@
         </ng-container>
 
         <ng-container matColumnDef="actualPrice">
-            <th mat-header-cell *matHeaderCellDef> Actual Price </th>
-            <td mat-cell *matCellDef="let alert"> {{alert.actualPrice | currencyMask }} </td>
+            <th mat-header-cell *matHeaderCellDef class="hide-on-mobile"> Actual Price </th>
+            <td mat-cell *matCellDef="let alert" class="hide-on-mobile"> {{alert.actualPrice | currencyMask }} </td>
         </ng-container>
 
         <ng-container matColumnDef="difference">
-            <th mat-header-cell *matHeaderCellDef> Difference </th>
-            <td mat-cell *matCellDef="let alert"> {{alert.difference | currencyMask }} </td>
+            <th mat-header-cell *matHeaderCellDef class="hide-on-mobile"> Difference </th>
+            <td mat-cell *matCellDef="let alert" class="hide-on-mobile"> {{alert.difference | currencyMask }} </td>
         </ng-container>
 
         <ng-container matColumnDef="state">

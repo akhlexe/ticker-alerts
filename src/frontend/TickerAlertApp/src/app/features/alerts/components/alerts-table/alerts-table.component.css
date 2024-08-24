@@ -1,5 +1,19 @@
 .alerts-container {
-    padding: 1% 5%;
+    /* padding: 1% 5%; */
+    width: 95%;
+    margin: auto;
+}
+
+.alerts-table {
+    margin-top: 1vh;
+}
+
+th {
+    text-align: center;    
+}
+
+td {
+    text-align: center;
 }
 
 .alert-state-common {
@@ -28,3 +42,14 @@
 .alert-canceled {
     background-color: #F44336;
 }
+
+@media (max-width: 600px) {
+    .hide-on-mobile {
+        display: none !important;
+    }
+
+    .alerts-table {
+        margin-top: 3vh;
+    }
+}
+
