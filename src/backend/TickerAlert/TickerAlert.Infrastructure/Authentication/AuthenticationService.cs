@@ -13,6 +13,7 @@ namespace TickerAlert.Infrastructure.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {
+    private const int ExpirationTime = 240;
     private readonly ApplicationDbContext _context;
     private readonly JwtSettings _jwtSettings;
 
@@ -75,7 +76,7 @@ public class AuthenticationService : IAuthenticationService
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(240),
+            expires: DateTime.Now.AddMinutes(ExpirationTime),
             signingCredentials: credentials
         );
 

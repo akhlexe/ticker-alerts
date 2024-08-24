@@ -23,7 +23,7 @@ public static class JwtConfigurationExtensions
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidIssuer = jwtSettings.Issuer,
-                    ValidAudience = jwtSettings.Audience
+                    ValidAudience = jwtSettings.Audience,
                 };
 
                 options.Events = new JwtBearerEvents()
@@ -33,7 +33,7 @@ public static class JwtConfigurationExtensions
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
                         
-                        if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/api/alertTriggeredHub")))
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/api/alertTriggeredHub"))
                         {
                             context.Token = accessToken;
                         }
