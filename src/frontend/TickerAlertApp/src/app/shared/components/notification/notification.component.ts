@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { SignalRService } from '../../../core/services/signal-r.service';
-import { ToastrService } from 'ngx-toastr';
 import { SoundService } from '../../../core/services/sound.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class NotificationComponent implements OnInit {
 
   constructor(
     private signalRService: SignalRService,
-    private toastrService: ToastrService,
+    private notificationService: NotificationService,
     private soundService: SoundService) { }
 
   ngOnInit(): void {
@@ -28,10 +28,7 @@ export class NotificationComponent implements OnInit {
   }
 
   private showNotification(notification: string) {
-    this.toastrService.success(notification, this.messageTitle, {
-      disableTimeOut: true
-    });
-
+    this.notificationService.showImportantNotification(notification, this.messageTitle);
     this.soundService.playSound(this.notificationSoundPath);
   }
 }

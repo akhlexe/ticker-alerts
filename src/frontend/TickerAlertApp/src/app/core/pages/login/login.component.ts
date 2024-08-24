@@ -6,8 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { ToastrService } from 'ngx-toastr';
 import { LoginRequestDto } from '../../services/models/auth.model';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrService,
-    private route: Router) { }
+    private route: Router,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -42,14 +42,14 @@ export class LoginComponent implements OnInit {
         next: (res) => {
           if (res.success) {
             this.route.navigateByUrl('');
-            this.toastr.success('Login success!');
+            this.notificationService.showSuccess('Login success!', 'Authentication')
           }
           else {
-            this.toastr.error(res.errorMessage);
+            this.notificationService.showError(res.errorMessage, 'Authentication')
           }
         },
         error: (err) => {
-          this.toastr.error('Error trying to login the user.');
+          this.notificationService.showError('Error trying to login the user.', 'Authentication')
         }
       })
     }

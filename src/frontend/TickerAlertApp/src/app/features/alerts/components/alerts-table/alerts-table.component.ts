@@ -1,16 +1,16 @@
-import { ConfirmModalData } from './../../../../shared/components/confirm-modal/models/confirm-dialog.model';
-import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
+import { CurrencyMaskPipe } from '../../../../shared/pipes/currency-mask.pipe';
+import { AlertState, AlertStateConfig } from '../../models/alert-state.enum';
 import { Alert } from '../../models/alert.model';
 import { AlertsService } from '../../services/alerts.service';
-import { MatTableModule } from '@angular/material/table';
-import { CurrencyMaskPipe } from '../../../../shared/pipes/currency-mask.pipe';
-import { MatIcon } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { AlertState, AlertStateConfig } from '../../models/alert-state.enum';
-import { CommonModule } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
-import { ToastrService } from 'ngx-toastr';
+import { ConfirmModalData } from './../../../../shared/components/confirm-modal/models/confirm-dialog.model';
 
 @Component({
   selector: 'app-alerts-table',
@@ -37,7 +37,7 @@ export class AlertsTableComponent implements OnInit {
   constructor(
     private alertsService: AlertsService,
     private dialog: MatDialog,
-    private toastr: ToastrService) { }
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.getData();
@@ -67,11 +67,11 @@ export class AlertsTableComponent implements OnInit {
         this.alertsService.cancelAlert({ id }).subscribe(cancelResult => {
           if (cancelResult.success) {
             this.getData();
-            this.toastr.success('Alert cancelled correctly', 'Cancel Alert');
+            this.notificationService.showSuccess('Alert cancelled correctly', 'Cancel Alert')
           } else {
-            this.toastr.error(cancelResult.errors.join(' '), 'Cancel Alert');
+            this.notificationService.showError(cancelResult.errors.join(' '), 'Cancel Alert')
           }
-        })
+        }, () => this.notificationService.showError('An error has occurred. Please try again later.', 'Cancel Alert'))
       }
     });
   }
@@ -80,11 +80,11 @@ export class AlertsTableComponent implements OnInit {
     this.alertsService.confirmReception({ id }).subscribe(result => {
       if (result.success) {
         this.getData();
-        this.toastr.success("Alert completed notified.", "Alert Confirmation");
+        this.notificationService.showSuccess("Alert completed notified.", 'Alert Confirmation')
       } else {
-        this.toastr.error(result.errors.join(' '), 'Alert Confirmation')
+        this.notificationService.showError(result.errors.join(' '), 'Alert Confirmation')
       }
-    })
+    }, () => this.notificationService.showError('An error has occurred. Please try again later.', 'Alert Confirmation'))
   }
 
   public getStateLabel(state: AlertState): string {

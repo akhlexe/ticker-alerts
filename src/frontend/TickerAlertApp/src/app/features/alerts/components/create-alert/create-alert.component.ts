@@ -1,26 +1,26 @@
+import { CommonModule } from '@angular/common';
 import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChild,
   AfterViewInit,
-  Output,
+  Component,
+  ElementRef,
   EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { CreateAlertRequest } from './models/create-alert.models';
-import { AlertsService } from '../../services/alerts.service';
-import { FinancialAssetsService } from './services/financial-assets.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { BehaviorSubject, Observable, debounceTime, of, switchMap } from 'rxjs';
-import { FinancialAssetDto } from './models/financial-asset.model';
-import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { AlertsService } from '../../services/alerts.service';
 import { AlertMessages } from './models/alerts-messages.model';
+import { CreateAlertRequest } from './models/create-alert.models';
+import { FinancialAssetDto } from './models/financial-asset.model';
+import { FinancialAssetsService } from './services/financial-assets.service';
 
 @Component({
   selector: 'app-create-alert',
@@ -51,7 +51,7 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private alertsService: AlertsService,
     private assetsService: FinancialAssetsService,
-    private toastr: ToastrService
+    private notificationService: NotificationService
   ) { }
   ngAfterViewInit(): void {
     setTimeout(() => this.tickerInput.nativeElement.focus());
@@ -99,11 +99,11 @@ export class CreateAlertComponent implements OnInit, AfterViewInit {
         this.alertCreated.emit();
         this.clearInputsAndSearchList();
         this.tickerInput.nativeElement.focus();
-        this.toastr.success(AlertMessages.SUCCESS_MESSAGE);
+        this.notificationService.showSuccess(AlertMessages.SUCCESS_MESSAGE, AlertMessages.CREATE_ALERT_TITLE)
       } else {
-        console.log(result.errors);
+        this.notificationService.showError(result.errors.join(' '), AlertMessages.CREATE_ALERT_TITLE)
       }
-    });
+    }, () => this.notificationService.showError(AlertMessages.ERROR_MESSAGE, AlertMessages.CREATE_ALERT_TITLE));
   }
 
   public clearInputsAndSearchList() {

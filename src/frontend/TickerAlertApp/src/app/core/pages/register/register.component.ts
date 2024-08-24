@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,8 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RegisterRequestDto } from '../../services/models/auth.model';
-import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -22,8 +22,8 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrService,
-    private route: Router) { }
+    private route: Router,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -44,20 +44,19 @@ export class RegisterComponent {
         next: (res) => {
           if (res.success) {
             this.route.navigateByUrl('');
-            this.toastr.success('Registration success!');
+            this.notificationService.showSuccess('Registration success!', 'Registration');
           }
           else {
-            this.toastr.error(res.errorMessage);
+            this.notificationService.showError(res.errorMessage, 'Registration');
           }
         },
         error: (err) => {
-          this.toastr.error('Error trying to register the user.');
+          this.notificationService.showError('Error trying to register the user.', 'Registration');
         }
       })
 
     } else {
-
-      this.toastr.error('Invalid form.')
+      this.notificationService.showError('Invalid form.', 'Registration');
     }
   }
 
