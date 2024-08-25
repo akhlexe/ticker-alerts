@@ -1,5 +1,4 @@
 .alerts-container {
-    /* padding: 1% 5%; */
     width: 95%;
     margin: auto;
 }
@@ -14,6 +13,7 @@ th {
 
 td {
     text-align: center;
+    padding: 0; /* Ensure no extra padding in the td */
 }
 
 .alert-state-common {
@@ -21,6 +21,7 @@ td {
     padding: 7px;
     border-radius: 7px;
     font-size: 16px;
+    display: inline-block;
 }
 
 .alert-pending {
