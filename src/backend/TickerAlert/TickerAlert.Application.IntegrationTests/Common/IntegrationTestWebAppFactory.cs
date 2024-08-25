@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 using TickerAlert.Application.IntegrationTests.SeedDatabase;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Infrastructure.Persistence;
@@ -14,8 +14,8 @@ namespace TickerAlert.Application.IntegrationTests.Common;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server:2019-latest")
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
+        .WithImage("postgres:latest")
         .Build();
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -27,8 +27,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 var interceptor = sp.GetRequiredService<ConvertDomainEventsToOutboxMessagesInterceptor>();
-                //options.UseSqlServer(_dbContainer.GetConnectionString())
-                //    .AddInterceptors(interceptor);
+                options.UseNpgsql(_dbContainer.GetConnectionString())
+                    .AddInterceptors(interceptor);
             });
 
             services.AddSingleton<IDataSeeder, TestDataSeeder>();

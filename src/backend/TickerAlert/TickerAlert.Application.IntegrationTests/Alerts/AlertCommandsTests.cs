@@ -1,6 +1,5 @@
 using TickerAlert.Application.IntegrationTests.Common;
 using TickerAlert.Application.UseCases.Alerts.CreateAlert;
-using TickerAlert.Domain.Entities;
 
 namespace TickerAlert.Application.IntegrationTests.Alerts;
 
