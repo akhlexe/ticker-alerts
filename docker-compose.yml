@@ -1,9 +1,3 @@
-version: "3.8"
-
-networks:
-  tickers-network:
-    driver: bridge
-
 services:
   frontend:
     container_name: frontend
@@ -68,3 +62,7 @@ services:
 volumes:
   postgres_data:
     driver: local
+
+networks:
+  tickers-network:
+    driver: bridge
