@@ -36,6 +36,7 @@ public class AlertReader : IAlertReader
         => await _context
             .Alerts
             .Include(x => x.FinancialAsset)
+            .Include(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == alertId);
 
     public async Task<IEnumerable<Alert>> GetAllForUserId(Guid userId) 

@@ -1,3 +1,5 @@
+using TickerAlert.Application.Common.Mailing;
+using TickerAlert.Application.Common.Mailing.Dtos;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.NotificationService;
 using TickerAlert.Domain.Entities;
@@ -5,31 +7,21 @@ using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Application.Services.Notifiers;
 
-public class AlertTriggeredNotifier
+public class AlertTriggeredNotifier(
+    INotificationService notificationService,
+    IAlertReader alertReader,
+    IAlertService alertService,
+    IEmailService emailService)
 {
-    private readonly IAlertReader _alertReader;
-    private readonly IAlertService _alertService;
-    private readonly INotificationService _notificationService;
-
-    public AlertTriggeredNotifier(
-        INotificationService notificationService, 
-        IAlertReader alertReader, 
-        IAlertService alertService)
-    {
-        _notificationService = notificationService;
-        _alertReader = alertReader;
-        _alertService = alertService;
-    }
-
     public async Task Notify(Guid alertId)
     {
         try
         {
-            var alertTriggered = await _alertReader.GetById(alertId);
-        
+            var alertTriggered = await alertReader.GetById(alertId);
             if (alertTriggered == null) return;
             
             await SendNotification(alertTriggered);
+            await SendAlertTriggeredEmail(alertTriggered);
             await UpdateAlertState(alertTriggered);
         }
         catch (Exception e)
@@ -39,19 +31,25 @@ public class AlertTriggeredNotifier
         }
     }
 
-    private async Task UpdateAlertState(Alert alert)
+    private async Task SendNotification(Alert alert)
+        => await notificationService.Notify(alert.UserId.ToString(), CreateMessage(alert));
+
+    private async Task SendAlertTriggeredEmail(Alert alertTriggered)
     {
-        await _alertService.NotifyAlert(alert);
+        var email = new Email(alertTriggered.User.Username, "Alert Triggered");
+        var data = new AlertTriggeredData(
+            alertTriggered.FinancialAsset.Name, 
+            alertTriggered.FinancialAsset.Ticker,
+            alertTriggered.TargetPrice,
+            CreateMessage(alertTriggered), 
+            DateTime.UtcNow.ToString());
+
+        await emailService.SendAlertTriggeredEmail(email, data);
     }
 
-    private async Task SendNotification(Alert alert)
+    private async Task UpdateAlertState(Alert alert)
     {
-        var message = CreateMessage(alert);
-        
-        await _notificationService.Notify(
-            alert.UserId.ToString(),
-            message
-        );
+        await alertService.NotifyAlert(alert);
     }
 
     private static string CreateMessage(Alert alert)
@@ -65,8 +63,8 @@ public class AlertTriggeredNotifier
     }
 
     private static string PriceCrossingBelowTargetMessage(Alert alert) => 
-        $"{alert.FinancialAsset.Name} ({alert.FinancialAsset.Ticker}) acaba pasar debajo del precio {alert.TargetPrice}.";
+        $"{alert.FinancialAsset.Name} ({alert.FinancialAsset.Ticker}) has just crossed below the target price of {alert.TargetPrice}.";
 
     private static string PriceCrossingAboveTargetMessage(Alert alert) 
-        => $"{alert.FinancialAsset.Name} ({alert.FinancialAsset.Ticker}) acaba de sobrepasar el precio {alert.TargetPrice}.";
+        => $"{alert.FinancialAsset.Name} ({alert.FinancialAsset.Ticker}) as just crossed above the target price of {alert.TargetPrice}.";
 }
