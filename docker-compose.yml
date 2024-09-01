@@ -38,6 +38,10 @@ services:
       - Jwt__Audience=${JWT_AUDIENCE}
       - Jwt__Key=${JWT_KEY}
       - ASPNETCORE_URLS=http://*:80
+      - EmailService__ApiKey=${EMAIL_SERVICE_API_KEY}
+      - EmailService__ApiBaseUrl=${EMAIL_SERVICE_API_BASE_URL}
+      - EmailService__SenderEmail=${EMAIL_SERVICE_SENDER_EMAIL}
+      - EmailService__SenderName=${EMAIL_SERVICE_SENDER_NAME}
     depends_on:
       - ticker-db
     networks:
