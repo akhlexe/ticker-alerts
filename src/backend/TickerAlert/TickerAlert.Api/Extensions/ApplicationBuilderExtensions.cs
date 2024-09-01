@@ -48,10 +48,7 @@ public static class ApplicationBuilderExtensions
 
     public static WebApplication AddHubEndpoints(this WebApplication app)
     {
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapHub<AlertTriggeredHub>("/alertTriggeredHub");
-        });
+        app.UseEndpoints(endpoints => endpoints.MapHub<TickerbloomHub>("tickerbloomhub"));
 
         return app;
     }

@@ -16,6 +16,7 @@ public class AlertTriggeredNotifier(
     public async Task Notify(Guid alertId)
     {
         try
+        
         {
             var alertTriggered = await alertReader.GetById(alertId);
             if (alertTriggered == null) return;

@@ -5,9 +5,9 @@ namespace TickerAlert.Infrastructure.NotificationService;
 
 public class SignalRNotificationService : INotificationService
 {
-    private readonly IHubContext<AlertTriggeredHub> _hubContext;
+    private readonly IHubContext<TickerbloomHub> _hubContext;
 
-    public SignalRNotificationService(IHubContext<AlertTriggeredHub> hubContext) 
+    public SignalRNotificationService(IHubContext<TickerbloomHub> hubContext) 
         => _hubContext = hubContext;
 
     public async Task Notify(string userId, string message)

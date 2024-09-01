@@ -35,7 +35,7 @@ export class SignalRService {
     }
 
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.apiProxy + '/alertTriggeredHub', {
+      .withUrl(environment.apiProxy + '/tickerbloomhub', {
         accessTokenFactory: () => token,
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
