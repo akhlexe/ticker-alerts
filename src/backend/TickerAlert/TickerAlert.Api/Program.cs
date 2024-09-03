@@ -8,7 +8,7 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddCustomSwaggerGen()
     .AddApplication()
-    .AddInfrastructure(builder.Configuration)
+    .AddInfrastructure(builder.Configuration, builder.Environment)
     .AddCustomCors(builder.Configuration)
     .AddControllers();
 

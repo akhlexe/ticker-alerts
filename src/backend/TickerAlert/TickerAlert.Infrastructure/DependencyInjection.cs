@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Quartz;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.NotificationService;
@@ -18,7 +19,7 @@ namespace TickerAlert.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
         RegisterSettings(services, configuration);
         RegisterCommonServices(services);
@@ -29,7 +30,7 @@ public static class DependencyInjection
         RegisterBackgroundJobs(services);
         RegisterNotificationServices(services);
 
-        services.RegisterTickerbloomEmailService(configuration);
+        services.RegisterTickerbloomEmailService(configuration, environment);
 
         return services;
     }
@@ -51,7 +52,7 @@ public static class DependencyInjection
 
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
     }
-    
+
     private static void RegisterAuthenticationServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddJwtAuthentication(configuration);
