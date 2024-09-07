@@ -19,8 +19,8 @@ import { NotificationService } from '../../../../core/services/notification/noti
 import { AlertsService } from '../../services/alerts.service';
 import { AlertMessages } from './models/alerts-messages.model';
 import { CreateAlertRequest } from './models/create-alert.models';
-import { FinancialAssetDto } from './models/financial-asset.model';
-import { FinancialAssetsService } from './services/financial-assets.service';
+import { FinancialAssetDto } from '../../../../shared/services/financial-asset/models/financial-asset.model';
+import { FinancialAssetsService } from '../../../../shared/services/financial-asset/financial-assets.service';
 
 @Component({
   selector: 'app-create-alert',
