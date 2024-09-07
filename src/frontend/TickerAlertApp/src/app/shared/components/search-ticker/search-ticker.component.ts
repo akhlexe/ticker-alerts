@@ -11,18 +11,16 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 const MatModules = [
-  ReactiveFormsModule,
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
-  CommonModule,
   MatButtonModule,
   MatAutocompleteModule]
 
 @Component({
   selector: 'app-search-ticker',
   standalone: true,
-  imports: [MatModules, CommonModule],
+  imports: [MatModules, CommonModule, ReactiveFormsModule],
   templateUrl: './search-ticker.component.html',
   styleUrl: './search-ticker.component.css'
 })
