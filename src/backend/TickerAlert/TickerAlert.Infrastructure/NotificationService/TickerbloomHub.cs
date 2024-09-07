@@ -1,21 +1,18 @@
 using Microsoft.AspNetCore.SignalR;
+using TickerAlert.Application.Services.StockMarket;
 
 namespace TickerAlert.Infrastructure.NotificationService;
 
-public class TickerbloomHub : Hub 
+public class TickerbloomHub(IStockSubscriptionService stockSubscriptionService) : Hub 
 {
-    private static Dictionary<string, HashSet<string>> userStockSubscriptions = new();
-
-    public Task SubscribeToStock(string stockSymbol)
+    public async Task SubscribeToStock(string stockSymbol)
     {
         var userId = Context.ConnectionId;
+        await stockSubscriptionService.AddSubscription(userId, stockSymbol);
+    }
 
-        if (!userStockSubscriptions.ContainsKey(userId))
-        {
-            userStockSubscriptions[userId] = new HashSet<string>();
-        }
-        userStockSubscriptions[userId].Add(stockSymbol);
-
-        return Task.CompletedTask;
+    public async Task RemoveSubscription(string userId, string stockSymbol)
+    {
+        await stockSubscriptionService.RemoveSubscription(userId, stockSymbol);
     }
 }

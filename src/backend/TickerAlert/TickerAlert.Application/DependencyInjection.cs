@@ -7,6 +7,7 @@ using TickerAlert.Application.Services.FinancialAssets;
 using TickerAlert.Application.Services.Notifiers;
 using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.Prices;
+using TickerAlert.Application.Services.StockMarket;
 
 namespace TickerAlert.Application;
 
@@ -30,5 +31,6 @@ public static class DependencyInjection
         services.AddScoped<AlertTriggeredNotifier>();
         services.AddScoped<IPriceMeasureService, PriceMeasureService>();
         services.AddScoped<IPriceMeasureReader, PriceMeasureReader>();
+        services.AddSingleton<IStockSubscriptionService, StockSubscriptionService>();
     }
 }
