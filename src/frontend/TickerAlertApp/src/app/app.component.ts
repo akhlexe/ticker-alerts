@@ -1,3 +1,4 @@
+import { GlobalKeydownService } from './core/services/global-keydown.service';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SignalRService } from './core/services/signal-r.service';
@@ -16,38 +17,32 @@ import { Subject } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'TickerAlertApp';
-  private modalSubject = new Subject<string>();
   private modalRef: any;
 
-  constructor(private signalRService: SignalRService, private dialog: MatDialog) {
-    // this.listenToKeydown();
+  constructor(
+    private signalRService: SignalRService,
+    private dialog: MatDialog,
+    private keydownService: GlobalKeydownService) {
 
   }
   ngOnDestroy(): void {
     this.signalRService.stopConnection();
-
   }
 
   ngOnInit(): void {
-    this.modalSubject.subscribe((key: string) => {
-      if (this.modalRef) {
-        this.modalRef.componentInstance.inputValue += key;
-      } else {
-        this.openModal(key);
+
+    this.keydownService.getKeydownObservable().subscribe(event => {
+
+      const activeElement = document.activeElement;
+      const isInputFocused = activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement;
+
+      if (!isInputFocused && !this.modalRef) {
+        this.openModal(event.key);
       }
-    });
+    })
   }
 
-  @HostListener('window:keydown', ['$event'])
-  public handleKeydown(event: KeyboardEvent) {
-    const isLetter = /^[a-zA-Z]$/.test(event.key);
-    if (isLetter) {
-      console.log(event.key);
-      this.modalSubject.next(event.key);
-    }
-  }
-
-  openModal(initialKey: string) {
+  private openModal(initialKey: string) {
     this.modalRef = this.dialog.open(GlobalSearchComponent, {
       data: { initialInput: initialKey },
     });

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { SearchTickerComponent } from "../../search-ticker.component";
 
 @Component({
   selector: 'app-global-search',
   standalone: true,
-  imports: [MatFormFieldModule, CommonModule, FormsModule, MatDialogModule, MatInputModule],
+  imports: [MatFormFieldModule, CommonModule, FormsModule, MatDialogModule, MatInputModule, SearchTickerComponent],
   templateUrl: './global-search.component.html',
   styleUrl: './global-search.component.css'
 })
@@ -27,5 +28,4 @@ export class GlobalSearchComponent {
   close(): void {
     this.dialogRef.close();
   }
-
 }

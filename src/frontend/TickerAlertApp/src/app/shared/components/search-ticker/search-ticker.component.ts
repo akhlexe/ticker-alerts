@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,7 @@ const MatModules = [ReactiveFormsModule,
 })
 export class SearchTickerComponent implements OnInit {
   @Output() tickerSelected = new EventEmitter<FinancialAssetDto>();
+  @Input() initialValue: string | null = null;
   private searchControl = new BehaviorSubject<string | null>(null);
   public assetSearchList: Observable<FinancialAssetDto[]> | undefined;
   public tickerForm!: FormGroup;
@@ -37,7 +38,7 @@ export class SearchTickerComponent implements OnInit {
 
   public ngOnInit(): void {
     this.tickerForm = this.formBuilder.group({
-      ticker: [null, []]
+      ticker: [this.initialValue, []]
     });
 
     this.tickerForm.get('ticker')?.valueChanges.subscribe(value => {
@@ -62,9 +63,11 @@ export class SearchTickerComponent implements OnInit {
   }
 
   public displayAssetTicker(asset: FinancialAssetDto): string {
-    return asset?.ticker && asset?.name
-      ? asset?.ticker + ' - ' + asset?.name
-      : '';
+    if (!asset || !asset.ticker || !asset.name) {
+      // Return the current value of the input to avoid clearing it
+      return this.tickerForm?.get('ticker')?.value || '';
+    }
+    return `${asset.ticker} - ${asset.name}`;
   }
 
   public clearTickerInput(): void {
