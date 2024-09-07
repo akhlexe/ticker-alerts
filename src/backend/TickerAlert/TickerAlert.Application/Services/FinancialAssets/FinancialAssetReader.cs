@@ -7,20 +7,13 @@ using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Application.Services.FinancialAssets;
 
-public class FinancialAssetReader : IFinancialAssetReader
+public class FinancialAssetReader(IApplicationDbContext context) : IFinancialAssetReader
 {
-    private readonly IApplicationDbContext _context;
-
-    public FinancialAssetReader(IApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IEnumerable<FinancialAssetDto>> GetAllBySearchCriteria(string criteria)
     {
         var normalizedCriteria = criteria.Trim().ToLowerInvariant();
 
-        var assets = await _context.FinancialAssets
+        var assets = await context.FinancialAssets
             .Where(x => x.Name.ToLower().Contains(normalizedCriteria) || x.Ticker.ToLower().Contains(normalizedCriteria))
             .ToListAsync();
 
@@ -29,8 +22,8 @@ public class FinancialAssetReader : IFinancialAssetReader
 
     public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()
     {
-        return await _context.FinancialAssets
-            .Join(_context.Alerts,
+        return await context.FinancialAssets
+            .Join(context.Alerts,
                 fa => fa.Id,
                 alert => alert.FinancialAssetId,
                 (fa, alert) => new { FinancialAsset = fa, Alert = alert })

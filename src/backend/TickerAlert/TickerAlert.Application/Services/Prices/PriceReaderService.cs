@@ -9,30 +9,19 @@ namespace TickerAlert.Application.Services.Prices;
 /// <summary>
 /// Main class responsible to read actual prices and save the price measures made.
 /// </summary>
-public class PriceReaderService
+public class PriceReaderService(
+    IFinancialAssetReader financialAssetReader,
+    IPriceMeasureService priceMeasureService,
+    IStockMarketService stockMarketService)
 {
-    private readonly IFinancialAssetReader _financialAssetReader;
-    private readonly IPriceMeasureService _priceMeasureReader;
-    private readonly IStockMarketService _stockMarketService;
-
-    public PriceReaderService(
-        IFinancialAssetReader financialAssetReader,
-        IPriceMeasureService priceMeasureService,
-        IStockMarketService stockMarketService)
+    public async Task ReadPricesAndSave()
     {
-        _financialAssetReader = financialAssetReader;
-        _priceMeasureReader = priceMeasureService;
-        _stockMarketService = stockMarketService;
-    }
-
-    public async Task ReadPricesAndSaveAsync()
-    {
-        var pendingAssets = await _financialAssetReader.GetAllWithPendingAlerts();
+        var pendingAssets = await financialAssetReader.GetAllWithPendingAlerts();
 
         foreach (var asset in pendingAssets)
         {
-            var priceMeasureDto = await _stockMarketService.ReadPriceFor(asset.Ticker);
-            await _priceMeasureReader.RegisterPriceMeasure(CreatePriceMeasureModel(asset, priceMeasureDto));
+            var priceMeasureDto = await stockMarketService.ReadPriceFor(asset.Ticker);
+            await priceMeasureService.RegisterPriceMeasure(CreatePriceMeasureModel(asset, priceMeasureDto));
         }
     }
 

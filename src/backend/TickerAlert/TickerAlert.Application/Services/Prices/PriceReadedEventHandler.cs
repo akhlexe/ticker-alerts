@@ -5,25 +5,24 @@ using TickerAlert.Domain.Events;
 
 namespace TickerAlert.Application.Services.Prices;
 
-public class PriceReadedEventHandler : INotificationHandler<PriceReadedDomainEvent>
+public class PriceReadedEventHandler(
+    PriceEvaluatorService priceEvaluatorService,
+    ILogger<PriceReadedEventHandler> logger) : INotificationHandler<PriceReadedDomainEvent>
 {
-    private readonly PriceEvaluatorService _priceEvaluatorService;
-    private readonly ILogger<PriceReadedEventHandler> _logger;
-
-    public PriceReadedEventHandler(
-        PriceEvaluatorService priceEvaluatorService, 
-        ILogger<PriceReadedEventHandler> logger)
-    {
-        _priceEvaluatorService = priceEvaluatorService;
-        _logger = logger;
-    }
-
     public async Task Handle(PriceReadedDomainEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Starting handling price measure (Id = {notification.PriceMeasureId})");
+        try
+        {
+            await priceEvaluatorService.EvaluatePriceMeasure(notification.PriceMeasureId);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+                ex, 
+                "Error evaluating price for PriceMeasure = {FinancialAsset}. Error message = {ErrorMessage}", 
+                notification.PriceMeasureId, 
+                ex.Message);
+        }
         
-        await _priceEvaluatorService.EvaluatePriceMeasure(notification.PriceMeasureId);
-        
-        _logger.LogInformation($"Finishing handling price measure (Id = {notification.PriceMeasureId})");
     }
 }
