@@ -3,16 +3,16 @@ using TickerAlert.Application.Services.StockMarket;
 
 namespace TickerAlert.Infrastructure.NotificationService;
 
-public class TickerbloomHub(IStockSubscriptionService stockSubscriptionService) : Hub 
+public class TickerbloomHub(IWatchlistStockSubscriptionService stockSubscriptionService) : Hub 
 {
     public async Task SubscribeToStock(string stockSymbol)
     {
         var userId = Context.ConnectionId;
-        await stockSubscriptionService.AddSubscription(userId, stockSymbol);
+        await stockSubscriptionService.AddSubscription(Guid.Parse(userId), stockSymbol);
     }
 
     public async Task RemoveSubscription(string userId, string stockSymbol)
     {
-        await stockSubscriptionService.RemoveSubscription(userId, stockSymbol);
+        await stockSubscriptionService.RemoveSubscription(Guid.Parse(userId), stockSymbol);
     }
 }

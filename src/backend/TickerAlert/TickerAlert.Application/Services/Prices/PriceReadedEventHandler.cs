@@ -7,12 +7,14 @@ namespace TickerAlert.Application.Services.Prices;
 
 public class PriceReadedEventHandler(
     PriceEvaluatorService priceEvaluatorService,
+    PriceReadedNotifier priceReadedNotifier,
     ILogger<PriceReadedEventHandler> logger) : INotificationHandler<PriceReadedDomainEvent>
 {
     public async Task Handle(PriceReadedDomainEvent notification, CancellationToken cancellationToken)
     {
         try
         {
+            await priceReadedNotifier.NotifyPriceReaded(notification.PriceMeasureId);
             await priceEvaluatorService.EvaluatePriceMeasure(notification.PriceMeasureId);
         }
         catch (Exception ex)

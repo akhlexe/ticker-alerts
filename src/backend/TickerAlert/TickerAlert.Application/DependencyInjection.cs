@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<AlertTriggeredNotifier>();
         services.AddScoped<IPriceMeasureService, PriceMeasureService>();
         services.AddScoped<IPriceMeasureReader, PriceMeasureReader>();
-        services.AddSingleton<IStockSubscriptionService, StockSubscriptionService>();
+        services.AddSingleton<IWatchlistStockSubscriptionService, WatchlistStockSubscriptionService>();
+        services.AddTransient<PriceReadedNotifier>();
     }
 }

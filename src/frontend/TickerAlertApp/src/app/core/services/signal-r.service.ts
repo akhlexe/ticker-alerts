@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { StorageKeys } from './models/storage-key.model';
@@ -11,6 +11,10 @@ import { AuthService } from './auth.service';
 export class SignalRService {
 
   private hubConnection!: HubConnection;
+  // TODO: Remover notification subject que es usado para el evento de ReceiveMessage
+  // que debería ser renombrado a un servicio para mostrar alertas que se reciba.
+  // Se debería llamar AlertReceived, y tener su propio subject en ese servicio que se dispare cuando 
+  // reciba la notificacion. Esta clase no debería tener ningún subject.
   private notificationSubject = new BehaviorSubject<string | null>(null);
   public notification$ = this.notificationSubject.asObservable();
 
@@ -55,5 +59,17 @@ export class SignalRService {
     this.hubConnection.stop()
       .then(() => console.log('Hub connection stopped'))
       .catch(err => console.log('Error while stopping connection: ' + err));
+  }
+
+  public on(event: string, callback: (...args: any[]) => void): void {
+    this.hubConnection.on(event, callback);
+  }
+
+  public invoke(methodName: string, ...args: any[]): Promise<void> {
+    return this.hubConnection.invoke(methodName, ...args);
+  }
+
+  public isConnected(): boolean {
+    return this.hubConnection && this.hubConnection.state === HubConnectionState.Connected;
   }
 }

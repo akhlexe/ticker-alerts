@@ -15,7 +15,7 @@ public class PriceReaderJob(ILogger<PriceReaderJob> logger, IServiceScopeFactory
                 
             try
             {
-                await priceReaderService.ReadPricesAndSave();
+                //await priceReaderService.ReadPricesAndSave();
             }
             catch (Exception ex)
             {
