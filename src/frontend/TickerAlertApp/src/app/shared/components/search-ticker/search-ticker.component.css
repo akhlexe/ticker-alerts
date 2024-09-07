@@ -1,0 +1,14 @@
+.search-ticker-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.search-ticker-form {
+    width: 100%;
+}
+
+.search-ticker {
+    width: 80%;
+    margin: 10%;
+}
