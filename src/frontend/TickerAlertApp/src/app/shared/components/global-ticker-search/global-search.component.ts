@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { SearchTickerComponent } from "../../search-ticker.component";
+import { SearchTickerComponent } from "../search-ticker/search-ticker.component";
 
 @Component({
   selector: 'app-global-search',

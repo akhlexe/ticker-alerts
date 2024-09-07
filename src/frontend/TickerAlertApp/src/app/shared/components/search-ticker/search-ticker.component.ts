@@ -10,13 +10,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
-const MatModules = [ReactiveFormsModule,
+const MatModules = [
+  ReactiveFormsModule,
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
   CommonModule,
   MatButtonModule,
-  MatAutocompleteModule,]
+  MatAutocompleteModule]
 
 @Component({
   selector: 'app-search-ticker',
@@ -34,7 +35,8 @@ export class SearchTickerComponent implements OnInit {
 
   constructor(
     private assetsService: FinancialAssetsService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder) {
+  }
 
   public ngOnInit(): void {
     this.tickerForm = this.formBuilder.group({
@@ -62,17 +64,17 @@ export class SearchTickerComponent implements OnInit {
     console.log(event);
   }
 
-  public displayAssetTicker(asset: FinancialAssetDto): string {
-    if (!asset || !asset.ticker || !asset.name) {
-      // Return the current value of the input to avoid clearing it
-      return this.tickerForm?.get('ticker')?.value || '';
-    }
-    return `${asset.ticker} - ${asset.name}`;
+  public displayAssetTicker(asset: string): string {
+    return asset;
   }
 
   public clearTickerInput(): void {
     this.tickerForm.controls['ticker'].setValue(null);
     this.searchControl.next(null);
+  }
+
+  public isFinancialAsset(asset: any): asset is FinancialAssetDto {
+    return asset && typeof asset.ticker === 'string' && typeof asset.name === 'string';
   }
 
 }

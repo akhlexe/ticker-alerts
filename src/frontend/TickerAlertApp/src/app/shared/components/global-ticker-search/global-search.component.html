@@ -4,7 +4,7 @@
     <!-- <mat-form-field>
         <input matInput [(ngModel)]="inputValue" placeholder="Type here..." />
     </mat-form-field> -->
-    <app-search-ticker [initialValue]="data.initialInput"></app-search-ticker>
+    <app-search-ticker [initialValue]="this.inputValue"></app-search-ticker>
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="close()">Close</button>
