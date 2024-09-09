@@ -5,7 +5,7 @@ public class CompanyProfileDto
     public string Country { get; set; }
     public string Currency { get; set; }
     public string Exchange { get; set; }
-    public DateTime? Ipo { get; set; }
+    public string Ipo { get; set; }
     public decimal MarketCapitalization { get; set; }
     public string Name { get; set; }
     public string Phone { get; set; }
