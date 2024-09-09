@@ -1,18 +1,6 @@
 <div class="create-alert-container">
     <form [formGroup]="createAlertForm" (ngSubmit)="submitForm()" class="create-alert-form">
-        <mat-form-field class="ticker-input">
-            <mat-label>Ticker</mat-label>
-            <input #tickerInput type="text" matInput formControlName="ticker" [matAutocomplete]="auto">
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayAssetTicker">
-                <mat-option *ngFor="let asset of assetSearchList | async" [value]="asset">
-                    {{ asset.ticker }} - {{ asset.name }}
-                </mat-option>
-            </mat-autocomplete>
-            <button *ngIf="createAlertForm.get('ticker')!.value" matSuffix mat-icon-button aria-label="Clear"
-                (click)="clearTickerInput()">
-                <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
+        <app-search-ticker (tickerSelected)="onTickerSelected($event)"></app-search-ticker>
 
         <mat-form-field class="price-input">
             <mat-label> Target Price </mat-label>
