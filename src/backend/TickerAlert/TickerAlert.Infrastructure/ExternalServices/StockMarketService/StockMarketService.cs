@@ -41,4 +41,30 @@ public class StockMarketService : IStockMarketService
     {
         return $"/quote?symbol={ticker}&token={_apiKey}";
     }
+
+    public async Task<CompanyProfileDto> GetCompanyProfile(string ticker)
+    {
+        var query = _baseUrl + $"/stock/profile2?symbol={ticker}&token={_apiKey}";
+        CompanyProfileApiDto? apiDto = await _httpClient.GetFromJsonAsync<CompanyProfileApiDto>(query);
+        return MapToCompanyProfileDto(apiDto);
+    }
+
+    private CompanyProfileDto MapToCompanyProfileDto(CompanyProfileApiDto? companyProfile)
+    {
+        return new CompanyProfileDto
+        {
+            Ticker = companyProfile?.Ticker ?? string.Empty,
+            Name = companyProfile?.Name ?? string.Empty,
+            Logo = companyProfile?.Logo ?? string.Empty,
+            Country = companyProfile?.Country ?? string.Empty,
+            Currency = companyProfile?.Currency ?? string.Empty,
+            Exchange = companyProfile?.Exchange ?? string.Empty,
+            FinnhubIndustry = companyProfile?.FinnhubIndustry ?? string.Empty,
+            Ipo = companyProfile?.Ipo,
+            MarketCapitalization = companyProfile?.MarketCapitalization ?? 0,
+            Phone = companyProfile?.Phone ?? string.Empty,
+            ShareOutstanding = companyProfile?.ShareOutstanding ?? 0,
+            Weburl = companyProfile?.Weburl ?? string.Empty
+        };
+    }
 }

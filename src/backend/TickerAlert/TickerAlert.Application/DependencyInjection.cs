@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<ISystemAlertReader, SystemAlertReader>();
         services.AddScoped<IAlertService, AlertService>();
         services.AddScoped<IFinancialAssetReader, FinancialAssetReader>();
+        services.AddScoped<FinancialAssetProfileService>();
         services.AddScoped<PriceReaderService>();
         services.AddScoped<PriceEvaluatorService>();
         services.AddScoped<AlertTriggeredNotifier>();
