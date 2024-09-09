@@ -1,14 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { debounceTime, Observable, of, switchMap } from 'rxjs';
 import { FinancialAssetsService } from '../../services/financial-asset/financial-assets.service';
 import { FinancialAssetDto } from '../../services/financial-asset/models/financial-asset.model';
-import { BehaviorSubject, debounceTime, Observable, of, switchMap } from 'rxjs';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 
 const MatModules = [
   MatFormFieldModule,
@@ -61,6 +61,6 @@ export class SearchTickerComponent implements OnInit {
   }
 
   public clearTickerInput(): void {
-    this.tickerForm.controls['ticker'].setValue(null);
+    this.tickerForm.controls['ticker'].setValue('');
   }
 }
