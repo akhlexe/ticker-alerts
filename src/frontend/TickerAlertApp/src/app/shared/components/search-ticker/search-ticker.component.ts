@@ -74,5 +74,4 @@ export class SearchTickerComponent implements OnInit {
   public isFinancialAsset(asset: any): asset is FinancialAssetDto {
     return asset && typeof asset.ticker === 'string' && typeof asset.name === 'string';
   }
-
 }

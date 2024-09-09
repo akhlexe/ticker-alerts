@@ -28,7 +28,6 @@ const MatModules = [
 })
 export class GlobalSearchComponent {
   inputValue: string = '';
-  
 
   constructor(
     public dialogRef: MatDialogRef<GlobalSearchComponent>,
@@ -44,8 +43,8 @@ export class GlobalSearchComponent {
     this.dialogRef.close();
   }
 
-  public onTickerSelected($event: FinancialAssetDto) {
+  public onTickerSelected(assetSelected: FinancialAssetDto) {
     this.close();
-    this.route.navigate([""]);
+    this.route.navigate(['/financial-assets', assetSelected.id]);
   }
 }
