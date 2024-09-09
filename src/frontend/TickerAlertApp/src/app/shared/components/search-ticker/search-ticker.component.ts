@@ -27,8 +27,7 @@ const MatModules = [
 export class SearchTickerComponent implements OnInit {
   @Output() tickerSelected = new EventEmitter<FinancialAssetDto>();
   @Input() initialValue: string | null = null;
-  private searchControl = new BehaviorSubject<string | null>(null);
-  public assetSearchList: Observable<FinancialAssetDto[]> | undefined;
+  public assetSearchList$: Observable<FinancialAssetDto[]> | undefined;
   public tickerForm!: FormGroup;
 
   constructor(
@@ -38,40 +37,30 @@ export class SearchTickerComponent implements OnInit {
 
   public ngOnInit(): void {
     this.tickerForm = this.formBuilder.group({
-      ticker: [this.initialValue, []]
+      ticker: [this.initialValue]
     });
 
-    this.tickerForm.get('ticker')?.valueChanges.subscribe(value => {
-      this.searchControl.next(value);
-    });
-
-    this.assetSearchList = this.searchControl.pipe(
+    this.assetSearchList$ = this.tickerForm.get('ticker')?.valueChanges.pipe(
       debounceTime(300),
-      switchMap((value) => {
-        if (value === null || value.length <= 2) {
-          return of([]);
-        } else {
-          return this.assetsService.getFinancialAssetsByCriteria(value);
-        }
-      })
+      switchMap(value => value?.length > 2 ? this.assetsService.getFinancialAssetsByCriteria(value) : of([]))
     );
   }
 
   public onTickerSelected(event: MatAutocompleteSelectedEvent): void {
     this.tickerSelected.emit(event.option.value);
-    console.log(event);
   }
 
-  public displayAssetTicker(asset: string): string {
-    return asset;
+  // If the windows just opens when the user writes, the asset will be just pure string.
+  // The option selected is typeof FinancialAssetDto: { ticker: 'MSFT' }
+  public displayAssetTicker(asset: any): string {
+    if (asset.ticker === undefined) {
+      return asset;
+    }
+
+    return asset.ticker;
   }
 
   public clearTickerInput(): void {
     this.tickerForm.controls['ticker'].setValue(null);
-    this.searchControl.next(null);
-  }
-
-  public isFinancialAsset(asset: any): asset is FinancialAssetDto {
-    return asset && typeof asset.ticker === 'string' && typeof asset.name === 'string';
   }
 }

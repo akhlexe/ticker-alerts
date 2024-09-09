@@ -6,7 +6,7 @@
                 placeholder="Ex. Microsoft Corp.">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onTickerSelected($event)"
                 [displayWith]="displayAssetTicker">
-                <mat-option *ngFor="let asset of assetSearchList | async" [value]="asset">
+                <mat-option *ngFor="let asset of assetSearchList$ | async" [value]="asset">
                     {{ asset.ticker }} - {{ asset.name }}
                 </mat-option>
             </mat-autocomplete>
