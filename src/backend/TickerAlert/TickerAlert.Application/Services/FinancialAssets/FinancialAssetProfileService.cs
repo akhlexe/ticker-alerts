@@ -14,6 +14,8 @@ public sealed class FinancialAssetProfileService(
     {
         FinancialAsset? financialAsset = await _context.FinancialAssets.FirstOrDefaultAsync(f => f.Id == financialAssetId);
 
-        return await stockMarketService.GetCompanyProfile(financialAsset.Ticker);
+        return financialAsset is null
+            ? new CompanyProfileDto()
+            : await stockMarketService.GetCompanyProfile(financialAsset.Ticker);
     }
 }
