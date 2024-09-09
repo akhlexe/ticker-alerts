@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,66 +10,57 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
-const MatModules = [ReactiveFormsModule,
+const MatModules = [
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
-  CommonModule,
   MatButtonModule,
-  MatAutocompleteModule,]
+  MatAutocompleteModule]
 
 @Component({
   selector: 'app-search-ticker',
   standalone: true,
-  imports: [MatModules, CommonModule],
+  imports: [MatModules, CommonModule, ReactiveFormsModule],
   templateUrl: './search-ticker.component.html',
   styleUrl: './search-ticker.component.css'
 })
 export class SearchTickerComponent implements OnInit {
   @Output() tickerSelected = new EventEmitter<FinancialAssetDto>();
-  private searchControl = new BehaviorSubject<string | null>(null);
-  public assetSearchList: Observable<FinancialAssetDto[]> | undefined;
+  @Input() initialValue: string | null = null;
+  public assetSearchList$: Observable<FinancialAssetDto[]> | undefined;
   public tickerForm!: FormGroup;
 
   constructor(
     private assetsService: FinancialAssetsService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder) {
+  }
 
   public ngOnInit(): void {
     this.tickerForm = this.formBuilder.group({
-      ticker: [null, []]
+      ticker: [this.initialValue]
     });
 
-    this.tickerForm.get('ticker')?.valueChanges.subscribe(value => {
-      this.searchControl.next(value);
-    });
-
-    this.assetSearchList = this.searchControl.pipe(
+    this.assetSearchList$ = this.tickerForm.get('ticker')?.valueChanges.pipe(
       debounceTime(300),
-      switchMap((value) => {
-        if (value === null || value.length <= 2) {
-          return of([]);
-        } else {
-          return this.assetsService.getFinancialAssetsByCriteria(value);
-        }
-      })
+      switchMap(value => value?.length > 2 ? this.assetsService.getFinancialAssetsByCriteria(value) : of([]))
     );
   }
 
   public onTickerSelected(event: MatAutocompleteSelectedEvent): void {
     this.tickerSelected.emit(event.option.value);
-    console.log(event);
   }
 
-  public displayAssetTicker(asset: FinancialAssetDto): string {
-    return asset?.ticker && asset?.name
-      ? asset?.ticker + ' - ' + asset?.name
-      : '';
+  // If the windows just opens when the user writes, the asset will be just pure string.
+  // The option selected is typeof FinancialAssetDto: { ticker: 'MSFT' }
+  public displayAssetTicker(asset: any): string {
+    if (asset.ticker === undefined) {
+      return asset;
+    }
+
+    return asset.ticker;
   }
 
   public clearTickerInput(): void {
     this.tickerForm.controls['ticker'].setValue(null);
-    this.searchControl.next(null);
   }
-
 }

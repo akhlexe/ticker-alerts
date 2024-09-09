@@ -1,0 +1,7 @@
+<div class="global-search-container">
+    <h1 mat-dialog-title>Search your stock</h1>
+    <div mat-dialog-content>
+        <app-search-ticker [initialValue]="this.inputValue" (tickerSelected)="onTickerSelected($event)">
+        </app-search-ticker>
+    </div>
+</div>

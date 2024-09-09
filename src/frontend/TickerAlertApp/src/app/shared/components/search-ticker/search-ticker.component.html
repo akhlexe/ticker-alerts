@@ -1,16 +1,16 @@
 <div class="search-ticker-container">
-    <form [formGroup]="tickerForm" class="search-ticker-form">
+    <form [formGroup]="this.tickerForm" class="search-ticker-form">
         <mat-form-field class="search-ticker">
             <mat-label>Ticker</mat-label>
             <input #tickerInput type="text" matInput formControlName="ticker" [matAutocomplete]="auto"
                 placeholder="Ex. Microsoft Corp.">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onTickerSelected($event)"
                 [displayWith]="displayAssetTicker">
-                <mat-option *ngFor="let asset of assetSearchList | async" [value]="asset">
+                <mat-option *ngFor="let asset of assetSearchList$ | async" [value]="asset">
                     {{ asset.ticker }} - {{ asset.name }}
                 </mat-option>
             </mat-autocomplete>
-            <button *ngIf="tickerForm.get('ticker')!.value" matSuffix mat-icon-button aria-label="Clear"
+            <button *ngIf="this.tickerForm.get('ticker')!.value" matSuffix mat-icon-button aria-label="Clear"
                 (click)="clearTickerInput()">
                 <mat-icon>close</mat-icon>
             </button>
