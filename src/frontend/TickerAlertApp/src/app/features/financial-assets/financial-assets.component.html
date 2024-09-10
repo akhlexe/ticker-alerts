@@ -3,29 +3,37 @@
 
     </div>
     <div class="card">
-        <div *ngIf="companyProfile$ | async as companyProfile">
-            <div class="company-profile">
-                <div class="company-header">
-                    <img [src]="companyProfile.logo" alt="{{ companyProfile.name }} logo" class="company-logo" />
-                    <h1>{{ companyProfile.name }}</h1>
-                </div>
-                <div class="company-information">
-                    <p><strong>Ticker:</strong> {{ companyProfile.ticker }}</p>
-                    <p><strong>Country:</strong> {{ companyProfile.country }}</p>
-                    <p><strong>Currency:</strong> {{ companyProfile.currency }}</p>
-                    <p><strong>Exchange:</strong> {{ companyProfile.exchange }}</p>
-                    <p><strong>IPO Date:</strong> {{ companyProfile.ipo }}</p>
-                    <p><strong>Market Capitalization:</strong> {{ companyProfile.marketCapitalization * 1000 | currency
-                        }}
-                    </p>
-                    <p><strong>Share Outstanding:</strong> {{ companyProfile.shareOutstanding }} B</p>
-                    <p><strong>Industry:</strong> {{ companyProfile.finnhubIndustry }}</p>
-                    <p><strong>Website: </strong> <a [href]="companyProfile.weburl" target="_blank">{{
-                            companyProfile.weburl
-                            }}</a>
-                    </p>
-                </div>
+        <div *ngIf="!(companyProfile$ | async); else companyProfileContent">
+            <div class="spinner-container">
+                <mat-spinner style="--mdc-circular-progress-active-indicator-color: #e9ae41;"></mat-spinner>
             </div>
         </div>
+        <ng-template #companyProfileContent>
+            <div *ngIf="companyProfile$ | async as companyProfile">
+                <div class="company-profile">
+                    <div class="company-header">
+                        <img [src]="companyProfile.logo" alt="{{ companyProfile.name }} logo" class="company-logo" />
+                        <h1>{{ companyProfile.name }}</h1>
+                    </div>
+                    <div class="company-information">
+                        <p><strong>Ticker:</strong> {{ companyProfile.ticker }}</p>
+                        <p><strong>Country:</strong> {{ companyProfile.country }}</p>
+                        <p><strong>Currency:</strong> {{ companyProfile.currency }}</p>
+                        <p><strong>Exchange:</strong> {{ companyProfile.exchange }}</p>
+                        <p><strong>IPO Date:</strong> {{ companyProfile.ipo }}</p>
+                        <p><strong>Market Capitalization:</strong> {{ companyProfile.marketCapitalization * 1000 |
+                            currency
+                            }}
+                        </p>
+                        <p><strong>Share Outstanding:</strong> {{ companyProfile.shareOutstanding }} B</p>
+                        <p><strong>Industry:</strong> {{ companyProfile.finnhubIndustry }}</p>
+                        <p><strong>Website: </strong> <a [href]="companyProfile.weburl" target="_blank">{{
+                                companyProfile.weburl
+                                }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
     </div>
 </div>
