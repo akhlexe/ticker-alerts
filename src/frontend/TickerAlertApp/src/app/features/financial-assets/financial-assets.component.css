@@ -1,13 +1,3 @@
-.financial-asset-container {
-    display: flex;
-    justify-content: flex-start;
-    min-height: 94vh;
-    flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-    margin: auto;
-    height: 100%;
-}
-
 .top-space{
     height: 10vh;
 }
@@ -23,7 +13,7 @@
     color: #ccc;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -40,10 +30,33 @@
 
   .company-header {
     display: flex;
-    justify-content: start;
     vertical-align: middle;
     align-items: center;
+    width: 100%;
   }
+
+  .company {
+    display: flex;
+    justify-content: flex-start;
+    vertical-align: middle;
+    align-items: center;
+    width: 50%;
+  }
+
+  .action-container {
+    display: flex;
+    justify-content: space-around;
+    width: 50%;
+  }
+
+  .action-button {
+    transform: scale(2);
+  }
+
+  .action-button:hover {
+    color:white;
+  }
+
   
   h1 {
     font-size: 2em;
@@ -69,3 +82,26 @@
     color: orange;
   }
 
+
+
+
+@media (max-width: 600px) {
+  .padding-small{
+    padding: 0px 20px;
+  }
+
+  .company-header {
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+  .company {
+    justify-content: flex-start;
+    width: 80%;
+  }
+
+  .action-container {
+    padding: 20px;
+    width: 100%;
+  }
+}
