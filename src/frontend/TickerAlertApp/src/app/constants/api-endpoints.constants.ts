@@ -6,6 +6,7 @@ export const Endpoints = {
   CancelAlert: `${environment.apiProxy}/Alerts/CancelAlert`,
   ConfirmReception: `${environment.apiProxy}/Alerts/ConfirmReception`,
   FinancialAssets: `${environment.apiProxy}/FinancialAssets`,
+  FinancialAssetProfile: `${environment.apiProxy}/FinancialAssets/Profile`,
 };
 
 export const AuthEndpoints = {

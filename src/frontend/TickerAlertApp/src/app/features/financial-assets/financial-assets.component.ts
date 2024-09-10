@@ -1,28 +1,29 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { CompanyProfileDto } from '../../shared/services/financial-asset/models/financial-asset.model';
+import { FinancialAssetsService } from '../../shared/services/financial-asset/financial-assets.service';
 
 @Component({
   selector: 'app-financial-assets',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './financial-assets.component.html',
   styleUrl: './financial-assets.component.css'
 })
-export class FinancialAssetsComponent {
+export class FinancialAssetsComponent implements OnInit {
+  companyProfile$: Observable<CompanyProfileDto> | undefined;
   private selectedAssetId = '';
 
-  constructor(private params: ActivatedRoute) {
-    this.getSymbolFromRoute();
-  }
+  constructor(private route: ActivatedRoute, private financialAssetsService: FinancialAssetsService) { }
 
-  private getSymbolFromRoute(): void {
-    this.params.queryParams.subscribe(params => {
-      this.selectedAssetId = params['id'];
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const financialAssetId = params.get('id') || '';
+      this.selectedAssetId = financialAssetId;
+      this.companyProfile$ = this.financialAssetsService.getFinancialAssetProfile(financialAssetId);
       console.log('Asset ID:', this.selectedAssetId);
     })
-  }
-
-  public getTicker(): string {
-    return this.selectedAssetId;
   }
 }

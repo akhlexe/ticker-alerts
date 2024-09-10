@@ -11,4 +11,13 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
 
+.feature-container {
+    display: flex;
+    justify-content: flex-start;
+    min-height: 94vh;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    margin: auto;
+    height: 100%;
+}
 
