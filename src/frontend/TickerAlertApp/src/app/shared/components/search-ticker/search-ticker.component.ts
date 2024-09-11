@@ -60,6 +60,11 @@ export class SearchTickerComponent implements OnInit {
     return asset.ticker;
   }
 
+  public setDefaultAsset(asset: FinancialAssetDto): void {
+    this.tickerForm.setValue(asset);
+    this.tickerSelected.emit(asset);
+  }
+
   public clearTickerInput(): void {
     this.tickerForm.controls['ticker'].setValue('');
   }
