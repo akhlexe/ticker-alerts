@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SearchTickerComponent } from '../../../../shared/components/search-ticker/search-ticker.component';
 import { FinancialAssetDto } from '../../../../shared/services/financial-asset/models/financial-asset.model';
@@ -14,6 +14,7 @@ import { Result } from '../../../../shared/models/result.models';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { CreateAlertModalData } from './models/create-alert.model';
 
 const MatModules = [
   MatDialogModule,
@@ -31,23 +32,32 @@ const MatModules = [
   templateUrl: './create-alert-modal.component.html',
   styleUrl: './create-alert-modal.component.css'
 })
-export class CreateAlertModalComponent {
-
+export class CreateAlertModalComponent implements OnInit {
   @Output() alertCreated: EventEmitter<void> = new EventEmitter<void>();
   @ViewChild(SearchTickerComponent) searchTickerComponent!: SearchTickerComponent;
 
   createAlertForm!: FormGroup;
+  public financialAssetDefault: FinancialAssetDto | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private alertsService: AlertsService,
     private notificationService: NotificationService,
-    public dialogRef: MatDialogRef<CreateAlertModalComponent>
-  ) { }
+    public dialogRef: MatDialogRef<CreateAlertModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: CreateAlertModalData,
+  ) {
+    if (data.defaultAsset) {
+      this.financialAssetDefault = data.defaultAsset;
+    }
+  }
 
   public ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  private initializeForm() {
     this.createAlertForm = this.formBuilder.group({
-      ticker: [null, [Validators.required]],
+      ticker: [this.financialAssetDefault, [Validators.required]],
       targetPrice: ['', [Validators.required]],
     });
   }

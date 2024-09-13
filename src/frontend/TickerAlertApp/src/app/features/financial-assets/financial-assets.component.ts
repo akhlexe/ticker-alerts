@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FinancialAssetsService } from '../../shared/services/financial-asset/financial-assets.service';
-import { CompanyProfileDto } from '../../shared/services/financial-asset/models/financial-asset.model';
+import { CompanyProfileDto, FinancialAssetDto } from '../../shared/services/financial-asset/models/financial-asset.model';
 import { CreateAlertModalComponent } from '../alerts/components/create-alert-modal/create-alert-modal.component';
 
 const MatModules = [
@@ -26,6 +26,7 @@ const MatModules = [
 })
 export class FinancialAssetsComponent implements OnInit {
   companyProfile$: Observable<CompanyProfileDto> | undefined;
+  asset: FinancialAssetDto | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,13 +34,22 @@ export class FinancialAssetsComponent implements OnInit {
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  private getData() {
     this.route.paramMap.subscribe(params => {
       const financialAssetId = params.get('id') || '';
       this.companyProfile$ = this.financialAssetsService.getFinancialAssetProfile(financialAssetId);
-    })
+      this.financialAssetsService.getFinancialAssetById(financialAssetId).subscribe(asset => {
+        this.asset = asset.data;
+      });
+    });
   }
 
   public onCreateAlert() {
-    this.dialog.open(CreateAlertModalComponent);
+    this.dialog.open(CreateAlertModalComponent, {
+      data: { defaultAsset: this.asset }
+    });
   }
 }
