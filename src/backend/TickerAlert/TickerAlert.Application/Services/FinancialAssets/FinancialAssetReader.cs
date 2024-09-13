@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TickerAlert.Application.Common.Persistence;
+using TickerAlert.Application.Common.Responses;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Services.FinancialAssets.Dtos;
 using TickerAlert.Domain.Entities;
@@ -48,5 +49,16 @@ public class FinancialAssetReader : IFinancialAssetReader
             Ticker = financialAsset.Ticker,
             Name = financialAsset.Name,
         };
+    }
+
+    public async Task<Result<FinancialAssetDto>> GetById(Guid id)
+    {
+        FinancialAsset? financialAsset = await _context
+            .FinancialAssets
+            .FirstOrDefaultAsync(f => f.Id == id);
+
+        return financialAsset is null
+            ? Result<FinancialAssetDto>.FailureResult($"Financial Asset doesnt exists with Id: {id}")
+            : Result<FinancialAssetDto>.SuccessResult(CreateFinancialAssetDto(financialAsset));
     }
 }

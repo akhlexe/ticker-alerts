@@ -1,3 +1,4 @@
+using TickerAlert.Application.Common.Responses;
 using TickerAlert.Application.Services.FinancialAssets.Dtos;
 using TickerAlert.Domain.Entities;
 
@@ -7,4 +8,5 @@ public interface IFinancialAssetReader
 {
     Task<IEnumerable<FinancialAssetDto>> GetAllBySearchCriteria(string criteria);
     Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts();
+    Task<Result<FinancialAssetDto>> GetById(Guid id);
 }

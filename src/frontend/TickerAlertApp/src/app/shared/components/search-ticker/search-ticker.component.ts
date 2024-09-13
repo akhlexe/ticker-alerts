@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, Observable, of, switchMap } from 'rxjs';
 import { FinancialAssetsService } from '../../services/financial-asset/financial-assets.service';
-import { FinancialAssetDto } from '../../services/financial-asset/models/financial-asset.model';
+import { FinancialAssetDto } from './../../services/financial-asset/models/financial-asset.model';
 
 const MatModules = [
   MatFormFieldModule,
@@ -53,11 +53,11 @@ export class SearchTickerComponent implements OnInit {
   // If the windows just opens when the user writes, the asset will be just pure string.
   // The option selected is typeof FinancialAssetDto: { ticker: 'MSFT' }
   public displayAssetTicker(asset: any): string {
-    if (asset.ticker === undefined) {
-      return asset;
+    if (!!asset && !!asset.ticker) {
+      // Do something
+      return asset.ticker;
     }
-
-    return asset.ticker;
+    return asset;
   }
 
   public clearTickerInput(): void {

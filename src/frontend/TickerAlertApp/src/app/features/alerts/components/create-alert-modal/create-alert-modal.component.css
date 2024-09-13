@@ -1,0 +1,55 @@
+.create-alert-modal-container {
+    padding: 16px;
+    max-width: 600px;
+    width: 400px;
+    margin: 0 auto; 
+    box-sizing: border-box; 
+}
+
+.financial-asset-label {
+    display: flex;
+    align-items: center;
+    background-color: #f1f1f1; 
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px; 
+}
+
+.financial-asset-label mat-icon {
+    color: green;
+    margin-right: 8px;
+}
+
+.asset-ticker {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.asset-name {
+    color: #555;
+    font-size: 14px;
+}
+
+.price-input {
+    width: 100%;
+}
+
+.create-alert-button {
+    font-weight: bold;
+}
+
+.create-alert-modal-actions-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+@media (max-width: 600px) {
+    .create-alert-modal-container {
+        max-width: 100%;
+    }
+
+    .create-alert-button {
+        font-size: 16px;
+    }
+
+}

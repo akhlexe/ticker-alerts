@@ -7,45 +7,19 @@
     margin-top: 3vh;
 }
 
-.create-alert-form {
-    display: flex;
-    gap: 30px;
-}
-
-.ticker-input {
-    width: 30vw;
-}
-
-.price-input {
-    width: 20vw;
-}
-
 .create-alert-button {
-    height: 56px;
+    min-height: 50px;
+    min-width: 250px;
+}
+
+.create-alert-button mat-icon {
+    margin-right: 8px; 
 }
 
 @media (max-width: 600px) {
     .create-alert-container {
         /* padding: 16px; */
         max-width: 100%;
-    }
-
-    .create-alert-form {
-        flex-direction: column;
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .create-alert-form {
-        gap: 12px; 
-    }
-
-    .ticker-input {
-        width: 100%;   
-    }
-
-    .price-input {
-        width: 100%;
     }
 
     .create-alert-button {

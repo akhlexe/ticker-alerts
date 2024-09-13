@@ -1,7 +1,6 @@
 .search-ticker-container {
     display: flex;
     justify-content: center;
-    width: 30vw;
 }
 
 .search-ticker-form {
@@ -10,11 +9,4 @@
 
 .search-ticker {
     width: 100%;
-}
-
-
-@media (max-width: 600px) {
-    .search-ticker-container {
-        width: 70vw;
-    }
 }

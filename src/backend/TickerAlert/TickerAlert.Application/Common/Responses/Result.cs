@@ -13,6 +13,7 @@ public class Result
 
     public static Result SuccessResult() => new(true, null);
     public static Result FailureResult(string[] errors) => new(false, errors);
+    public static Result FailureResult(string error) => new(false, [error]);
 }
 
 public class Result<T>
@@ -30,4 +31,5 @@ public class Result<T>
 
     public static Result<T> SuccessResult(T data) => new(true, Array.Empty<string>(), data);
     public static Result<T> FailureResult(params string[] errors) => new(false, errors, default);
+    public static Result<T> FailureResult(string error) => new(false, [error], default);
 }
