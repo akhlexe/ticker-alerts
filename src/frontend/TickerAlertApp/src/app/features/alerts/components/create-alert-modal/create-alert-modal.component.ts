@@ -84,11 +84,11 @@ export class CreateAlertModalComponent implements OnInit {
     if (result.success) {
       this.alertCreated.emit();
       this.notificationService.showSuccess(AlertMessages.SUCCESS_MESSAGE, AlertMessages.CREATE_ALERT_TITLE);
+      this.dialogRef.close(true);
     } else {
       this.notificationService.showError(result.errors.join(' '), AlertMessages.CREATE_ALERT_TITLE);
+      this.dialogRef.close(false);
     }
-
-    this.dialogRef.close();
   }
 
   private handleError(): void {

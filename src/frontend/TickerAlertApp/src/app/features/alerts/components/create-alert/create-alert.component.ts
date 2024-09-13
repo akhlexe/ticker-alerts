@@ -35,6 +35,10 @@ export class CreateAlertComponent {
   public openCreateAlertModal() {
     this.dialog.open(CreateAlertModalComponent, {
       data: { defaultAsset: null }
+    }).afterClosed().subscribe(isAlertCreated => {
+      if (isAlertCreated) {
+        this.alertCreated.emit();
+      }
     });
   }
 }

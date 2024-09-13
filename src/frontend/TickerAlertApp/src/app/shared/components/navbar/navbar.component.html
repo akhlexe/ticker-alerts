@@ -1,15 +1,20 @@
-<mat-toolbar class="toolbar">
-    <div class="appname-cotainer">
-        <img src="assets/images/logo.png" alt="App Logo" class="app-logo" width="50" height="50">
-        <span>TickerBloom</span>
-    </div>
-    <div *ngIf="username" class="user-login">
-        <div class="user-info">
-            <mat-icon>account_circle</mat-icon>
-            <span>{{username}}</span>
+<mat-toolbar>
+    <mat-toolbar-row class="toolbar">
+        <div class="appname-cotainer">
+            <img src="assets/images/logo.png" alt="App Logo" class="app-logo" width="50" height="50">
+            <span>TickerBloom</span>
         </div>
-        <div>
-            <button mat-button (click)="onLogout()">Logout</button>
+        <div class="nav-links">
+            <a mat-button routerLink="alerts">Alerts</a>
         </div>
-    </div>
+        <div *ngIf="username" class="user-login">
+            <div class="user-info">
+                <mat-icon>account_circle</mat-icon>
+                <span>{{username}}</span>
+            </div>
+            <div>
+                <button mat-button (click)="onLogout()">Logout</button>
+            </div>
+        </div>
+    </mat-toolbar-row>
 </mat-toolbar>
