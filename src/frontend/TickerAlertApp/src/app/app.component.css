@@ -9,3 +9,28 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.main-layout {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden; /* Prevents overflow and enables scrolling */
+  }
+  
+  .watchlist-column {
+    width: 250px; 
+    background-color: #f4f4f4;
+    overflow-y: auto; 
+  }
+  
+  .router-column {
+    flex-grow: 1;
+    /* padding: 20px; */
+    overflow-y: auto; /* Enable scrolling for the main content */
+  }
+
+
+  @media (max-width: 768px) {
+    /* .watchlist-column {
+      display: none;
+    } */
+  }
