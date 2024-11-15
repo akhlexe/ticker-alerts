@@ -1,5 +1,12 @@
 <div class="app-main-container">
     <app-navbar />
     <app-notification />
-    <router-outlet />
+    <div class="main-layout">
+        <div class="watchlist-column" *ngIf="isLoggedIn | async">
+            <app-watchlist />
+        </div>
+        <div class="router-column">
+            <router-outlet />
+        </div>
+    </div>
 </div>

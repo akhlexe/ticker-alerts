@@ -9,3 +9,25 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.main-layout {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  
+  .watchlist-column {
+    width: 300px; 
+    overflow-y: auto; 
+  }
+  
+  .router-column {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 768px) {
+    /* .watchlist-column {
+      display: none;
+    } */
+  }
