@@ -1,6 +1,22 @@
+
+/* workaround to determine fixed 6vh toolbar height */
+::ng-deep .mat-toolbar-row, 
+::ng-deep .mat-toolbar-single-row
+::ng-deep .mat-toolbar-multiple-rows {
+  height: 6vh;
+}
+
+.toolbar-container .mat-toolbar-row,
+.toolbar-container .mat-toolbar-single-row {
+    height: 6vh !important;
+}
+
+.toolbar-container {
+    min-height: 6vh !important;
+}
+
 .toolbar {
     justify-content: space-between;
-    height: 6vh;
     width: 100%;
 }
 
