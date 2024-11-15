@@ -21,7 +21,4 @@ public class User : Entity
     {
         return new User(Id, username, hashedPassword);
     }
-    
-    // EF Core required.
-    // private User() : base(Guid.Empty) {}
 }

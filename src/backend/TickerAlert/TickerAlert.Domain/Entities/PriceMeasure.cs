@@ -19,8 +19,5 @@ namespace TickerAlert.Domain.Entities
             => new(id, financialAssetId, price);
 
         public FinancialAsset? FinancialAsset { get; private set; }
-        
-        // EF Core required.
-        // private PriceMeasure() : base(Guid.Empty) { }
     }
 }

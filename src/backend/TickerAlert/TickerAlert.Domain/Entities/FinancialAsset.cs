@@ -15,8 +15,5 @@ namespace TickerAlert.Domain.Entities
 
         public static FinancialAsset Create(Guid id, string ticker, string name) 
             => new(id, ticker, name);
-        
-        // EF Core.
-        // private FinancialAsset() : base(Guid.Empty) {}
     }
 }
