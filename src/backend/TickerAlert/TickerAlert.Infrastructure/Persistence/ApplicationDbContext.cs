@@ -15,17 +15,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<PriceMeasure> PriceMeasures { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<OutboxMessage> OutboxMessages { get; set; }
+    public DbSet<Watchlist> Watchlists { get; set; }
+    public DbSet<WatchlistItem> WatchlistItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
-    
-    public Task<int> SaveChangesAsync()
-    {
-        
-        
-        return base.SaveChangesAsync();
-    }
+
+    public Task<int> SaveChangesAsync() => base.SaveChangesAsync();
 }

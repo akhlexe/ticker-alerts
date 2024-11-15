@@ -9,4 +9,5 @@ public interface IFinancialAssetReader
     Task<IEnumerable<FinancialAssetDto>> GetAllBySearchCriteria(string criteria);
     Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts();
     Task<Result<FinancialAssetDto>> GetById(Guid id);
+    Task<List<FinancialAssetDto>> GetAllByIds(IEnumerable<Guid> ids);
 }
