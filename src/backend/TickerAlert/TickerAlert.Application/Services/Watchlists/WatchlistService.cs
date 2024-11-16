@@ -18,6 +18,7 @@ internal sealed class WatchlistService(
     {
         Watchlist? watchlist = await context
             .Watchlists
+            .Include(w => w.WatchlistItems)
             .AsNoTracking()
             .FirstOrDefaultAsync(w => w.UserId == currentUserService.UserId);
 
