@@ -14,3 +14,9 @@ export const AuthEndpoints = {
   Register: `${environment.apiProxy}/Auth/Register`,
   Login: `${environment.apiProxy}/Auth/Login`,
 }
+
+export const WatchlistEndpoints = {
+  GetWatchlist: `${environment.apiProxy}/Watchlists`,
+  AddWatchlistItem: `${environment.apiProxy}/Watchlists/AddItem`,
+  RemoveWatchlistItem: `${environment.apiProxy}/Watchlists/RemoveItem`
+}

@@ -8,5 +8,5 @@ public class WatchlistDto
 
     public string Name { get; set; }
 
-    public List<WatchlistItemDto> WatchlistItems { get; set; }
+    public List<WatchlistItemDto> Items { get; set; }
 }

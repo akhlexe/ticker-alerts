@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { WatchlistService } from '../../services/watchlist/watchlist.service';
+import { WatchlistDto, WatchlistItemDto } from '../../services/watchlist/models/watchlist.model';
 
 const MatModules = [
   MatCardModule,
@@ -31,34 +33,17 @@ export interface TrackElement {
   styleUrl: './watchlist.component.css'
 })
 export class WatchlistComponent {
-  watchlist: TrackElement[] = [];
-  newItem: string = '';
-  displayedColumns: string[] = ['ticker', 'price', 'ratio'];
+  watchlist: WatchlistDto | null = null;
+  watchlistItems: WatchlistItemDto[] = [];
+  displayedColumns: string[] = ['ticker', 'price', '%'];
+
+  constructor(private watchlistService: WatchlistService) { }
 
   ngOnInit(): void {
-    // Initialize with some items or fetch from a service
-    this.watchlist = [
-      {
-        ticker: "MSFT",
-        price: 420,
-        ratio: "3:1"
-      },
-      {
-        ticker: "GOOGL",
-        price: 165.57,
-        ratio: "8:1"
-      }
-    ];
-  }
-
-  addItem(): void {
-    if (this.newItem.trim()) {
-      // this.watchlist.push(this.newItem.trim());
-      this.newItem = '';
-    }
-  }
-
-  removeItem(item: string): void {
-    // this.watchlist = this.watchlist.filter(i => i !== item);
+    this.watchlistService.getWatchlist().subscribe((result) => {
+      debugger;
+      this.watchlist = result;
+      this.watchlistItems = result.items;
+    });
   }
 }
