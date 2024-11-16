@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { FinancialAssetsService } from '../../shared/services/financial-asset/financial-assets.service';
 import { CompanyProfileDto, FinancialAssetDto } from '../../shared/services/financial-asset/models/financial-asset.model';
 import { CreateAlertModalComponent } from '../alerts/components/create-alert-modal/create-alert-modal.component';
+import { WatchlistService } from '../../shared/services/watchlist/watchlist.service';
 
 const MatModules = [
   MatProgressSpinnerModule,
@@ -31,7 +32,9 @@ export class FinancialAssetsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private financialAssetsService: FinancialAssetsService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private watchlistService: WatchlistService
+  ) { }
 
   ngOnInit(): void {
     this.getData();
@@ -51,5 +54,9 @@ export class FinancialAssetsComponent implements OnInit {
     this.dialog.open(CreateAlertModalComponent, {
       data: { defaultAsset: this.asset }
     });
+  }
+
+  public onAddToWatchlist() {
+    // this.watchlistService.addWatchlistItem()
   }
 }

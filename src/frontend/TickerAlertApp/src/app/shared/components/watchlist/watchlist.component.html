@@ -5,7 +5,7 @@
     <!-- <button mat-raised-button color="primary" (click)="addItem()">Add</button> -->
 
     <mat-card-content>
-        <table mat-table [dataSource]="watchlistItems" class="mat-elevation-z8">
+        <table mat-table [dataSource]="watchlist?.items ?? []" class="mat-elevation-z8">
 
             <!-- Ticker Column -->
             <ng-container matColumnDef="ticker">

@@ -1,33 +1,52 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { WatchlistDto } from './models/watchlist.model';
-import { WatchlistEndpoints } from '../../../constants/api-endpoints.constants';
+import { WatchlistHttpService } from './watchlist-http.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WatchlistService {
+  private watchlist$ = new BehaviorSubject<WatchlistDto | null>(null);
+  private currentWatchlistId: string | null = null;
 
-  constructor(private httpClient: HttpClient) { }
 
-  public getWatchlist(): Observable<WatchlistDto> {
-    return this.httpClient.get<WatchlistDto>(WatchlistEndpoints.GetWatchlist);
+  constructor(private watchlistHttpService: WatchlistHttpService) { }
+
+  public loadWatchlist(): Observable<WatchlistDto> {
+    return this.watchlistHttpService.getWatchlist().pipe(
+      tap((watchlist) => {
+        this.watchlist$.next(watchlist);
+        this.currentWatchlistId = watchlist.id;
+      })
+    )
   }
 
-  public addWatchlistItem(watchlistId: string, financialAssetId: string): Observable<WatchlistDto> {
-    let params = new HttpParams();
-    params = params.append('watchlistId', watchlistId);
-    params = params.append('financialAssetId', financialAssetId);
-
-    return this.httpClient.post<WatchlistDto>(WatchlistEndpoints.AddWatchlistItem, { params });
+  public getWatchlist(): Observable<WatchlistDto | null> {
+    return this.watchlist$.asObservable();
   }
 
-  public removeWatchlistItem(watchlistId: string, itemId: string): Observable<WatchlistDto> {
-    let params = new HttpParams();
-    params = params.append('watchlistId', watchlistId);
-    params = params.append('itemId', itemId);
+  public addWatchlistItem(financialAssetId: string): Observable<WatchlistDto> {
+    if (!this.currentWatchlistId) {
+      throw new Error('No watchlist loaded.');
+    }
 
-    return this.httpClient.delete<WatchlistDto>(WatchlistEndpoints.RemoveWatchlistItem, { params });
+    return this.watchlistHttpService
+      .addWatchlistItem(this.currentWatchlistId, financialAssetId)
+      .pipe(
+        tap((updatedWatchlist) => this.watchlist$.next(updatedWatchlist))
+      )
+  }
+
+  public removeItemFromWatchlist(itemId: string): Observable<WatchlistDto> {
+    if (!this.currentWatchlistId) {
+      throw new Error('No watchlist loaded');
+    }
+
+    return this.watchlistHttpService
+      .removeWatchlistItem(this.currentWatchlistId, itemId)
+      .pipe(
+        tap((updatedWatchlist) => this.watchlist$.next(updatedWatchlist))
+      );
   }
 }

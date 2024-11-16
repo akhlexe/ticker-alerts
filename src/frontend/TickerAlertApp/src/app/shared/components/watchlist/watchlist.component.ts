@@ -34,16 +34,14 @@ export interface TrackElement {
 })
 export class WatchlistComponent {
   watchlist: WatchlistDto | null = null;
-  watchlistItems: WatchlistItemDto[] = [];
   displayedColumns: string[] = ['ticker', 'price', '%'];
 
   constructor(private watchlistService: WatchlistService) { }
 
   ngOnInit(): void {
-    this.watchlistService.getWatchlist().subscribe((result) => {
-      debugger;
-      this.watchlist = result;
-      this.watchlistItems = result.items;
-    });
+    this.watchlistService.loadWatchlist().subscribe({
+      next: ((watchlist) => this.watchlist = watchlist),
+      error: (err) => console.error('Error loading watchlist:', err)
+    })
   }
 }
