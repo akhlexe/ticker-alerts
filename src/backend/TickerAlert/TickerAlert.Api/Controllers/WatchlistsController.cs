@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TickerAlert.Application.Interfaces.Watchlists.Dtos;
 using TickerAlert.Application.UseCases.Watchlists.Commands.AddWatchlistItem;
 using TickerAlert.Application.UseCases.Watchlists.Commands.RemoveWatchlistItem;
@@ -6,6 +7,7 @@ using TickerAlert.Application.UseCases.Watchlists.Queries.GetUserWatchlist;
 
 namespace TickerAlert.Api.Controllers;
 
+[Authorize]
 public class WatchlistsController : ApiController
 {
     [HttpGet]

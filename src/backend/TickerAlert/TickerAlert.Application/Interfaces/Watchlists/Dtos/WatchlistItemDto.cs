@@ -8,7 +8,5 @@ public class WatchlistItemDto
 
     public string TickerName { get; set; }
 
-    public decimal ActualPrice { get; set; }
-
     public Guid WatchlistId { get; set; }
 }

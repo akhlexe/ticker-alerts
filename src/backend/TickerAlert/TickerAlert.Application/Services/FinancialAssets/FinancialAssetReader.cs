@@ -61,4 +61,16 @@ public class FinancialAssetReader : IFinancialAssetReader
             ? Result<FinancialAssetDto>.FailureResult($"Financial Asset doesnt exists with Id: {id}")
             : Result<FinancialAssetDto>.SuccessResult(CreateFinancialAssetDto(financialAsset));
     }
+
+    public async Task<List<FinancialAssetDto>> GetAllByIds(IEnumerable<Guid> ids)
+    {
+        List<FinancialAsset> financialAssets = await _context
+            .FinancialAssets
+            .Where(a => ids.Contains(a.Id))
+            .ToListAsync();
+
+        return financialAssets
+            .Select(CreateFinancialAssetDto)
+            .ToList();
+    }
 }

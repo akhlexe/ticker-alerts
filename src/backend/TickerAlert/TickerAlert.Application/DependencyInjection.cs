@@ -2,11 +2,13 @@ using Microsoft.Extensions.DependencyInjection;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.PriceMeasures;
+using TickerAlert.Application.Interfaces.Watchlists;
 using TickerAlert.Application.Services.Alerts;
 using TickerAlert.Application.Services.FinancialAssets;
 using TickerAlert.Application.Services.Notifiers;
 using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.Prices;
+using TickerAlert.Application.Services.Watchlists;
 
 namespace TickerAlert.Application;
 
@@ -31,5 +33,6 @@ public static class DependencyInjection
         services.AddScoped<AlertTriggeredNotifier>();
         services.AddScoped<IPriceMeasureService, PriceMeasureService>();
         services.AddScoped<IPriceMeasureReader, PriceMeasureReader>();
+        services.AddScoped<IWatchlistService, WatchlistService>();
     }
 }
