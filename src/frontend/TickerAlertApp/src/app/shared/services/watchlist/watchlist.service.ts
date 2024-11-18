@@ -10,7 +10,6 @@ export class WatchlistService {
   private watchlist$ = new BehaviorSubject<WatchlistDto | null>(null);
   private currentWatchlistId: string | null = null;
 
-
   constructor(private watchlistHttpService: WatchlistHttpService) { }
 
   public loadWatchlist(): Observable<WatchlistDto> {
@@ -26,27 +25,29 @@ export class WatchlistService {
     return this.watchlist$.asObservable();
   }
 
-  public addWatchlistItem(financialAssetId: string): Observable<WatchlistDto> {
+  public addWatchlistItem(financialAssetId: string): void {
     if (!this.currentWatchlistId) {
       throw new Error('No watchlist loaded.');
     }
 
-    return this.watchlistHttpService
+    this.watchlistHttpService
       .addWatchlistItem(this.currentWatchlistId, financialAssetId)
-      .pipe(
-        tap((updatedWatchlist) => this.watchlist$.next(updatedWatchlist))
-      )
+      .subscribe({
+        next: (updatedWatchlist) => this.watchlist$.next(updatedWatchlist),
+        error: err => console.log("Error on adding an item to the watchlist.")
+      });
   }
 
-  public removeItemFromWatchlist(itemId: string): Observable<WatchlistDto> {
+  public removeItemFromWatchlist(itemId: string): void {
     if (!this.currentWatchlistId) {
       throw new Error('No watchlist loaded');
     }
 
-    return this.watchlistHttpService
+    this.watchlistHttpService
       .removeWatchlistItem(this.currentWatchlistId, itemId)
-      .pipe(
-        tap((updatedWatchlist) => this.watchlist$.next(updatedWatchlist))
-      );
+      .subscribe({
+        next: (updatedWatchlist) => this.watchlist$.next(updatedWatchlist),
+        error: err => console.log("Error on deleting an item to the watchlist.")
+      });
   }
 }

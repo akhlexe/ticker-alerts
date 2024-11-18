@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WatchlistEndpoints } from '../../../constants/api-endpoints.constants';
 import { WatchlistDto } from './models/watchlist.model';
+import { AddItemRequest, RemoveItemRequest } from './models/watchlist-http.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +17,23 @@ export class WatchlistHttpService {
   }
 
   public addWatchlistItem(watchlistId: string, financialAssetId: string): Observable<WatchlistDto> {
-    let params = new HttpParams();
-    params = params.append('watchlistId', watchlistId);
-    params = params.append('financialAssetId', financialAssetId);
+    var body: AddItemRequest = {
+      watchlistId: watchlistId,
+      financialAssetId: financialAssetId
+    }
 
-    return this.httpClient.post<WatchlistDto>(WatchlistEndpoints.AddWatchlistItem, { params });
+    return this.httpClient.post<WatchlistDto>(WatchlistEndpoints.AddWatchlistItem, body);
   }
 
   public removeWatchlistItem(watchlistId: string, itemId: string): Observable<WatchlistDto> {
-    let params = new HttpParams();
-    params = params.append('watchlistId', watchlistId);
-    params = params.append('itemId', itemId);
 
-    return this.httpClient.delete<WatchlistDto>(WatchlistEndpoints.RemoveWatchlistItem, { params });
+    var body: RemoveItemRequest = {
+      watchlistId: watchlistId,
+      itemId: itemId
+    }
+
+    return this.httpClient.delete<WatchlistDto>(WatchlistEndpoints.RemoveWatchlistItem, {
+      body: body
+    });
   }
 }
