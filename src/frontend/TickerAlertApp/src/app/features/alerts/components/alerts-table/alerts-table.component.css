@@ -7,15 +7,6 @@
     margin-top: 1vh;
 }
 
-th {
-    text-align: center;    
-}
-
-td {
-    text-align: center;
-    padding: 0; /* Ensure no extra padding in the td */
-}
-
 .alert-state-common {
     color: white;
     padding: 7px;
@@ -43,6 +34,45 @@ td {
 .alert-canceled {
     background-color: #F44336;
 }
+
+/* TODO: ver de la manera mas prolija de no repetir css en multiples lugares */
+
+table {
+    width: 100%;
+    color: #ffffff;
+    background-color: #2e2a24;
+}
+
+table th {
+    text-align: center;
+    font-weight: bold;
+    background-color: #3b2f29; 
+    color: #a67c00;
+    padding: 12px;
+}
+
+table td {
+    text-align: center;
+    padding: 12px;
+    background-color: #3e3a35;
+    color: #d4af37;
+    border-bottom: 1px solid #3b2f29;
+}
+
+tr:hover td {
+    background-color: #4c453f; 
+    color: #87a96b; 
+    transition: background-color 0.3s, color 0.3s;
+}
+
+td:nth-child(even) {
+    color: #87a96b; 
+}
+
+td:nth-child(odd) {
+    color: #d4af37; 
+}
+
 
 @media (max-width: 600px) {
     .hide-on-mobile {

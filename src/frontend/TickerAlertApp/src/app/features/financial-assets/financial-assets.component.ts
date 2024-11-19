@@ -57,11 +57,9 @@ export class FinancialAssetsComponent implements OnInit {
   }
 
   public onAddToWatchlist() {
-    debugger;
     if (!this.asset) {
       return;
     }
-
     this.watchlistService.addWatchlistItem(this.asset.id);
   }
 }
