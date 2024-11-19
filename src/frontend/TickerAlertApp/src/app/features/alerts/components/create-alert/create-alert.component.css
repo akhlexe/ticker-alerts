@@ -4,12 +4,14 @@
     text-align: center;
     width: 95%;
     margin: auto;
-    margin-top: 3vh;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
 }
 
 .create-alert-button {
     min-height: 50px;
     min-width: 250px;
+    background-color: #3e3a35;
 }
 
 .create-alert-button mat-icon {

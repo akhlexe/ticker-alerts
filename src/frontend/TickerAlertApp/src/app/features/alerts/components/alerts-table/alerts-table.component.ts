@@ -22,7 +22,6 @@ import { ConfirmModalData } from './../../../../shared/components/confirm-modal/
 })
 export class AlertsTableComponent implements OnInit {
 
-
   public displayedColumns: string[] = [
     'tickerName',
     'targetPrice',

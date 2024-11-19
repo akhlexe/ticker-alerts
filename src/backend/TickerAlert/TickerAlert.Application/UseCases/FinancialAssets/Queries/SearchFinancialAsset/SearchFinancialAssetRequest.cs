@@ -6,13 +6,9 @@ namespace TickerAlert.Application.UseCases.FinancialAssets.Queries.SearchFinanci
 
 public record SearchFinancialAssetRequest(string SearchString) : IRequest<IEnumerable<FinancialAssetDto>>;
 
-public class SearchFinancialAssetRequestHandler : IRequestHandler<SearchFinancialAssetRequest, IEnumerable<FinancialAssetDto>>
+public class SearchFinancialAssetRequestHandler(IFinancialAssetReader financialAssetReader) 
+    : IRequestHandler<SearchFinancialAssetRequest, IEnumerable<FinancialAssetDto>>
 {
-    private readonly IFinancialAssetReader _financialAssetReader;
-
-    public SearchFinancialAssetRequestHandler(IFinancialAssetReader financialAssetReader) 
-        => _financialAssetReader = financialAssetReader;
-
     public async Task<IEnumerable<FinancialAssetDto>> Handle(SearchFinancialAssetRequest request, CancellationToken cancellationToken) 
-        => await _financialAssetReader.GetAllBySearchCriteria(request.SearchString);
+        => await financialAssetReader.GetAllBySearchCriteria(request.SearchString);
 }

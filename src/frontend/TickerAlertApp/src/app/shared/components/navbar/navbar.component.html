@@ -4,7 +4,7 @@
             <img src="assets/images/logo.png" alt="App Logo" class="app-logo" width="50" height="50">
             <span>TickerBloom</span>
         </div>
-        <div class="nav-links">
+        <div *ngIf="username" class="nav-links">
             <a mat-button routerLink="alerts">Alerts</a>
         </div>
         <div *ngIf="username" class="user-login">

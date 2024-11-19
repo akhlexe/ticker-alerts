@@ -21,11 +21,14 @@ public class FinancialAssetReader : IFinancialAssetReader
     {
         var normalizedCriteria = criteria.Trim().ToLowerInvariant();
 
-        var assets = await _context.FinancialAssets
+        var assets = await _context
+            .FinancialAssets
             .Where(x => x.Name.ToLower().Contains(normalizedCriteria) || x.Ticker.ToLower().Contains(normalizedCriteria))
             .ToListAsync();
 
-        return assets.Select(CreateFinancialAssetDto);
+        return assets
+            .Select(CreateFinancialAssetDto)
+            .ToList();
     }
 
     public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()

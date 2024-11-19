@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { ConfirmModalData } from '../confirm-modal/models/confirm-dialog.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { CurrencyMaskPipe } from '../../pipes/currency-mask.pipe';
+import { Router } from '@angular/router';
 
 const MatModules = [
   MatCardModule,
@@ -32,11 +34,12 @@ export interface TrackElement {
 @Component({
   selector: 'app-watchlist',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatModules],
+  imports: [CommonModule, FormsModule, MatModules, CurrencyMaskPipe],
   templateUrl: './watchlist.component.html',
   styleUrl: './watchlist.component.css'
 })
 export class WatchlistComponent implements OnInit, OnDestroy {
+
 
   watchlist: WatchlistDto | null = null;
   private subscription: Subscription | null = null;
@@ -44,7 +47,8 @@ export class WatchlistComponent implements OnInit, OnDestroy {
 
   constructor(
     private watchlistService: WatchlistService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.subscription = this.watchlistService.getWatchlist().subscribe({
@@ -61,7 +65,10 @@ export class WatchlistComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe();
   }
 
-  public removeItem(itemId: string) {
+  public removeItem(event: MouseEvent, itemId: string) {
+    // Requerido para evitar redirección.
+    event.stopPropagation();
+
     const dialogData: ConfirmModalData = {
       title: 'Watchlist',
       message: 'Do you want to remove this item?',
@@ -78,5 +85,9 @@ export class WatchlistComponent implements OnInit, OnDestroy {
         this.watchlistService.removeItemFromWatchlist(itemId);
       }
     });
+  }
+
+  public onRowClick(row: any) {
+    this.router.navigate(['financial-assets', row.financialAssetId]);
   }
 }
