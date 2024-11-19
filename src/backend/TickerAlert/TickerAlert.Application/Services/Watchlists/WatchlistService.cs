@@ -2,17 +2,18 @@
 using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.FinancialAssets;
+using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Application.Interfaces.Watchlists;
 using TickerAlert.Application.Interfaces.Watchlists.Dtos;
 using TickerAlert.Application.Services.Watchlists.Mappings;
 using TickerAlert.Domain.Entities;
 
-
 namespace TickerAlert.Application.Services.Watchlists;
 internal sealed class WatchlistService(
     IApplicationDbContext context,
     ICurrentUserService currentUserService,
-    IFinancialAssetReader assetsReader) : IWatchlistService
+    IFinancialAssetReader assetsReader,
+    IPriceMeasureReader priceMeasureReader) : IWatchlistService
 {
     public async Task<WatchlistDto> GetWatchlist()
     {
@@ -22,13 +23,10 @@ internal sealed class WatchlistService(
             .AsNoTracking()
             .FirstOrDefaultAsync(w => w.UserId == currentUserService.UserId);
 
-        if (watchlist == null)
-        {
-            Watchlist watchlistCreated = await CreateWatchlist();
-            return WatchlistMappings.MapToDto(watchlistCreated, []);
-        }
 
-        return await ReturnWatchlistDto(watchlist);
+        return watchlist is null
+            ? await ReturnWatchlistDto(await CreateWatchlist())
+            : await ReturnWatchlistDto(watchlist);
     }
 
     public async Task<WatchlistDto> AddItem(Guid watchlistId, Guid financialAssetId)
@@ -84,9 +82,21 @@ internal sealed class WatchlistService(
 
     private async Task<WatchlistDto> ReturnWatchlistDto(Watchlist watchlist)
     {
-        List<Guid> financialAssetIds = watchlist.WatchlistItems.Select(w => w.FinancialAssetId).ToList();
-        var assets = await assetsReader.GetAllByIds(financialAssetIds);
+        if (watchlist.WatchlistItems is [])
+        {
+            return WatchlistMappings.MapToDto(watchlist, [], [], []);
+        }
 
-        return WatchlistMappings.MapToDto(watchlist, assets.ToDictionary(a => a.Id, a => a));
+        List<Guid> financialAssetIds = watchlist.WatchlistItems.Select(w => w.FinancialAssetId).ToList();
+
+        var assets = await assetsReader.GetAllByIds(financialAssetIds);
+        var lastPrices = await priceMeasureReader.GetLastPricesMeasuresFor(financialAssetIds);
+        var yesterdayPrices = await priceMeasureReader.GetYesterdayClosePricesFor(financialAssetIds);
+
+        return WatchlistMappings.MapToDto(
+            watchlist, 
+            assets.ToDictionary(x => x.Id, a => a),
+            lastPrices.ToDictionary(x => x.FinancialAssetId, a => a),
+            yesterdayPrices.ToDictionary(x => x.FinancialAssetId, a => a));
     }
 }

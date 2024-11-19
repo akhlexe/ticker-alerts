@@ -5,12 +5,13 @@
     <!-- <button mat-raised-button color="primary" (click)="addItem()">Add</button> -->
 
     <mat-card-content>
-        <table mat-table [dataSource]="watchlist" class="mat-elevation-z8">
+        <table mat-table [dataSource]="watchlist?.items ?? []" class="mat-elevation-z8"
+            *ngIf="watchlist?.items?.length; else emptyWatchlist">
 
             <!-- Ticker Column -->
             <ng-container matColumnDef="ticker">
                 <th mat-header-cell *matHeaderCellDef> Symbol </th>
-                <td mat-cell *matCellDef="let element"> {{element.ticker}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.tickerName}} </td>
             </ng-container>
 
             <!-- Price Column -->
@@ -19,14 +20,31 @@
                 <td mat-cell *matCellDef="let element"> {{element.price}} </td>
             </ng-container>
 
-            <!-- Ratio Column -->
-            <ng-container matColumnDef="ratio">
-                <th mat-header-cell *matHeaderCellDef> Ratio </th>
-                <td mat-cell *matCellDef="let element"> {{element.ratio}} </td>
+            <!-- Variation Column -->
+            <ng-container matColumnDef="%">
+                <th mat-header-cell *matHeaderCellDef> % </th>
+                <td mat-cell *matCellDef="let element"> {{element.variation}} </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element" class="actions-cell">
+                    <button mat-icon-button color="warn" (click)="removeItem(element.id)" matTooltip="Delete"
+                        class="delete-button">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hoverable-row"></tr>
         </table>
+
+        <ng-template #emptyWatchlist>
+            <div class="empty-message">
+                <p>You are not following any assets yet.</p>
+            </div>
+        </ng-template>
     </mat-card-content>
 </mat-card>

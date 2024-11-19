@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { WatchlistService } from '../../services/watchlist/watchlist.service';
+import { WatchlistDto, WatchlistItemDto } from '../../services/watchlist/models/watchlist.model';
+import { Subscription } from 'rxjs';
+import { ConfirmModalData } from '../confirm-modal/models/confirm-dialog.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 const MatModules = [
   MatCardModule,
@@ -30,35 +36,47 @@ export interface TrackElement {
   templateUrl: './watchlist.component.html',
   styleUrl: './watchlist.component.css'
 })
-export class WatchlistComponent {
-  watchlist: TrackElement[] = [];
-  newItem: string = '';
-  displayedColumns: string[] = ['ticker', 'price', 'ratio'];
+export class WatchlistComponent implements OnInit, OnDestroy {
+
+  watchlist: WatchlistDto | null = null;
+  private subscription: Subscription | null = null;
+  displayedColumns: string[] = ['ticker', 'price', '%', 'actions'];
+
+  constructor(
+    private watchlistService: WatchlistService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    // Initialize with some items or fetch from a service
-    this.watchlist = [
-      {
-        ticker: "MSFT",
-        price: 420,
-        ratio: "3:1"
-      },
-      {
-        ticker: "GOOGL",
-        price: 165.57,
-        ratio: "8:1"
+    this.subscription = this.watchlistService.getWatchlist().subscribe({
+      next: (watchlist) => this.watchlist = watchlist,
+      error: (err) => console.error('Error observing watchlist state:', err),
+    })
+
+    this.watchlistService.loadWatchlist().subscribe({
+      error: (err) => console.error('Error loading watchlist:', err),
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
+
+  public removeItem(itemId: string) {
+    const dialogData: ConfirmModalData = {
+      title: 'Watchlist',
+      message: 'Do you want to remove this item?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+    };
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      width: '300px',
+      data: dialogData
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.watchlistService.removeItemFromWatchlist(itemId);
       }
-    ];
-  }
-
-  addItem(): void {
-    if (this.newItem.trim()) {
-      // this.watchlist.push(this.newItem.trim());
-      this.newItem = '';
-    }
-  }
-
-  removeItem(item: string): void {
-    // this.watchlist = this.watchlist.filter(i => i !== item);
+    });
   }
 }

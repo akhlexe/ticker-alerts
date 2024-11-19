@@ -7,6 +7,10 @@ public class WatchlistItemDto
     public Guid FinancialAssetId { get; set; }
 
     public string TickerName { get; set; }
+    
+    public decimal Price { get; set; }
+
+    public decimal Variation { get; set; }
 
     public Guid WatchlistId { get; set; }
 }
