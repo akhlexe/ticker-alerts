@@ -3,12 +3,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
+using StackExchange.Redis;
+using TickerAlert.Application.Common.Cache;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.NotificationService;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
 using TickerAlert.Infrastructure.BackgroundJobs;
 using TickerAlert.Infrastructure.BackgroundJobs.Helpers;
+using TickerAlert.Infrastructure.Cache;
 using TickerAlert.Infrastructure.Common;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Mailing;
@@ -29,6 +32,7 @@ public static class DependencyInjection
         RegisterExternalServices(services);
         RegisterBackgroundJobs(services);
         RegisterNotificationServices(services);
+        RegisterRedisCacheService(services, configuration);
 
         services.RegisterTickerbloomEmailService(configuration, environment);
 
@@ -73,5 +77,20 @@ public static class DependencyInjection
     private static void RegisterSettings(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+    }
+
+    private static void RegisterRedisCacheService(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            string connection = configuration["Redis:Connection"] 
+                ?? throw new ArgumentNullException("Redis connection is missing.");
+
+            var configurationOptions = ConfigurationOptions.Parse(connection, true);
+
+            return ConnectionMultiplexer.Connect(configurationOptions);
+        });
+
+        services.AddScoped<ICacheService, RedisCacheService>();
     }
 }

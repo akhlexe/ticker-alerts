@@ -33,6 +33,7 @@ services:
       - EmailService__SenderName=${EMAIL_SERVICE_SENDER_NAME}
     depends_on:
       - ticker-db
+      - redis
     networks:
       - tickers-network
 
@@ -52,9 +53,21 @@ services:
     networks:
       - tickers-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - tickers-network
+
 volumes:
   postgres_data:
     driver: local
+  redis-data:
 
 networks:
   tickers-network:

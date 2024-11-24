@@ -5,19 +5,20 @@ using TickerAlert.Domain.Events;
 
 namespace TickerAlert.Application.Services.Prices;
 
-public class PriceMeasureService : IPriceMeasureService
+public class PriceMeasureService(
+    IApplicationDbContext context, 
+    ILastPriceCacheService lastPriceCacheService) : IPriceMeasureService
 {
-    private readonly IApplicationDbContext _context;
-
-    public PriceMeasureService(IApplicationDbContext context)
+    public async Task ProcessPriceMeasure(PriceMeasure measure)
     {
-        _context = context;
+        await SavePriceMeasure(measure);
+        await lastPriceCacheService.UpdatePrice(measure.FinancialAssetId, measure.Price);
     }
-    
-    public async Task RegisterPriceMeasure(PriceMeasure measure)
+
+    private async Task SavePriceMeasure(PriceMeasure measure)
     {
         measure.RaiseDomainEvent(new PriceReadedDomainEvent(Guid.NewGuid(), measure.Id));
-        _context.PriceMeasures.Add(measure);
-        await _context.SaveChangesAsync();
+        context.PriceMeasures.Add(measure);
+        await context.SaveChangesAsync();
     }
 }

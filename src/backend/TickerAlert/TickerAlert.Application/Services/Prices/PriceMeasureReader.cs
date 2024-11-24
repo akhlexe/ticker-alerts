@@ -16,7 +16,8 @@ public class PriceMeasureReader : IPriceMeasureReader
 
     public async Task<PriceMeasure?> GetLastPriceMeasureFor(Guid financialAssetId)
     {
-        return await _context.PriceMeasures
+        return await _context
+            .PriceMeasures
             .AsNoTracking()
             .Where(p => p.FinancialAssetId == financialAssetId)
             .OrderByDescending(p => p.MeasuredOn)
@@ -25,7 +26,8 @@ public class PriceMeasureReader : IPriceMeasureReader
 
     public async Task<List<PriceMeasure>> GetLastPricesMeasuresFor(IEnumerable<Guid> financialAssetsIds)
     {
-        return await _context.PriceMeasures
+        return await _context
+            .PriceMeasures
             .AsNoTracking()
             .Where(x => financialAssetsIds.Contains(x.FinancialAssetId))
             .GroupBy(x => x.FinancialAssetId)
