@@ -17,6 +17,8 @@ using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Mailing;
 using TickerAlert.Infrastructure.NotificationService;
 using TickerAlert.Infrastructure.Persistence;
+using TickerAlert.Infrastructure.Settings;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TickerAlert.Infrastructure;
 
@@ -32,8 +34,8 @@ public static class DependencyInjection
         RegisterExternalServices(services);
         RegisterBackgroundJobs(services);
         RegisterNotificationServices(services);
-        RegisterRedisCacheService(services, configuration);
 
+        services.RegisterRedisCacheService(configuration);
         services.RegisterTickerbloomEmailService(configuration, environment);
 
         return services;
@@ -77,20 +79,5 @@ public static class DependencyInjection
     private static void RegisterSettings(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
-    }
-
-    private static void RegisterRedisCacheService(IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSingleton<IConnectionMultiplexer>(sp =>
-        {
-            string connection = configuration["Redis:Connection"] 
-                ?? throw new ArgumentNullException("Redis connection is missing.");
-
-            var configurationOptions = ConfigurationOptions.Parse(connection, true);
-
-            return ConnectionMultiplexer.Connect(configurationOptions);
-        });
-
-        services.AddScoped<ICacheService, RedisCacheService>();
     }
 }

@@ -15,6 +15,7 @@ namespace TickerAlert.Application.UnitTests.Services.Alerts;
 public class AlertReaderTests
 {
     private readonly IApplicationDbContext _context;
+    private readonly Mock<IPriceMeasureReader> _priceMeasureReader;
     private readonly Guid _userId = Guid.NewGuid();
     private readonly AlertReader _alertReader;
     private readonly Fixture _fixture;
@@ -22,11 +23,17 @@ public class AlertReaderTests
     public AlertReaderTests()
     {
         _context = DbContextInMemory.Create();
+        _priceMeasureReader = new Mock<IPriceMeasureReader>();
+
         _alertReader = new AlertReader(
             _context,
-            new PriceMeasureReader(_context),
+            _priceMeasureReader.Object,
             CreateMockCurrentUser().Object
         );
+
+        _priceMeasureReader
+            .Setup(s => s.GetLastPricesFor(It.IsAny<IEnumerable<Guid>>()))
+            .ReturnsAsync([]);
         
         _fixture = new Fixture();
     }

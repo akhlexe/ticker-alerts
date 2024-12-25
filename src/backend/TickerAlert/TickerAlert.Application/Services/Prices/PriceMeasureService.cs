@@ -12,7 +12,7 @@ public class PriceMeasureService(
     public async Task ProcessPriceMeasure(PriceMeasure measure)
     {
         await SavePriceMeasure(measure);
-        await lastPriceCacheService.UpdatePrice(measure.FinancialAssetId, measure.Price);
+        await lastPriceCacheService.UpdatePriceAsync(measure.FinancialAssetId, measure.Price);
     }
 
     private async Task SavePriceMeasure(PriceMeasure measure)

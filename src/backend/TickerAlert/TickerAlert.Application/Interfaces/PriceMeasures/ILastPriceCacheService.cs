@@ -2,7 +2,7 @@
 
 public interface ILastPriceCacheService
 {
-    Task<decimal?> GetPrice(Guid financialAssetId);
-    Task<Dictionary<Guid, decimal>> GetPrices(IEnumerable<Guid> financialAssetIds);
-    Task UpdatePrice(Guid financialAssetId, decimal price);
+    Task<decimal?> GetPriceAsync(Guid financialAssetId);
+    Task<Dictionary<Guid, decimal>> GetPricesAsync(IEnumerable<Guid> financialAssetIds);
+    Task UpdatePriceAsync(Guid financialAssetId, decimal price);
 }

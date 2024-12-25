@@ -6,18 +6,11 @@ using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Application.Services.Alerts;
 
-public class SystemAlertReader : ISystemAlertReader
+public class SystemAlertReader(IApplicationDbContext context) : ISystemAlertReader
 {
-    private readonly IApplicationDbContext _context;
-
-    public SystemAlertReader(IApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<IEnumerable<Alert>> GetPendingAlertsByFinancialAsset(Guid financialAssetId)
     {
-        return await _context
+        return await context
             .Alerts
             .AsNoTracking()
             .Where(x => x.State == AlertState.PENDING && x.FinancialAssetId == financialAssetId)

@@ -31,6 +31,7 @@ services:
       - EmailService__ApiBaseUrl=${EMAIL_SERVICE_API_BASE_URL}
       - EmailService__SenderEmail=${EMAIL_SERVICE_SENDER_EMAIL}
       - EmailService__SenderName=${EMAIL_SERVICE_SENDER_NAME}
+      - Redis__Connection=${REDIS_CONNECTION}
     depends_on:
       - ticker-db
       - redis
@@ -55,19 +56,22 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: redis-cache
+    container_name: redis-container
     ports:
       - "6379:6379"
-    command: ["redis-server", "--appendonly", "yes"]
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
     volumes:
       - redis-data:/data
     networks:
       - tickers-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+    name: postgres_data_volume
     driver: local
   redis-data:
+    name: redis_data_volume
 
 networks:
   tickers-network:
