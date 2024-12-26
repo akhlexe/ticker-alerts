@@ -20,12 +20,12 @@ public class PriceReaderJob : IJob
     {
         using (var scope = _serviceScopeFactory.CreateScope())
         {
-            var priceReaderService = scope.ServiceProvider.GetRequiredService<PriceReaderService>();
+            var priceReaderService = scope.ServiceProvider.GetRequiredService<PriceCollectorService>();
                 
             try
             {
                 _logger.LogInformation("Running PriceReaderService.");
-                await priceReaderService.ReadPricesAndSaveAsync();
+                await priceReaderService.CollectPrices();
                 _logger.LogInformation("Price reading and saving completed successfully.");
             }
             catch (Exception ex)

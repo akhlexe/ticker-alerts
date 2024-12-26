@@ -9,59 +9,46 @@ using TickerAlert.Domain.Enums;
 
 namespace TickerAlert.Application.Services.Alerts;
 
-public class AlertReader : IAlertReader
+public class AlertReader(
+    IApplicationDbContext context,
+    IPriceMeasureReader priceMeasureReader,
+    ICurrentUserService currentUserService) : IAlertReader
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IPriceMeasureReader _priceMeasureReader;
-    private readonly ICurrentUserService _currentUserService;
-    
-    public AlertReader(
-        IApplicationDbContext context,
-        IPriceMeasureReader priceMeasureReader, 
-        ICurrentUserService currentUserService) 
-    {
-        _context = context;
-        _priceMeasureReader = priceMeasureReader;
-        _currentUserService = currentUserService;
-    }
+    private static List<AlertState> EstadosVisibles => [AlertState.PENDING, AlertState.TRIGGERED, AlertState.NOTIFIED];
 
     public async Task<IEnumerable<AlertDto>> GetAlerts()
     {
-        var alerts = await GetAllForUserId(_currentUserService.UserId);
-        var lastPrices = await _priceMeasureReader.GetLastPricesMeasuresFor(alerts.Select(x => x.FinancialAssetId));
-        return alerts.Select(alert => CreateAlertDto(alert, lastPrices.FirstOrDefault(p => p.FinancialAssetId == alert.FinancialAssetId)));
+        var alerts = await GetAllForUserId(currentUserService.UserId);
+        var lastPrices = await priceMeasureReader.GetLastPricesFor(alerts.Select(x => x.FinancialAssetId));
+
+        return alerts.Select(alert => CreateAlertDto(alert, lastPrices.GetValueOrDefault(alert.FinancialAssetId)));
     }
 
     public async Task<Alert?> GetById(Guid alertId) 
-        => await _context
+        => await context
             .Alerts
             .Include(x => x.FinancialAsset)
             .Include(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == alertId);
 
     public async Task<IEnumerable<Alert>> GetAllForUserId(Guid userId) 
-        => await _context
+        => await context
             .Alerts
             .Include(a => a.FinancialAsset)
-            .Where(a => a.UserId == userId && GetEstadosVisibles().Contains(a.State))
+            .Where(a => a.UserId == userId && EstadosVisibles.Contains(a.State))
             .AsNoTracking()
             .ToListAsync();
 
-    private static List<AlertState> GetEstadosVisibles() 
-        => [AlertState.PENDING, AlertState.TRIGGERED, AlertState.NOTIFIED];
-
-    private static AlertDto CreateAlertDto(Alert a, PriceMeasure? priceMeasure)
+    private static AlertDto CreateAlertDto(Alert a, decimal lastPrice)
     {
-        var actualPrice = priceMeasure?.Price ?? 0;
-
         return new AlertDto()
         {
             Id = a.Id,
             FinancialAssetId = a.FinancialAssetId,
             TickerName = a.FinancialAsset.Ticker,
             TargetPrice = a.TargetPrice,
-            ActualPrice = actualPrice,
-            Difference = a.TargetPrice - actualPrice,
+            ActualPrice = lastPrice,
+            Difference = a.TargetPrice - lastPrice,
             State = a.State
         };
     }

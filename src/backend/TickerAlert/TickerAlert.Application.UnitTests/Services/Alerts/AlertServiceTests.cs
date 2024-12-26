@@ -1,6 +1,7 @@
 using AutoFixture;
 using FluentAssertions;
 using Moq;
+using TickerAlert.Application.Common.Cache;
 using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
@@ -15,17 +16,17 @@ namespace TickerAlert.Application.UnitTests.Services.Alerts;
 public class AlertServiceTests
 {
     private readonly IApplicationDbContext _context;
+    private readonly Mock<ILastPriceCacheService> _cacheService;
     private readonly AlertService _alertService;
     private readonly Guid _userId = Guid.NewGuid();
-    private readonly Fixture _fixture;
 
     public AlertServiceTests()
     {
         _context = DbContextInMemory.Create();
-        _fixture = new Fixture();
+        _cacheService = new Mock<ILastPriceCacheService>();
         _alertService = new AlertService(
             _context,
-            new PriceMeasureReader(_context),
+            new PriceMeasureReader(_context, _cacheService.Object),
             CreateCurrentUserServiceMock().Object
         );
     }

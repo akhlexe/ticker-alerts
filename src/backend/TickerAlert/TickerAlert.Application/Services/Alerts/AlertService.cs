@@ -58,14 +58,8 @@ public class AlertService : IAlertService
     
     private async Task<PriceThresholdType> ResolveThreshold(Guid financialAssetId, decimal targetPrice)
     {
-        decimal currentPrice = await GetCurrentPrice(financialAssetId);
+        decimal currentPrice = await _priceMeasureReader.GetLastPriceFor(financialAssetId);
         return ThresholdResolver.Resolve(currentPrice, targetPrice);
-    }
-
-    private async Task<decimal> GetCurrentPrice(Guid financialAssetId)
-    {
-        var priceMeasure = await _priceMeasureReader.GetLastPriceMeasureFor(financialAssetId);
-        return priceMeasure?.Price ?? 0;
     }
 
     public async Task ConfirmReception(Guid alertId)

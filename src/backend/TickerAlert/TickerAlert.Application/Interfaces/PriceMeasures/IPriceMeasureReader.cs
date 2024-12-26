@@ -4,8 +4,8 @@ namespace TickerAlert.Application.Interfaces.PriceMeasures;
 
 public interface IPriceMeasureReader
 {
-    Task<PriceMeasure?> GetLastPriceMeasureFor(Guid financialAssetId);
-    Task<List<PriceMeasure>> GetLastPricesMeasuresFor(IEnumerable<Guid> financialAssetsIds);
+    Task<decimal> GetLastPriceFor(Guid financialAssetId);
+    Task<Dictionary<Guid, decimal>> GetLastPricesFor(IEnumerable<Guid> financialAssetsIds);
     Task<List<PriceMeasure>> GetYesterdayClosePricesFor(IEnumerable<Guid> financialAssetsIds);
     Task<PriceMeasure?> GetById(Guid id);
 }

@@ -4,5 +4,5 @@ namespace TickerAlert.Application.Interfaces.PriceMeasures;
 
 public interface IPriceMeasureService
 {
-    Task RegisterPriceMeasure(PriceMeasure measure);
+    Task ProcessPriceMeasure(PriceMeasure measure);
 }

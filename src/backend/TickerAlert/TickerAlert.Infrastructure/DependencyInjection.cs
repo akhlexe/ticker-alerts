@@ -9,6 +9,7 @@ using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
 using TickerAlert.Infrastructure.BackgroundJobs;
 using TickerAlert.Infrastructure.BackgroundJobs.Helpers;
+using TickerAlert.Infrastructure.Cache;
 using TickerAlert.Infrastructure.Common;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Mailing;
@@ -30,6 +31,7 @@ public static class DependencyInjection
         RegisterBackgroundJobs(services);
         RegisterNotificationServices(services);
 
+        services.RegisterRedisCacheService(configuration);
         services.RegisterTickerbloomEmailService(configuration, environment);
 
         return services;
