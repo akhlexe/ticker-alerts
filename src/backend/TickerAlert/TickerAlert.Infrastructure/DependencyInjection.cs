@@ -3,8 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
-using StackExchange.Redis;
-using TickerAlert.Application.Common.Cache;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.NotificationService;
 using TickerAlert.Application.Services.StockMarket;
@@ -17,8 +15,6 @@ using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Mailing;
 using TickerAlert.Infrastructure.NotificationService;
 using TickerAlert.Infrastructure.Persistence;
-using TickerAlert.Infrastructure.Settings;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TickerAlert.Infrastructure;
 

@@ -31,7 +31,9 @@ services:
       - EmailService__ApiBaseUrl=${EMAIL_SERVICE_API_BASE_URL}
       - EmailService__SenderEmail=${EMAIL_SERVICE_SENDER_EMAIL}
       - EmailService__SenderName=${EMAIL_SERVICE_SENDER_NAME}
-      - Redis__Connection=${REDIS_CONNECTION}
+      - Redis__Host=${REDIS_HOST}
+      - Redis__Port=${REDIS_PORT}
+      - Redis__Password=${REDIS_PASSWORD}
     depends_on:
       - ticker-db
       - redis
