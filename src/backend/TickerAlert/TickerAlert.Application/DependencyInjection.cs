@@ -41,5 +41,6 @@ public static class DependencyInjection
     private static void RegisterCacheServices(IServiceCollection services)
     {
         services.AddScoped<ILastPriceCacheService, LastPriceCacheService>();
+        services.AddScoped<ICompanyProfileCacheService, CompanyProfileCacheService>();
     }
 }
