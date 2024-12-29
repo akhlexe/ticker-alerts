@@ -9,12 +9,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { WatchlistService } from '../../services/watchlist/watchlist.service';
 import { WatchlistDto, WatchlistItemDto } from '../../services/watchlist/models/watchlist.model';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { ConfirmModalData } from '../confirm-modal/models/confirm-dialog.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { CurrencyMaskPipe } from '../../pipes/currency-mask.pipe';
 import { Router } from '@angular/router';
+import { SignalRService } from '../../../core/services/signal-r.service';
+import { AssetPriceUpdateDto } from '../../../core/services/models/signalr.model';
 
 const MatModules = [
   MatCardModule,
@@ -39,30 +41,20 @@ export interface TrackElement {
   styleUrl: './watchlist.component.css'
 })
 export class WatchlistComponent implements OnInit, OnDestroy {
+  public displayedColumns: string[] = ['ticker', 'price', '%', 'actions'];
+  public watchlist$ = this.watchlistService.getWatchlist();
 
-
-  watchlist: WatchlistDto | null = null;
-  private subscription: Subscription | null = null;
-  displayedColumns: string[] = ['ticker', 'price', '%', 'actions'];
+  private destroy$ = new Subject<void>();
 
   constructor(
     private watchlistService: WatchlistService,
     private dialog: MatDialog,
     private router: Router) { }
 
-  ngOnInit(): void {
-    this.subscription = this.watchlistService.getWatchlist().subscribe({
-      next: (watchlist) => this.watchlist = watchlist,
-      error: (err) => console.error('Error observing watchlist state:', err),
-    })
-
-    this.watchlistService.loadWatchlist().subscribe({
+  public ngOnInit(): void {
+    this.watchlistService.loadWatchlist().pipe(takeUntil(this.destroy$)).subscribe({
       error: (err) => console.error('Error loading watchlist:', err),
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
   }
 
   public removeItem(event: MouseEvent, itemId: string) {
@@ -89,5 +81,10 @@ export class WatchlistComponent implements OnInit, OnDestroy {
 
   public onRowClick(row: any) {
     this.router.navigate(['financial-assets', row.financialAssetId]);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

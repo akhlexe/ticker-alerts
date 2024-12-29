@@ -25,6 +25,11 @@ export class NotificationComponent implements OnInit {
         this.showNotification(notification);
       }
     })
+
+    // borrar.
+    this.signalRService.assetPriceUpdate$.subscribe(priceUpdate => {
+      console.log(priceUpdate);
+    })
   }
 
   private showNotification(notification: string) {

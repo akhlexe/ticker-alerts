@@ -33,7 +33,7 @@ public class AlertTriggeredNotifier(
     }
 
     private async Task SendNotification(Alert alert)
-        => await notificationService.Notify(alert.UserId.ToString(), CreateMessage(alert));
+        => await notificationService.NotifyAlertTriggered(alert.UserId.ToString(), CreateMessage(alert));
 
     private async Task SendAlertTriggeredEmail(Alert alertTriggered)
     {
