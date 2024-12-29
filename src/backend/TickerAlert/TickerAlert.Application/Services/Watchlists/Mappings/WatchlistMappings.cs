@@ -11,8 +11,7 @@ public static class WatchlistMappings
     public static WatchlistDto MapToDto(
         Watchlist watchlist, 
         Dictionary<Guid, FinancialAssetDto> assets, 
-        Dictionary<Guid, decimal> lastPrices, 
-        Dictionary<Guid, PriceMeasure> yesterdayPrices)
+        Dictionary<Guid, decimal> lastPrices)
     {
         return new WatchlistDto
         {
@@ -22,13 +21,12 @@ public static class WatchlistMappings
             Items = watchlist.WatchlistItems.Select(item => MapToDto(
                 item, 
                 assets.GetValueOrDefault(item.FinancialAssetId),
-                lastPrices.GetValueOrDefault(item.FinancialAssetId),
-                yesterdayPrices.GetValueOrDefault(item.FinancialAssetId))
+                lastPrices.GetValueOrDefault(item.FinancialAssetId))
             ).ToList()
         };
     }
 
-    private static WatchlistItemDto MapToDto(WatchlistItem item, FinancialAssetDto? asset, decimal lastPrice, PriceMeasure? yesterdayPrice)
+    private static WatchlistItemDto MapToDto(WatchlistItem item, FinancialAssetDto? asset, decimal lastPrice)
     {
         return new WatchlistItemDto
         {
@@ -37,19 +35,6 @@ public static class WatchlistMappings
             WatchlistId = item.WatchlistId,
             TickerName = asset?.Ticker ?? TickernameNotFound,
             Price = lastPrice,
-            Variation = CalculateVariation(lastPrice, yesterdayPrice),
         };
-    }
-
-    private static decimal CalculateVariation(decimal lastPrice, PriceMeasure? yesterdayPrice)
-    {
-        decimal yesterday = yesterdayPrice?.Price ?? 0;
-
-        if (yesterday == 0)
-        {
-            return 0;
-        }
-
-        return  (lastPrice / yesterday) - 1;
     }
 }

@@ -84,20 +84,18 @@ internal sealed class WatchlistService(
     {
         if (watchlist.WatchlistItems is [])
         {
-            return WatchlistMappings.MapToDto(watchlist, [], [], []);
+            return WatchlistMappings.MapToDto(watchlist, [], []);
         }
 
         List<Guid> financialAssetIds = watchlist.WatchlistItems.Select(w => w.FinancialAssetId).ToList();
 
         var assets = await assetsReader.GetAllByIds(financialAssetIds);
         var lastPrices = await priceMeasureReader.GetLastPricesFor(financialAssetIds);
-        var yesterdayPrices = await priceMeasureReader.GetYesterdayClosePricesFor(financialAssetIds);
 
         return WatchlistMappings.MapToDto(
             watchlist, 
             assets.ToDictionary(x => x.Id, a => a),
-            lastPrices,
-            yesterdayPrices.ToDictionary(x => x.FinancialAssetId, a => a)
+            lastPrices
         );
     }
 }

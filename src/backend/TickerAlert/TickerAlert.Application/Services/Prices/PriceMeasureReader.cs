@@ -58,20 +58,4 @@ public class PriceMeasureReader(
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
     }
-
-    public async Task<List<PriceMeasure>> GetYesterdayClosePricesFor(IEnumerable<Guid> financialAssetsIds)
-    {
-        var yesterdayStart = DateTime.UtcNow.Date.AddDays(-1);
-        var yesterdayEnd = yesterdayStart.AddDays(1);
-
-        return await context
-            .PriceMeasures
-            .AsNoTracking()
-            .Where(x => financialAssetsIds.Contains(x.FinancialAssetId) &&
-                    x.MeasuredOn >= yesterdayStart &&
-                    x.MeasuredOn < yesterdayEnd)
-            .GroupBy(x => x.FinancialAssetId)
-            .Select(g => g.OrderByDescending(r => r.MeasuredOn).First())
-            .ToListAsync();
-    }
 }

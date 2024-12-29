@@ -41,7 +41,7 @@ export interface TrackElement {
   styleUrl: './watchlist.component.css'
 })
 export class WatchlistComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['ticker', 'price', '%', 'actions'];
+  public displayedColumns: string[] = ['ticker', 'price', 'actions'];
   public watchlist$ = this.watchlistService.getWatchlist();
 
   private destroy$ = new Subject<void>();

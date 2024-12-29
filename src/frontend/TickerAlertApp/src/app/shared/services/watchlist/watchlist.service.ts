@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
-import { WatchlistDto } from './models/watchlist.model';
+import { WatchlistDto, WatchlistItemDto } from './models/watchlist.model';
 import { WatchlistHttpService } from './watchlist-http.service';
 import { SignalRService } from '../../../core/services/signal-r.service';
 import { AssetPriceUpdateDto } from '../../../core/services/models/signalr.model';

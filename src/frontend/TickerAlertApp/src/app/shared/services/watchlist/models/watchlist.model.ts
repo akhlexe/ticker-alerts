@@ -10,5 +10,4 @@ export interface WatchlistItemDto {
     financialAssetId: string;
     ticker: string;
     price: number;
-    variation: number;
 }
