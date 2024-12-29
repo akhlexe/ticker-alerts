@@ -8,24 +8,18 @@ namespace TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 
 public class StockMarketService : IStockMarketService
 {
+    private const string BaseUrlConfigurationPath = "Services:Finnhub:BaseUrl";
+    private const string ApiKeyConfigurationPath = "Services:Finnhub:ApiKey";
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl;
     private readonly string _apiKey;
 
     public StockMarketService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
-        _baseUrl = configuration["Services:Finnhub:BaseUrl"];
-        _apiKey = configuration["Services:Finnhub:ApiKey"];
-        
-        if (string.IsNullOrEmpty(_baseUrl))
-        {
-            throw new ArgumentNullException(nameof(_baseUrl), "Base URL configuration is missing in the settings.");
-        }
-    
-        if (string.IsNullOrEmpty(_apiKey))
-        {
-            throw new ArgumentNullException(nameof(_apiKey), "API Key configuration is missing in the settings.");
-        }
+        _baseUrl = configuration[BaseUrlConfigurationPath] 
+            ?? throw new ArgumentNullException(nameof(_baseUrl), "Base URL configuration is missing in the settings.");
+        _apiKey = configuration[ApiKeyConfigurationPath]
+            ?? throw new ArgumentNullException(nameof(_apiKey), "API Key configuration is missing in the settings."); ;
         
         _httpClient = httpClientFactory.CreateClient();
     }

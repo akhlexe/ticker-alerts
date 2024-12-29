@@ -5,8 +5,8 @@
     <!-- <button mat-raised-button color="primary" (click)="addItem()">Add</button> -->
 
     <mat-card-content>
-        <table mat-table [dataSource]="watchlist?.items ?? []" class="mat-elevation-z8"
-            *ngIf="watchlist?.items?.length; else emptyWatchlist">
+        <table mat-table [dataSource]="(watchlist$ | async)?.items ?? []" class="mat-elevation-z8"
+            *ngIf="(watchlist$ | async)?.items?.length; else emptyWatchlist">
 
             <!-- Ticker Column -->
             <ng-container matColumnDef="ticker">
@@ -18,12 +18,6 @@
             <ng-container matColumnDef="price">
                 <th mat-header-cell *matHeaderCellDef> Price </th>
                 <td mat-cell *matCellDef="let element"> {{element.price | currencyMask}} </td>
-            </ng-container>
-
-            <!-- Variation Column -->
-            <ng-container matColumnDef="%">
-                <th mat-header-cell *matHeaderCellDef> % </th>
-                <td mat-cell *matCellDef="let element"> {{element.variation}} </td>
             </ng-container>
 
             <!-- Actions Column -->

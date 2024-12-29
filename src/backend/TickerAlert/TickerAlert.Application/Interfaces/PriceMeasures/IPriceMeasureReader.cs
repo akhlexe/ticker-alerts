@@ -6,6 +6,5 @@ public interface IPriceMeasureReader
 {
     Task<decimal> GetLastPriceFor(Guid financialAssetId);
     Task<Dictionary<Guid, decimal>> GetLastPricesFor(IEnumerable<Guid> financialAssetsIds);
-    Task<List<PriceMeasure>> GetYesterdayClosePricesFor(IEnumerable<Guid> financialAssetsIds);
     Task<PriceMeasure?> GetById(Guid id);
 }

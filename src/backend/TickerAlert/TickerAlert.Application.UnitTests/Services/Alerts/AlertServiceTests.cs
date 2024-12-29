@@ -1,12 +1,9 @@
-using AutoFixture;
 using FluentAssertions;
 using Moq;
-using TickerAlert.Application.Common.Cache;
 using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Application.Services.Alerts;
-using TickerAlert.Application.Services.Prices;
 using TickerAlert.Application.UnitTests.Common.Persistence;
 using TickerAlert.Domain.Entities;
 using TickerAlert.Domain.Enums;
@@ -16,19 +13,23 @@ namespace TickerAlert.Application.UnitTests.Services.Alerts;
 public class AlertServiceTests
 {
     private readonly IApplicationDbContext _context;
-    private readonly Mock<ILastPriceCacheService> _cacheService;
+    private readonly Mock<IPriceMeasureReader> _priceMeasureReader;
     private readonly AlertService _alertService;
     private readonly Guid _userId = Guid.NewGuid();
 
     public AlertServiceTests()
     {
         _context = DbContextInMemory.Create();
-        _cacheService = new Mock<ILastPriceCacheService>();
+        _priceMeasureReader = new Mock<IPriceMeasureReader>();
         _alertService = new AlertService(
             _context,
-            new PriceMeasureReader(_context, _cacheService.Object),
+            _priceMeasureReader.Object,
             CreateCurrentUserServiceMock().Object
         );
+
+        _priceMeasureReader
+            .Setup(x => x.GetLastPriceFor(It.IsAny<Guid>()))
+            .ReturnsAsync(0);
     }
 
     private Mock<ICurrentUserService> CreateCurrentUserServiceMock()
@@ -46,10 +47,10 @@ public class AlertServiceTests
         Guid assetId = Guid.NewGuid();
         const decimal targetPrice = 100m;
         const decimal currentPrice = 90m;
-        
-        var priceMeasure = PriceMeasure.Create(Guid.NewGuid(), assetId, currentPrice);
-        _context.PriceMeasures.Add(priceMeasure);
-        await _context.SaveChangesAsync();
+
+        _priceMeasureReader
+            .Setup(x => x.GetLastPriceFor(It.IsAny<Guid>()))
+            .ReturnsAsync(currentPrice);
 
         // Act
         await _alertService.CreateAlert(assetId, targetPrice);

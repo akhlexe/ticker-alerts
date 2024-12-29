@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { StorageKeys } from './models/storage-key.model';
 import { AuthService } from './auth.service';
+import { AssetPriceUpdateDto } from './models/signalr.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,14 @@ export class SignalRService {
   private notificationSubject = new BehaviorSubject<string | null>(null);
   public notification$ = this.notificationSubject.asObservable();
 
+  private assetPriceUpdateSubject = new BehaviorSubject<AssetPriceUpdateDto | null>(null);
+  public assetPriceUpdate$ = this.assetPriceUpdateSubject.asObservable();
+
   constructor(private authService: AuthService) {
+    this.connectToSignalRWhenUserIsLoggedIn();
+  }
+
+  private connectToSignalRWhenUserIsLoggedIn() {
     this.authService.getLoggedInUsername().subscribe(username => {
       if (username) {
         this.startConnection();
@@ -44,6 +52,10 @@ export class SignalRService {
 
     this.hubConnection.on('ReceiveMessage', (message) => {
       this.notificationSubject.next(message);
+    })
+
+    this.hubConnection.on('ReceiveAssetPriceUpdate', (assetPriceUpdate) => {
+      this.assetPriceUpdateSubject.next(assetPriceUpdate);
     })
 
     this.hubConnection.start()

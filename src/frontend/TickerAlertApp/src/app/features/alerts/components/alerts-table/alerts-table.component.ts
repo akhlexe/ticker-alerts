@@ -1,5 +1,6 @@
+import { SignalRService } from './../../../../core/services/signal-r.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
@@ -11,6 +12,8 @@ import { AlertState, AlertStateConfig } from '../../models/alert-state.enum';
 import { Alert } from '../../models/alert.model';
 import { AlertsService } from '../../services/alerts.service';
 import { ConfirmModalData } from './../../../../shared/components/confirm-modal/models/confirm-dialog.model';
+import { AssetPriceUpdateDto } from '../../../../core/services/models/signalr.model';
+import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-alerts-table',
@@ -20,7 +23,7 @@ import { ConfirmModalData } from './../../../../shared/components/confirm-modal/
   styleUrl: './alerts-table.component.css',
   providers: [AlertsService],
 })
-export class AlertsTableComponent implements OnInit {
+export class AlertsTableComponent implements OnInit, OnDestroy {
 
   public displayedColumns: string[] = [
     'tickerName',
@@ -31,20 +34,27 @@ export class AlertsTableComponent implements OnInit {
     'actions',
   ];
 
-  public alerts: Alert[] = [];
+  // public alerts: Alert[] = [];
+
+  private alertsSubject = new BehaviorSubject<Alert[]>([]);
+  public alerts$ = this.alertsSubject.asObservable();
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private alertsService: AlertsService,
     private dialog: MatDialog,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private signalRService: SignalRService) { }
 
   ngOnInit(): void {
     this.getData();
+    this.listenForPriceUpdates();
   }
 
   public getData() {
     this.alertsService.getAlerts().subscribe((result) => {
-      this.alerts = result;
+      this.alertsSubject.next(result);
     });
   }
 
@@ -100,5 +110,32 @@ export class AlertsTableComponent implements OnInit {
 
   public isReceivedVisible(state: AlertState): boolean {
     return state === AlertState.TRIGGERED || state === AlertState.NOTIFIED;
+  }
+
+  public listenForPriceUpdates(): void {
+    this.signalRService.assetPriceUpdate$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (priceUpdate) => this.updatePriceInAlerts(priceUpdate),
+      error: (err) => console.log('Error receiving price updates: ', err)
+    });
+  }
+
+  private updatePriceInAlerts(priceUpdate: AssetPriceUpdateDto | null): void {
+    if (!priceUpdate) return;
+
+    const currentAlerts = this.alertsSubject.value;
+    if (!currentAlerts) return;
+
+    const updatedAlerts = currentAlerts.map(item =>
+      item.financialAssetId === priceUpdate.financialAssetId
+        ? { ...item, price: priceUpdate.newPrice, difference: priceUpdate.newPrice - item.targetPrice }
+        : { ...item }
+    );
+
+    this.alertsSubject.next(updatedAlerts);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

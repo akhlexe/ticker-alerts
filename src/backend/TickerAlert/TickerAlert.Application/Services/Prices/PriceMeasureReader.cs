@@ -11,33 +11,34 @@ public class PriceMeasureReader(
 {
     public async Task<decimal> GetLastPriceFor(Guid financialAssetId)
     {
-        decimal? lastPrice = await cacheService.GetPriceAsync(financialAssetId);
+        Dictionary<Guid, decimal> lastPrices = await GetLastPricesFor([financialAssetId]);
 
-        // TODO: si no existe el precio en cache, buscarlo y salvarlo.
-        // Pero se debería extraer la lógica en una funcionalidad unica, pero capaz haya que pensarla
-        // un poco más para no duplicar el código o dejar las cosas medias rebuscadas.
-
-        return lastPrice ?? 0;
+        return lastPrices.GetValueOrDefault(financialAssetId);
     }
 
     public async Task<Dictionary<Guid, decimal>> GetLastPricesFor(IEnumerable<Guid> financialAssetsIds)
     {
         Dictionary<Guid, decimal> lastPrices = await cacheService.GetPricesAsync(financialAssetsIds);
+        Dictionary<Guid, decimal> missingPrices = await FetchAndSaveMissingPricesInCache(context, cacheService, financialAssetsIds.Except(lastPrices.Keys).ToList());
 
-        List<Guid> missingIds = financialAssetsIds.Except(lastPrices.Keys).ToList();
+        return lastPrices
+            .Concat(missingPrices)
+            .GroupBy(pair => pair.Key)
+            .ToDictionary(group => group.Key, group => group.Last().Value);
+    }
 
-        if (missingIds.Any())
+    private static async Task<Dictionary<Guid, decimal>> FetchAndSaveMissingPricesInCache(IApplicationDbContext context, ILastPriceCacheService cacheService, IEnumerable<Guid> financialAssetsIds)
+    {
+        if (!financialAssetsIds.Any()) return [];
+
+        List<PriceMeasure> priceMeasures = await FetchLastPricesFromDatabaseAsync(context, financialAssetsIds);
+
+        foreach (var price in priceMeasures)
         {
-            List<PriceMeasure> priceMeasures = await FetchLastPricesFromDatabaseAsync(context, missingIds);
-
-            foreach (var price in priceMeasures)
-            {
-                await cacheService.UpdatePriceAsync(price.FinancialAssetId, price.Price);
-                lastPrices[price.FinancialAssetId] = price.Price;
-            }
+            await cacheService.UpdatePriceAsync(price.FinancialAssetId, price.Price);
         }
 
-        return lastPrices;
+        return priceMeasures.ToDictionary(p => p.FinancialAssetId, p => p.Price);
     }
 
     private static async Task<List<PriceMeasure>> FetchLastPricesFromDatabaseAsync(IApplicationDbContext context, IEnumerable<Guid> financialAssetsIds)
@@ -57,21 +58,5 @@ public class PriceMeasureReader(
             .PriceMeasures
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
-    }
-
-    public async Task<List<PriceMeasure>> GetYesterdayClosePricesFor(IEnumerable<Guid> financialAssetsIds)
-    {
-        var yesterdayStart = DateTime.UtcNow.Date.AddDays(-1);
-        var yesterdayEnd = yesterdayStart.AddDays(1);
-
-        return await context
-            .PriceMeasures
-            .AsNoTracking()
-            .Where(x => financialAssetsIds.Contains(x.FinancialAssetId) &&
-                    x.MeasuredOn >= yesterdayStart &&
-                    x.MeasuredOn < yesterdayEnd)
-            .GroupBy(x => x.FinancialAssetId)
-            .Select(g => g.OrderByDescending(r => r.MeasuredOn).First())
-            .ToListAsync();
     }
 }
