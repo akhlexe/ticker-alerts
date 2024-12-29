@@ -31,7 +31,7 @@ public class FinancialAssetReader : IFinancialAssetReader
             .ToList();
     }
 
-    public async Task<IEnumerable<FinancialAsset>> GetAllWithPendingAlerts()
+    public async Task<List<FinancialAsset>> GetAllWithPendingAlerts()
     {
         return await _context.FinancialAssets
             .Join(_context.Alerts,
@@ -75,5 +75,19 @@ public class FinancialAssetReader : IFinancialAssetReader
         return financialAssets
             .Select(CreateFinancialAssetDto)
             .ToList();
+    }
+
+    public async Task<List<FinancialAsset>> GetAllInWatchlists()
+    {
+        List<Guid> financialAssetsInWatchlists = await _context
+            .WatchlistItems
+            .Select(w => w.FinancialAssetId)
+            .Distinct()
+            .ToListAsync();
+
+        return await _context
+            .FinancialAssets
+            .Where(a => financialAssetsInWatchlists.Contains(a.Id))
+            .ToListAsync();
     }
 }

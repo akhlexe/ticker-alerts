@@ -16,13 +16,24 @@ public class PriceCollectorService(
 {
     public async Task CollectPrices()
     {
-        var pendingAssets = await financialAssetReader.GetAllWithPendingAlerts();
+        List<FinancialAsset> assetsToScan = await CollectFinancialAssetsToScan(financialAssetReader);
 
-        foreach (var asset in pendingAssets)
+        foreach (var asset in assetsToScan)
         {
             var priceMeasureDto = await stockMarketService.ReadPriceFor(asset.Ticker);
             await priceMeasureService.ProcessPriceMeasure(CreatePriceMeasureModel(asset, priceMeasureDto));
         }
+    }
+
+    private static async Task<List<FinancialAsset>> CollectFinancialAssetsToScan(IFinancialAssetReader financialAssetReader)
+    {
+        List<FinancialAsset> assetsInPendingAlerts = await financialAssetReader.GetAllWithPendingAlerts();
+        List<FinancialAsset> assetsInWatchlists = await financialAssetReader.GetAllInWatchlists();
+
+        return assetsInPendingAlerts
+            .Concat(assetsInWatchlists)
+            .DistinctBy(x => x.Ticker)
+            .ToList();
     }
 
     private static PriceMeasure CreatePriceMeasureModel(FinancialAsset asset, PriceMeasureDto priceMeasureDto) 

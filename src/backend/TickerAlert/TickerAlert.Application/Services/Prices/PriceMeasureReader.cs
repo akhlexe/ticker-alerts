@@ -21,9 +21,10 @@ public class PriceMeasureReader(
         Dictionary<Guid, decimal> lastPrices = await cacheService.GetPricesAsync(financialAssetsIds);
         Dictionary<Guid, decimal> missingPrices = await FetchAndSaveMissingPricesInCache(context, cacheService, financialAssetsIds.Except(lastPrices.Keys).ToList());
 
-        return lastPrices.Concat(missingPrices)
-                 .GroupBy(pair => pair.Key)
-                 .ToDictionary(group => group.Key, group => group.Last().Value);
+        return lastPrices
+            .Concat(missingPrices)
+            .GroupBy(pair => pair.Key)
+            .ToDictionary(group => group.Key, group => group.Last().Value);
     }
 
     private static async Task<Dictionary<Guid, decimal>> FetchAndSaveMissingPricesInCache(IApplicationDbContext context, ILastPriceCacheService cacheService, IEnumerable<Guid> financialAssetsIds)
