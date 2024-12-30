@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<OutboxMessage> OutboxMessages { get; set; }
     public DbSet<Watchlist> Watchlists { get; set; }
     public DbSet<WatchlistItem> WatchlistItems { get; set; }
+    public DbSet<Cedear> Cedears { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
