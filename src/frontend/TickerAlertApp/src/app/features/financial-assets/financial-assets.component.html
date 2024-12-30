@@ -13,9 +13,9 @@
                 <div class="company-profile">
                     <div class="company-header">
                         <div class="company">
-                            <img [src]="companyProfile.logo" alt="{{ companyProfile.name }} logo"
+                            <img [src]="companyProfile.profile.logo" alt="{{ companyProfile.profile.name }} logo"
                                 class="company-logo" />
-                            <h1>{{ companyProfile.name }}</h1>
+                            <h1>{{ companyProfile.profile.name }}</h1>
                         </div>
                         <div class="action-container">
                             <button mat-icon-button class="action-button" aria-label="Clear"
@@ -30,21 +30,34 @@
                         </div>
                     </div>
                     <div class="company-information">
-                        <p><strong>Ticker:</strong> {{ companyProfile.ticker }}</p>
-                        <p><strong>Country:</strong> {{ companyProfile.country }}</p>
-                        <p><strong>Currency:</strong> {{ companyProfile.currency }}</p>
-                        <p><strong>Exchange:</strong> {{ companyProfile.exchange }}</p>
-                        <p><strong>IPO Date:</strong> {{ companyProfile.ipo }}</p>
-                        <p><strong>Market Capitalization:</strong> {{ companyProfile.marketCapitalization * 1000 |
+                        <p><strong>Ticker:</strong> {{ companyProfile.profile.ticker }}</p>
+                        <p><strong>Country:</strong> {{ companyProfile.profile.country }}</p>
+                        <p><strong>Currency:</strong> {{ companyProfile.profile.currency }}</p>
+                        <p><strong>Exchange:</strong> {{ companyProfile.profile.exchange }}</p>
+                        <p><strong>IPO Date:</strong> {{ companyProfile.profile.ipo }}</p>
+                        <p><strong>Market Capitalization:</strong> {{ companyProfile.profile.marketCapitalization * 1000
+                            |
                             currency
                             }}
                         </p>
-                        <p><strong>Share Outstanding:</strong> {{ companyProfile.shareOutstanding }} B</p>
-                        <p><strong>Industry:</strong> {{ companyProfile.finnhubIndustry }}</p>
-                        <p><strong>Website: </strong> <a [href]="companyProfile.weburl" target="_blank">{{
-                                companyProfile.weburl
+                        <p><strong>Share Outstanding:</strong> {{ companyProfile.profile.shareOutstanding }} B</p>
+                        <p><strong>Industry:</strong> {{ companyProfile.profile.finnhubIndustry }}</p>
+                        <p><strong>Website: </strong> <a [href]="companyProfile.profile.weburl" target="_blank">{{
+                                companyProfile.profile.weburl
                                 }}</a>
                         </p>
+                    </div>
+                </div>
+                <br>
+                <div class="cedear-information">
+                    <div class="title">
+                        Cedear Information
+                    </div>
+                    <div *ngIf="companyProfile.cedearInformation.hasCedear">
+                        <p><strong>Ratio:</strong> {{ companyProfile.cedearInformation.ratio }}</p>
+                    </div>
+                    <div *ngIf="!companyProfile.cedearInformation.hasCedear">
+                        <p>This asset has no cedear in Argentina.</p>
                     </div>
                 </div>
             </div>

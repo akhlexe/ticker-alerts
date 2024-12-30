@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TickerAlert.Application.Common.Persistence;
 using TickerAlert.Application.Interfaces.FinancialAssets;
+using TickerAlert.Application.Services.FinancialAssets.Dtos;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Application.Services.StockMarket.Dtos;
 using TickerAlert.Domain.Entities;
@@ -12,16 +13,16 @@ public sealed class FinancialAssetProfileService(
     IApplicationDbContext _context,
     ICompanyProfileCacheService cacheService)
 {
-    public async Task<CompanyProfileDto> GetFinancialAssetProfileAsync(Guid financialAssetId)
+    public async Task<FinancialAssetProfileDto> GetFinancialAssetProfileAsync(Guid financialAssetId)
     {
-        CompanyProfileDto? companyProfileDto = await cacheService.GetCompanyProfileDto(financialAssetId);
+        FinancialAssetProfileDto? financialAssetProfile = await cacheService.GetCompanyProfileDto(financialAssetId);
 
-        return companyProfileDto is null
+        return financialAssetProfile is null
             ? await FetchAndSaveInCacheAsync(financialAssetId)
-            : companyProfileDto;
+            : financialAssetProfile;
     }
 
-    private async Task<CompanyProfileDto> FetchAndSaveInCacheAsync(Guid financialAssetId)
+    private async Task<FinancialAssetProfileDto> FetchAndSaveInCacheAsync(Guid financialAssetId)
     {
         FinancialAsset? financialAsset = await _context
             .FinancialAssets
@@ -29,16 +30,54 @@ public sealed class FinancialAssetProfileService(
 
         if (financialAsset is null) return CreateUnknownAssetResponse();
 
-        CompanyProfileDto companyProfileDto = await stockMarketService.GetCompanyProfile(financialAsset.Ticker);
+        Task<CompanyProfileDto> companyProfileTask = stockMarketService.GetCompanyProfile(financialAsset.Ticker);
+        Task<Cedear?> cedearTask = _context.Cedears.FirstOrDefaultAsync(x => x.FinancialAssetId == financialAssetId);
 
-        await cacheService.SaveCompanyProfileDto(financialAssetId, companyProfileDto);
+        await Task.WhenAll(companyProfileTask, cedearTask);
 
-        return companyProfileDto;
+        CompanyProfileDto companyProfileDto = companyProfileTask.Result;
+        Cedear? cedear = cedearTask.Result;
+
+        FinancialAssetProfileDto financialAssetProfile = CreateFinancialAssetProfile(companyProfileDto, cedear);
+
+        await cacheService.SaveCompanyProfileDto(financialAssetId, financialAssetProfile);
+
+        return financialAssetProfile;
     }
 
-    private static CompanyProfileDto CreateUnknownAssetResponse() => new()
+    private static FinancialAssetProfileDto CreateFinancialAssetProfile(CompanyProfileDto companyProfileDto, Cedear? cedear)
     {
-        Ticker = "Unknown Ticker",
-        Name = "Unkonwn",
+        return new FinancialAssetProfileDto
+        {
+            Profile = companyProfileDto,
+            CedearInformation = new CedearInformationDto
+            {
+                Ratio = cedear?.Ratio ?? "Unknown ratio",
+                HasCedear = cedear is not null
+            }
+        };
+    }
+
+    private static void CompleteCompanyProfileWithCedearInformation(CompanyProfileDto companyProfileDto, Cedear? cedear)
+    {
+        if (cedear is not null)
+        {
+            companyProfileDto.CedearRatio = cedear.Ratio;
+            companyProfileDto.HasCedear = true;
+        }
+    }
+
+    private static FinancialAssetProfileDto CreateUnknownAssetResponse() => new()
+    {
+        Profile = new CompanyProfileDto
+        {
+            Ticker = "Unknown Ticker",
+            Name = "Unkonwn",
+        },
+        CedearInformation = new CedearInformationDto
+        {
+            HasCedear = false,
+            Ratio = "Unknown Ratio"
+        }
     };
 }

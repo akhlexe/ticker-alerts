@@ -1,6 +1,7 @@
 using TickerAlert.Api.Extensions;
 using TickerAlert.Application;
 using TickerAlert.Infrastructure;
+using TickerAlert.Infrastructure.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 

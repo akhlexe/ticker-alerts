@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FinancialAssetsService } from '../../shared/services/financial-asset/financial-assets.service';
-import { CompanyProfileDto, FinancialAssetDto } from '../../shared/services/financial-asset/models/financial-asset.model';
+import { FinancialAssetDto, FinancialAssetProfileDto } from '../../shared/services/financial-asset/models/financial-asset.model';
 import { CreateAlertModalComponent } from '../alerts/components/create-alert-modal/create-alert-modal.component';
 import { WatchlistService } from '../../shared/services/watchlist/watchlist.service';
 
@@ -26,7 +26,7 @@ const MatModules = [
   styleUrl: './financial-assets.component.css'
 })
 export class FinancialAssetsComponent implements OnInit {
-  companyProfile$: Observable<CompanyProfileDto> | undefined;
+  companyProfile$: Observable<FinancialAssetProfileDto> | undefined;
   asset: FinancialAssetDto | null = null;
 
   constructor(
