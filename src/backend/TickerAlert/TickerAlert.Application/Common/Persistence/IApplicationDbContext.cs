@@ -10,6 +10,7 @@ public interface IApplicationDbContext
     public DbSet<FinancialAsset> FinancialAssets { get; }
     public DbSet<Watchlist> Watchlists { get; }
     public DbSet<WatchlistItem> WatchlistItems { get; }
+    public DbSet<Cedear> Cedears { get; set; }
 
     Task<int> SaveChangesAsync();
 }
