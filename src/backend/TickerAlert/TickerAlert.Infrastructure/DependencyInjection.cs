@@ -9,7 +9,7 @@ using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
 using TickerAlert.Infrastructure.BackgroundJobs;
 using TickerAlert.Infrastructure.BackgroundJobs.Helpers;
-using TickerAlert.Infrastructure.Cache;
+using TickerAlert.Infrastructure.Cache.Extensions;
 using TickerAlert.Infrastructure.Common;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Mailing;

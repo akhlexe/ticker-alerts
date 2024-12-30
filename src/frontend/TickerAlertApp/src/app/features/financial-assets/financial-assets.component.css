@@ -17,7 +17,7 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    max-width: 600px;
+    max-width: 80%;
     margin: auto;
   }
   
@@ -57,6 +57,26 @@
     color:white;
   }
 
+  .company-information {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .company-information p {
+    flex: 1 1 calc(33.333% - 16px); /* Each item will take 1/3rd of the width */
+    margin: 0;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add an ellipsis for overflowed text */
+    position: relative; /* For positioning the hover tooltip */
+  }
+
+  .company-information p:hover {
+    white-space: normal; /* Allow text to wrap */
+    overflow: visible; /* Show the full text */
+    z-index: 1; /* Ensure the text appears above other elements */
+  }
   
   h1 {
     font-size: 2em;

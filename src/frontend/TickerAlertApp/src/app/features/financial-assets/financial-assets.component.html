@@ -1,7 +1,5 @@
 <div class="feature-container padding-small">
-    <div class="top-space">
-
-    </div>
+    <div class="top-space"></div>
     <div class="card">
         <div *ngIf="!(companyProfile$ | async); else companyProfileContent">
             <div class="spinner-container">
@@ -46,18 +44,9 @@
                                 companyProfile.profile.weburl
                                 }}</a>
                         </p>
-                    </div>
-                </div>
-                <br>
-                <div class="cedear-information">
-                    <div class="title">
-                        Cedear Information
-                    </div>
-                    <div *ngIf="companyProfile.cedearInformation.hasCedear">
-                        <p><strong>Ratio:</strong> {{ companyProfile.cedearInformation.ratio }}</p>
-                    </div>
-                    <div *ngIf="!companyProfile.cedearInformation.hasCedear">
-                        <p>This asset has no cedear in Argentina.</p>
+                        <p>
+                            <strong>Cedear Ratio: {{ companyProfile.cedearInformation.ratio }}</strong>
+                        </p>
                     </div>
                 </div>
             </div>

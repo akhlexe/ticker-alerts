@@ -1,7 +1,7 @@
 using TickerAlert.Api.Extensions;
 using TickerAlert.Application;
 using TickerAlert.Infrastructure;
-using TickerAlert.Infrastructure.Cache;
+using TickerAlert.Infrastructure.Cache.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +16,7 @@ builder.Services
 var app = builder.Build();
 
 app.InitializeDatabase();
+app.ResetCache();
 app.AddSwaggerIfDevelopment();
 app.UseCors("AllowSpecificOrigin");
 app.UseRouting();

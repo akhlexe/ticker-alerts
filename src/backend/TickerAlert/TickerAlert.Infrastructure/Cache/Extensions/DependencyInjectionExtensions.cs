@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using TickerAlert.Application.Common.Cache;
 
-namespace TickerAlert.Infrastructure.Cache;
+namespace TickerAlert.Infrastructure.Cache.Extensions;
 
 public static class DependencyInjectionExtensions
 {
