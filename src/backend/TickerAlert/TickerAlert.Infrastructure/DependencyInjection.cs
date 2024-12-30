@@ -5,12 +5,14 @@ using Microsoft.Extensions.Hosting;
 using Quartz;
 using TickerAlert.Application.Interfaces.Authentication;
 using TickerAlert.Application.Interfaces.NotificationService;
+using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Infrastructure.Authentication;
 using TickerAlert.Infrastructure.BackgroundJobs;
 using TickerAlert.Infrastructure.BackgroundJobs.Helpers;
 using TickerAlert.Infrastructure.Cache.Extensions;
 using TickerAlert.Infrastructure.Common;
+using TickerAlert.Infrastructure.ExternalServices.CotizacionDolares;
 using TickerAlert.Infrastructure.ExternalServices.StockMarketService;
 using TickerAlert.Infrastructure.Mailing;
 using TickerAlert.Infrastructure.NotificationService;
@@ -50,6 +52,7 @@ public static class DependencyInjection
         {
             QuartzJobsConfigurator.RegisterTimedJob<ProcessOutboxMessagesJob>(config, JobIntervalsInSeconds.ProcessOutboxMessagesJob);
             QuartzJobsConfigurator.RegisterTimedJob<PriceReaderJob>(config, JobIntervalsInSeconds.PriceReaderJob);
+            QuartzJobsConfigurator.RegisterTimedJob<CotizacionDolarReaderJob>(config, JobIntervalsInSeconds.CotizacionDolarReaderJob);
         });
 
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
@@ -70,6 +73,7 @@ public static class DependencyInjection
     private static void RegisterExternalServices(IServiceCollection services)
     {
         services.AddScoped<IStockMarketService, StockMarketService>();
+        services.AddScoped<IDolarArgentinaService, DolarArgentinaService>();
     }
 
     private static void RegisterSettings(IServiceCollection services, IConfiguration configuration)

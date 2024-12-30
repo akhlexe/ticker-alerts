@@ -2,12 +2,15 @@ using Microsoft.Extensions.DependencyInjection;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.PriceMeasures;
+using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina;
 using TickerAlert.Application.Interfaces.Watchlists;
 using TickerAlert.Application.Services.Alerts;
 using TickerAlert.Application.Services.FinancialAssets;
 using TickerAlert.Application.Services.Notifiers;
 using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.Prices;
+using TickerAlert.Application.Services.Prices.DolarArgentina;
+using TickerAlert.Application.Services.Prices.DolarArgentina.Cache;
 using TickerAlert.Application.Services.Watchlists;
 
 namespace TickerAlert.Application;
@@ -35,12 +38,19 @@ public static class DependencyInjection
         services.AddScoped<IPriceMeasureService, PriceMeasureService>();
         services.AddScoped<IPriceMeasureReader, PriceMeasureReader>();
         services.AddScoped<IWatchlistService, WatchlistService>();
-        
+
+        RegisterCotizacionDolarServices(services);
     }
 
     private static void RegisterCacheServices(IServiceCollection services)
     {
         services.AddScoped<ILastPriceCacheService, LastPriceCacheService>();
         services.AddScoped<ICompanyProfileCacheService, CompanyProfileCacheService>();
+    }
+
+    private static void RegisterCotizacionDolarServices(IServiceCollection services)
+    {
+        services.AddScoped<CotizacionDolarReader>();
+        services.AddScoped<IDolarArgentinaCacheService, DolarArgentinaCacheService>();
     }
 }
