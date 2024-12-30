@@ -14,4 +14,7 @@ public class CompanyProfileDto
     public string Weburl { get; set; }
     public string Logo { get; set; }
     public string FinnhubIndustry { get; set; }
+
+    public string CedearRatio { get; set; }
+    public bool HasCedear { get; set; }
 }

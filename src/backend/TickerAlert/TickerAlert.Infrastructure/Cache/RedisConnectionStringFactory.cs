@@ -1,27 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
-using TickerAlert.Application.Common.Cache;
 
 namespace TickerAlert.Infrastructure.Cache;
 
-public static class DependencyInjectionExtensions
+internal class RedisConnectionStringFactory
 {
     private const string ConnectionStringTemplate = "{host}:{port},password={password}";
 
-    public static void RegisterRedisCacheService(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddSingleton<IConnectionMultiplexer>(sp =>
-        {
-            string connection = CreateConnectionStringFromConfiguration(configuration);
-
-            return ConnectionMultiplexer.Connect(connection);
-        });
-
-        services.AddScoped<ICacheService, RedisCacheService>();
-    }
-
-    private static string CreateConnectionStringFromConfiguration(IConfiguration configuration)
+    public static string CreateConnectionString(IConfiguration configuration)
     {
         string host = configuration["Redis:Host"]
             ?? throw new ArgumentNullException("Redis host is missing.");

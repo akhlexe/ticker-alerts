@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TickerAlert.Application.Common.Responses;
 using TickerAlert.Application.Services.FinancialAssets.Dtos;
-using TickerAlert.Application.Services.StockMarket.Dtos;
 using TickerAlert.Application.UseCases.FinancialAssets.Queries.GetFinancialAsset;
 using TickerAlert.Application.UseCases.FinancialAssets.Queries.GetFinancialAssetProfile;
 using TickerAlert.Application.UseCases.FinancialAssets.Queries.SearchFinancialAsset;
@@ -19,6 +18,6 @@ public class FinancialAssetsController : ApiController
         => await Mediator.Send(new SearchFinancialAssetRequest(criteria));
 
     [HttpGet("Profile")]
-    public async Task<CompanyProfileDto> GetFinancialAssetProfile([FromQuery] GetFinancialAssetProfileRequest query) 
+    public async Task<FinancialAssetProfileDto> GetFinancialAssetProfile([FromQuery] GetFinancialAssetProfileRequest query) 
         => await Mediator.Send(query);
 }

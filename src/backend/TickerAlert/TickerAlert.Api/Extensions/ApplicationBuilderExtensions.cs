@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using TickerAlert.Api.Utilities;
 using TickerAlert.Infrastructure.NotificationService;
 using TickerAlert.Infrastructure.Persistence;

@@ -4,6 +4,11 @@ export interface FinancialAssetDto {
   name: string;
 }
 
+export interface FinancialAssetProfileDto {
+  profile: CompanyProfileDto,
+  cedearInformation: CedearInformationDto
+}
+
 export interface CompanyProfileDto {
   country: string;
   currency: string;
@@ -17,4 +22,9 @@ export interface CompanyProfileDto {
   weburl: string;
   logo: string;
   finnhubIndustry: string;
+}
+
+export interface CedearInformationDto {
+  ratio: string,
+  hasCedear: boolean
 }

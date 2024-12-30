@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CompanyProfileDto, FinancialAssetDto } from './models/financial-asset.model';
+import { CompanyProfileDto, FinancialAssetDto, FinancialAssetProfileDto } from './models/financial-asset.model';
 import { Endpoints } from '../../../constants/api-endpoints.constants';
 import { Result } from '../../models/result.models';
 
@@ -18,11 +18,11 @@ export class FinancialAssetsService {
     return this.httpClient.get<FinancialAssetDto[]>(Endpoints.FinancialAssets, { params });
   }
 
-  public getFinancialAssetProfile(financialAssetId: string): Observable<CompanyProfileDto> {
+  public getFinancialAssetProfile(financialAssetId: string): Observable<FinancialAssetProfileDto> {
     let params = new HttpParams();
     params = params.append('financialAssetId', financialAssetId);
 
-    return this.httpClient.get<CompanyProfileDto>(Endpoints.FinancialAssetProfile, { params });
+    return this.httpClient.get<FinancialAssetProfileDto>(Endpoints.FinancialAssetProfile, { params });
   }
 
   public getFinancialAssetById(id: string): Observable<Result<FinancialAssetDto>> {
