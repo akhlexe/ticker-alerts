@@ -1,4 +1,4 @@
-﻿namespace TickerAlert.Application.Services.FinancialAssets.Dtos;
+﻿namespace TickerAlert.Application.Interfaces.Cedears.Dtos;
 
 public class CedearInformationDto
 {

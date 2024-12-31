@@ -1,9 +1,9 @@
-﻿using TickerAlert.Application.Services.FinancialAssets.Dtos;
+﻿using TickerAlert.Application.Services.StockMarket.Dtos;
 
 namespace TickerAlert.Application.Interfaces.FinancialAssets;
 
 public interface ICompanyProfileCacheService
 {
-    Task<FinancialAssetProfileDto?> GetCompanyProfileDto(Guid financialAssetId);
-    Task SaveCompanyProfileDto(Guid financialAssetId, FinancialAssetProfileDto companyProfileDto);
+    Task<CompanyProfileDto?> GetCompanyProfileDto(Guid financialAssetId);
+    Task SaveCompanyProfileDto(Guid financialAssetId, CompanyProfileDto companyProfileDto);
 }
