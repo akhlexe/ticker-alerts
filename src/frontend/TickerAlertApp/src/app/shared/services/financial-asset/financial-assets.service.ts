@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CompanyProfileDto, FinancialAssetDto, FinancialAssetProfileDto } from './models/financial-asset.model';
+import { FinancialAssetDto, FinancialAssetProfileDto } from './models/financial-asset.model';
 import { Endpoints } from '../../../constants/api-endpoints.constants';
 import { Result } from '../../models/result.models';
 

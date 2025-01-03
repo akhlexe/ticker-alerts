@@ -45,7 +45,15 @@
                                 }}</a>
                         </p>
                         <p>
-                            <strong>Cedear Ratio: {{ companyProfile.cedearInformation.ratio }}</strong>
+                            <strong>Cedear Ratio: {{ companyProfile.cedearCotizacion.ratio }}</strong>
+                        </p>
+                        <p>
+                            <strong>Cedear Compra: {{ companyProfile.cedearCotizacion.cedearCompra | currency:
+                                'ARS $':'symbol':'1.2-2' }}</strong>
+                        </p>
+                        <p>
+                            <strong>Cedear Venta: {{ companyProfile.cedearCotizacion.cedearVenta | currency:
+                                'ARS $':'symbol':'1.2-2' }}</strong>
                         </p>
                     </div>
                 </div>

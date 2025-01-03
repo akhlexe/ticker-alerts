@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using TickerAlert.Application.Services.FinancialAssets;
 using TickerAlert.Application.Services.FinancialAssets.Dtos;
-using TickerAlert.Application.Services.StockMarket.Dtos;
 
 namespace TickerAlert.Application.UseCases.FinancialAssets.Queries.GetFinancialAssetProfile;
 

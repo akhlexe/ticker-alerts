@@ -1,11 +1,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using TickerAlert.Application.Interfaces.Alerts;
+using TickerAlert.Application.Interfaces.Cedears;
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.PriceMeasures;
 using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina;
 using TickerAlert.Application.Interfaces.Watchlists;
 using TickerAlert.Application.Services.Alerts;
+using TickerAlert.Application.Services.Cedears;
 using TickerAlert.Application.Services.FinancialAssets;
+using TickerAlert.Application.Services.FinancialAssets.CompanyProfile;
 using TickerAlert.Application.Services.Notifiers;
 using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.Prices;
@@ -21,7 +24,6 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         RegisterApplicationServices(services);
-        RegisterCacheServices(services);
         return services;
     }
 
@@ -32,25 +34,40 @@ public static class DependencyInjection
         services.AddScoped<IAlertService, AlertService>();
         services.AddScoped<IFinancialAssetReader, FinancialAssetReader>();
         services.AddScoped<FinancialAssetProfileService>();
-        services.AddScoped<PriceCollectorService>();
         services.AddScoped<PriceEvaluatorService>();
         services.AddScoped<AlertTriggeredNotifier>();
-        services.AddScoped<IPriceMeasureService, PriceMeasureService>();
-        services.AddScoped<IPriceMeasureReader, PriceMeasureReader>();
         services.AddScoped<IWatchlistService, WatchlistService>();
 
+        RegisterPriceServices(services);
         RegisterCotizacionDolarServices(services);
+        RegisterCedearServices(services);
+        RegisterCompanyProfileServices(services);
     }
 
-    private static void RegisterCacheServices(IServiceCollection services)
+    private static void RegisterPriceServices(IServiceCollection services)
     {
+        services.AddScoped<PriceCollectorService>();
         services.AddScoped<ILastPriceCacheService, LastPriceCacheService>();
-        services.AddScoped<ICompanyProfileCacheService, CompanyProfileCacheService>();
+        services.AddScoped<IPriceMeasureService, PriceMeasureService>();
+        services.AddScoped<IPriceMeasureReader, PriceMeasureReader>();
     }
 
     private static void RegisterCotizacionDolarServices(IServiceCollection services)
     {
         services.AddScoped<CotizacionDolarReader>();
         services.AddScoped<IDolarArgentinaCacheService, DolarArgentinaCacheService>();
+    }
+
+    private static void RegisterCedearServices(IServiceCollection services)
+    {
+        services.AddScoped<CedearCotizacionService>();
+        services.AddScoped<CedearInformationService>();
+        services.AddScoped<ICedearInformationCacheService, CedearInformationCacheService>();
+    }
+
+    private static void RegisterCompanyProfileServices(IServiceCollection services)
+    {
+        services.AddScoped<CompanyProfileService>();
+        services.AddScoped<ICompanyProfileCacheService, CompanyProfileCacheService>();
     }
 }
