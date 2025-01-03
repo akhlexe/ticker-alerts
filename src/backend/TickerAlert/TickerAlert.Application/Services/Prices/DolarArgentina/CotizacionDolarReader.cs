@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina;
-using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina.Dtos;
 
 namespace TickerAlert.Application.Services.Prices.DolarArgentina;
 

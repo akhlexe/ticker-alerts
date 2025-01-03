@@ -1,24 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TickerAlert.Application.Common.Persistence;
+using TickerAlert.Application.Interfaces.Cedears;
 using TickerAlert.Application.Interfaces.Cedears.Dtos;
 using TickerAlert.Domain.Entities;
 
 namespace TickerAlert.Application.Services.Cedears;
 
-public sealed class CedearInformationService
+public sealed class CedearInformationService(
+    ICedearInformationCacheService cacheService, 
+    IApplicationDbContext context)
 {
-    private readonly CedearInformationCacheService _cacheService;
-    private readonly IApplicationDbContext _context;
-
-    public CedearInformationService(CedearInformationCacheService cacheService, IApplicationDbContext context)
-    {
-        _cacheService = cacheService;
-        _context = context;
-    }
-
     public async Task<CedearInformationDto> GetCedearInformationAsync(Guid financialAssetId)
     {
-        var cedearInformation = await _cacheService.GetCedearInformation(financialAssetId);
+        var cedearInformation = await cacheService.GetCedearInformation(financialAssetId);
 
         return cedearInformation is not null
             ? cedearInformation
@@ -27,11 +21,11 @@ public sealed class CedearInformationService
 
     private async Task<CedearInformationDto> FetchCedearInformationAndSaveInCache(Guid financialAssetId)
     {
-        Cedear? cedear = await _context.Cedears.FirstOrDefaultAsync(c => c.FinancialAssetId == financialAssetId);
+        Cedear? cedear = await context.Cedears.FirstOrDefaultAsync(c => c.FinancialAssetId == financialAssetId);
 
         CedearInformationDto cedearInformation = CreateCedearInformationDto(cedear);
 
-        await _cacheService.UpdateCedearInformation(financialAssetId, cedearInformation);
+        await cacheService.UpdateCedearInformation(financialAssetId, cedearInformation);
 
         return cedearInformation;
     }

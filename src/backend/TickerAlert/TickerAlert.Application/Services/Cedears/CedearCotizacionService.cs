@@ -1,15 +1,15 @@
 ﻿
 using TickerAlert.Application.Interfaces.Cedears.Dtos;
+using TickerAlert.Application.Interfaces.PriceMeasures;
+using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina;
 using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina.Dtos;
-using TickerAlert.Application.Services.Prices;
-using TickerAlert.Application.Services.Prices.DolarArgentina.Cache;
 
 namespace TickerAlert.Application.Services.Cedears;
 
 public class CedearCotizacionService(
     CedearInformationService cedearInformationService,
-    DolarArgentinaCacheService dolarArgentinaCacheService,
-    PriceMeasureReader priceMeasureReader)
+    IDolarArgentinaCacheService dolarArgentinaCacheService,
+    IPriceMeasureReader priceMeasureReader)
 {
     public async Task<CedearCotizacion> GetCedearCotizacionAsync(Guid financialAssetId)
     {

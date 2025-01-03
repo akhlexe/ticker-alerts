@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TickerAlert.Application.Common.Persistence;
+using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Application.Services.StockMarket.Dtos;
 using TickerAlert.Domain.Entities;
@@ -8,7 +9,7 @@ namespace TickerAlert.Application.Services.FinancialAssets.CompanyProfile;
 
 public class CompanyProfileService(
     IApplicationDbContext context,
-    CompanyProfileCacheService cacheService,
+    ICompanyProfileCacheService cacheService,
     IStockMarketService stockMarketService)
 {
     public async Task<CompanyProfileDto> GetCompanyProfileAsync(Guid financialAssetId)
@@ -35,6 +36,6 @@ public class CompanyProfileService(
         return companyProfile;
     }
 
-    private CompanyProfileDto CreateUnknownAssetResponse() 
+    private static CompanyProfileDto CreateUnknownAssetResponse() 
         => new CompanyProfileDto { Ticker = "Unknown Ticker", Name = "Unkonwn" };
 }
