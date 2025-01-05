@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using TickerAlert.Application.Interfaces.PriceMeasures.DolarArgentina;
+using TickerAlert.Application.Services.Prices.MarketHours;
 
 namespace TickerAlert.Application.Services.Prices.DolarArgentina;
 
@@ -9,6 +10,14 @@ public class CotizacionDolarReader(
     ILogger<CotizacionDolarReader> logger)
 {
     public async Task ReadCotizacionAsync()
+    {
+        if (ArgentinaMarketHours.IsMarketOpen())
+        {
+            await ReadCotizacionDolares(dolarArgentinaService, cacheService, logger);
+        }
+    }
+
+    private static async Task ReadCotizacionDolares(IDolarArgentinaService dolarArgentinaService, IDolarArgentinaCacheService cacheService, ILogger<CotizacionDolarReader> logger)
     {
         var cotizacionDolar = await dolarArgentinaService.GetCotizacionDolarCCL();
 
