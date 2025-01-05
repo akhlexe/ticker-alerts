@@ -1,5 +1,6 @@
 using TickerAlert.Application.Interfaces.FinancialAssets;
 using TickerAlert.Application.Interfaces.PriceMeasures;
+using TickerAlert.Application.Services.Prices.MarketHours;
 using TickerAlert.Application.Services.StockMarket;
 using TickerAlert.Application.Services.StockMarket.Dtos;
 using TickerAlert.Domain.Entities;
@@ -15,6 +16,14 @@ public class PriceCollectorService(
     IStockMarketService stockMarketService)
 {
     public async Task CollectPrices()
+    {
+        if (UnitedStatesMarketHours.IsMarketOpen())
+        {
+            await CollectPrices(financialAssetReader, priceMeasureService, stockMarketService);
+        }
+    }
+
+    private static async Task CollectPrices(IFinancialAssetReader financialAssetReader, IPriceMeasureService priceMeasureService, IStockMarketService stockMarketService)
     {
         List<FinancialAsset> assetsToScan = await CollectFinancialAssetsToScan(financialAssetReader);
 
