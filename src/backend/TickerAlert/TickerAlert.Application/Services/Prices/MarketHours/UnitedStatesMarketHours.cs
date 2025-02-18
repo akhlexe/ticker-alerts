@@ -8,9 +8,8 @@ public sealed class UnitedStatesMarketHours
     // 9:00 PM UTC
     public const string MarketCloseTimeUtc = "21:30";
 
-    public static bool IsMarketOpen()
+    public static bool IsMarketOpen(DateTime now)
     {
-        DateTime now = DateTime.UtcNow;
         DateTime marketOpen = CalculateUtcMarketOpen(now.Date);
         DateTime marketClose = CalculateUtcMarketClose(now.Date);
 

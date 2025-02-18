@@ -41,7 +41,8 @@ export interface TrackElement {
   styleUrl: './watchlist.component.css'
 })
 export class WatchlistComponent implements OnInit, OnDestroy {
-  public displayedColumns: string[] = ['ticker', 'price', 'actions'];
+
+  public displayedColumns: string[] = ['ticker', 'price', 'link', 'actions'];
   public watchlist$ = this.watchlistService.getWatchlist();
 
   private destroy$ = new Subject<void>();
@@ -81,6 +82,11 @@ export class WatchlistComponent implements OnInit, OnDestroy {
 
   public onRowClick(row: any) {
     this.router.navigate(['financial-assets', row.financialAssetId]);
+  }
+
+  public openLink(url: any) {
+    debugger
+    window.open(url, '_blank');
   }
 
   ngOnDestroy(): void {

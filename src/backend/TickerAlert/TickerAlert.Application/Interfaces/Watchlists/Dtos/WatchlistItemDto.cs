@@ -13,4 +13,5 @@ public class WatchlistItemDto
     public decimal Variation { get; set; }
 
     public Guid WatchlistId { get; set; }
+    public string ChartLink { get; set; }
 }

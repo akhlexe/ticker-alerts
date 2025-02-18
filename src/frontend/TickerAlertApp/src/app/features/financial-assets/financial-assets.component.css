@@ -77,6 +77,7 @@
     overflow: visible; /* Show the full text */
     z-index: 1; /* Ensure the text appears above other elements */
   }
+
   
   h1 {
     font-size: 2em;

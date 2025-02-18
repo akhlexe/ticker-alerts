@@ -9,6 +9,11 @@
   border-radius: 0px;
 }
 
+.scrollable-content {
+  max-height: 82vh;
+  overflow-y: auto;
+}
+
 .watchlist-container .mat-card-title {
   font-size: 1.5em;
   font-weight: 600;
@@ -26,12 +31,11 @@ table th {
   font-weight: bold;
   background-color: #3b2f29; 
   color: #a67c00;
-  padding: 12px;
-  text-align: left;
+  text-align: center;
 }
 
 table td {
-  padding: 12px;
+  text-align: center;
   background-color: #3e3a35;
   color: #d4af37;
   border-bottom: 1px solid #3b2f29;
