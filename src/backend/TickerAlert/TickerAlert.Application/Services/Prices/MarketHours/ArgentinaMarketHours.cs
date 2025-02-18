@@ -5,10 +5,8 @@ internal sealed class ArgentinaMarketHours
     public const string MarketOpenTimeUtc = "14:00"; // 2:00 PM UTC
     public const string MarketCloseTimeUtc = "20:00"; // 8:00 PM UTC
 
-    public static bool IsMarketOpen()
+    public static bool IsMarketOpen(DateTime now)
     {
-        DateTime now = DateTime.UtcNow;
-
         DateTime marketOpen = CalculateUtcMarketOpen(now.Date);
         DateTime marketClose = CalculateUtcMarketClose(now.Date);
 

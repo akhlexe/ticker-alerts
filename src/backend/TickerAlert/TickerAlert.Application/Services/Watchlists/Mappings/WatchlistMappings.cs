@@ -8,6 +8,10 @@ public static class WatchlistMappings
 {
     private const string TickernameNotFound = "Tickername not found";
 
+    // TODO: improve this adding exchange and ticker when exchange info is available
+    // https://www.tradingview.com/chart/siNTkFlw/?symbol=<exchange>%3A<ticker>
+    private const string ChartUrl = "https://www.tradingview.com/chart/siNTkFlw/?symbol=";
+
     public static WatchlistDto MapToDto(
         Watchlist watchlist, 
         Dictionary<Guid, FinancialAssetDto> assets, 
@@ -35,6 +39,7 @@ public static class WatchlistMappings
             WatchlistId = item.WatchlistId,
             TickerName = asset?.Ticker ?? TickernameNotFound,
             Price = lastPrice,
+            ChartLink = ChartUrl + asset?.Ticker
         };
     }
 }

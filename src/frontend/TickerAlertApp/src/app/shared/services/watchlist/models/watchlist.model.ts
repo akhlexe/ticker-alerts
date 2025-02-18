@@ -10,4 +10,5 @@ export interface WatchlistItemDto {
     financialAssetId: string;
     ticker: string;
     price: number;
+    chartLink: string;
 }

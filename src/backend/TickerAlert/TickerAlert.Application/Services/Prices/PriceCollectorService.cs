@@ -17,7 +17,12 @@ public class PriceCollectorService(
 {
     public async Task CollectPrices()
     {
-        if (UnitedStatesMarketHours.IsMarketOpen())
+        DateTime now = DateTime.UtcNow;
+
+        // Only for test
+        //DateTime fake = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 15, 0, 0, DateTimeKind.Utc); // 3:00 PM UTC
+
+        if (UnitedStatesMarketHours.IsMarketOpen(now))
         {
             await CollectPrices(financialAssetReader, priceMeasureService, stockMarketService);
         }

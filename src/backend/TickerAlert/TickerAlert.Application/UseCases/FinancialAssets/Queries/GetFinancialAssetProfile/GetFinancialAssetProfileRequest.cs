@@ -6,7 +6,8 @@ namespace TickerAlert.Application.UseCases.FinancialAssets.Queries.GetFinancialA
 
 public sealed record GetFinancialAssetProfileRequest(Guid FinancialAssetId) : IRequest<FinancialAssetProfileDto>;
 
-public sealed class GetFinancialAssetProfileRequestHandler(FinancialAssetProfileService financialAssetProfileService) 
+public sealed class GetFinancialAssetProfileRequestHandler(
+    FinancialAssetProfileService financialAssetProfileService) 
     : IRequestHandler<GetFinancialAssetProfileRequest, FinancialAssetProfileDto>
 {
     public async Task<FinancialAssetProfileDto> Handle(GetFinancialAssetProfileRequest request, CancellationToken cancellationToken) 

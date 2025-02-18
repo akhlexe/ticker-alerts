@@ -10,13 +10,8 @@ public sealed class FinancialAssetProfileService(
 {
     public async Task<FinancialAssetProfileDto> GetFinancialAssetProfileAsync(Guid financialAssetId)
     {
-        var companyProfileTask = companyProfileService.GetCompanyProfileAsync(financialAssetId);
-        var cedearCotizacionTask = cedearCotizacionService.GetCedearCotizacionAsync(financialAssetId);
-
-        await Task.WhenAll(companyProfileTask, cedearCotizacionTask);
-
-        var companyProfile = companyProfileTask.Result;
-        var cedearCotizacion = cedearCotizacionTask.Result;
+        var companyProfile = await companyProfileService.GetCompanyProfileAsync(financialAssetId);
+        var cedearCotizacion = await cedearCotizacionService.GetCedearCotizacionAsync(financialAssetId);
 
         return new FinancialAssetProfileDto
         {

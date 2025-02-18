@@ -6,7 +6,7 @@ export interface FinancialAssetDto {
 
 export interface FinancialAssetProfileDto {
   profile: CompanyProfileDto,
-  cedearCotizacion: cedearCotizacion
+  cedearCotizacion: CedearCotizacion
 }
 
 export interface CompanyProfileDto {
@@ -24,7 +24,7 @@ export interface CompanyProfileDto {
   finnhubIndustry: string;
 }
 
-export interface cedearCotizacion {
+export interface CedearCotizacion {
   ratio: string,
   hasCedear: boolean,
   cedearCompra: number,
