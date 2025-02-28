@@ -21,7 +21,7 @@ public class PriceMeasureService(
 
     private async Task SavePriceMeasure(PriceMeasure measure)
     {
-        measure.RaiseDomainEvent(new PriceReadedDomainEvent(Guid.NewGuid(), measure.Id));
+        measure.RaiseDomainEvent(new PriceUpdateEvent(Guid.NewGuid(), measure.Id));
         context.PriceMeasures.Add(measure);
         await context.SaveChangesAsync();
     }

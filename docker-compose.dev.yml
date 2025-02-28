@@ -35,8 +35,12 @@ services:
       - Redis__Port=${REDIS_PORT}
       - Redis__Password=${REDIS_PASSWORD}
     depends_on:
-      - ticker-db
-      - redis
+      ticker-db:
+        condition: service_started
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     networks:
       - tickers-network
 
@@ -67,6 +71,21 @@ services:
     networks:
       - tickers-network
     restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    ports:
+      - "0:5672" # RabbitMQ default messaging port
+      - "0:15672" # Management UI port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: ${RABBIMQ_PASSWORD}
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 volumes:
   postgres_data:

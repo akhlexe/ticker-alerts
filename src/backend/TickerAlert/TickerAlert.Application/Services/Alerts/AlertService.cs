@@ -40,7 +40,7 @@ public class AlertService : IAlertService
     public async Task TriggerAlert(Alert alert)
     {
         alert.State = AlertState.TRIGGERED;
-        alert.RaiseDomainEvent(new AlertTriggeredDomainEvent(Guid.NewGuid(), alert.Id));
+        alert.RaiseDomainEvent(new AlertTriggeredEvent(Guid.NewGuid(), alert.Id));
         
         _context.Alerts.Update(alert);
         await _context.SaveChangesAsync();

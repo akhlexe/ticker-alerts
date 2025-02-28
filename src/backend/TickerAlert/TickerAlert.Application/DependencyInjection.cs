@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using TickerAlert.Application.Common.EventBus;
 using TickerAlert.Application.Interfaces.Alerts;
 using TickerAlert.Application.Interfaces.Cedears;
 using TickerAlert.Application.Interfaces.FinancialAssets;
@@ -14,7 +16,9 @@ using TickerAlert.Application.Services.PriceEvaluator;
 using TickerAlert.Application.Services.Prices;
 using TickerAlert.Application.Services.Prices.DolarArgentina;
 using TickerAlert.Application.Services.Prices.DolarArgentina.Cache;
+using TickerAlert.Application.Services.Prices.PriceUpdates;
 using TickerAlert.Application.Services.Watchlists;
+using TickerAlert.Domain.Events;
 
 namespace TickerAlert.Application;
 
@@ -42,6 +46,7 @@ public static class DependencyInjection
         RegisterCotizacionDolarServices(services);
         RegisterCedearServices(services);
         RegisterCompanyProfileServices(services);
+        RegisterConsumers(services);
     }
 
     private static void RegisterPriceServices(IServiceCollection services)
@@ -69,5 +74,11 @@ public static class DependencyInjection
     {
         services.AddScoped<CompanyProfileService>();
         services.AddScoped<ICompanyProfileCacheService, CompanyProfileCacheService>();
+    }
+
+    private static void RegisterConsumers(IServiceCollection services)
+    {
+        services.AddScoped<IEventConsumer<PriceUpdateEvent>, PriceUpdateConsumer>();
+        services.AddScoped<IEventConsumer<AlertTriggeredEvent>, AlertTriggeredConsumer>();
     }
 }
